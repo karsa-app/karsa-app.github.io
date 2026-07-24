@@ -1,0 +1,23 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>@karsa/web · Karsa packages</title>
+<link rel="icon" type="image/png" href="/karsa-logo.png"/>
+<link rel="stylesheet" href="/styles.css"/></head><body>
+<header class="site-header"><a class="brand" href="/" aria-label="Karsa home"><img src="/karsa-logo.png" alt="" width="28" height="28"/><span class="wordmark">Karsa</span></a>
+<nav class="nav"><a href="/">Home</a><a href="/doc/">Manual</a><a href="/packages/">Packages</a><a class="nav-hide-sm" href="https://github.com/karsa-app">GitHub</a></nav></header>
+<main><article class="wrap" style="max-width:48rem;padding:2rem 1.25rem 4rem">
+<p><a href="/packages/">← Packages</a></p>
+<h1>@karsa/web</h1>
+<p>The Karsa web UI — the single-page app the daemon serves at <code>/</code>. A React + Vite bundle that talks to the daemon's HTTP API on the same origin.</p>
+<h2>Install</h2>
+<p>Ships as the <code>karsa-web.tar.gz</code> artifact (<code>kind: web</code> in the registry). The installer downloads it, verifies its sha256, and extracts it to:</p>
+<pre><code>$KARSA_HOME/packages/@karsa/web/dist</code></pre>
+<p>The daemon reads that directory fresh on each request, so swapping the files is a zero-downtime upgrade — no server restart (<code>spec_01KVE4X4BM2A</code> §6.5 tier 1).</p>
+<h2>Build</h2>
+<pre><code>npm ci          # in web/ (and ui/ for the shared design system)
+npm run build   # → web/dist (minified, sourcemap: false)</code></pre>
+<p>The release tool (<code>deno task release</code>) runs this and tars <code>web/dist</code> into <code>karsa-web.tar.gz</code>.</p>
+<h2>Requires</h2>
+<p><code>karsa &gt;= 0.1.0</code> (the daemon that serves it).</p>
+<p><a href="README.md">Raw README</a> · <a href="karsa.package.json">Manifest</a></p>
+</article></main></body></html>

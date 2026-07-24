@@ -16,19 +16,19 @@
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="/index.html" aria-label="Karsa home">
+    <a class="brand" href="/" aria-label="Karsa home">
       <img src="/karsa-logo.png" alt="" />
       <span class="wordmark">Karsa</span>
     </a>
     <nav class="nav">
-      <a href="/doc/index.html">Manual</a>
+      <a href="/doc/">Manual</a>
       <a href="/packages.html">Packages</a>
-      <a class="nav-hide-sm" href="https://github.com/karsa-app/karsa">GitHub</a>
+      <a class="nav-hide-sm" href="https://github.com/karsa-app">GitHub</a>
     </nav>
   </header>
   <main>
-    <article class="wrap" style="max-width:48rem;padding-top:2rem;padding-bottom:4rem">
-      <p><a href="/doc/index.html">← The Karsa Manual</a></p><h1>Using Karsa</h1>
+    <article class="wrap" style="max-width:48rem;padding:2rem 1.25rem 4rem">
+      <p><a href="/doc/">← The Karsa Manual</a></p><h1>Using Karsa</h1>
 <p>Karsa runs as a <strong>local daemon</strong> (<code>karsa-server</code>) with a <strong>web UI</strong> at <code>localhost:3100</code>. Everything you do lives in <strong>projects</strong>, and every project is just plain files on disk — versioned in git, yours to keep, readable without Karsa at all. This page is the lay of the land.</p>
 <h2>The daemon and <code>$KARSA_HOME</code></h2>
 <p>One daemon serves the whole machine. Its state lives under <code>$KARSA_HOME</code> (by default <code>~/.karsa</code>): the project registry (<code>projects.yaml</code>), machine config (<code>KARSA.md</code>), and this manual (<code>doc/</code>). The daemon is a pure function of its <code>--home</code> flag — there is no hidden environment fallback, so a misconfigured launch fails loudly instead of pointing at the wrong data.</p>

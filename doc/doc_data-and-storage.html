@@ -16,19 +16,19 @@
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="/index.html" aria-label="Karsa home">
+    <a class="brand" href="/" aria-label="Karsa home">
       <img src="/karsa-logo.png" alt="" />
       <span class="wordmark">Karsa</span>
     </a>
     <nav class="nav">
-      <a href="/doc/index.html">Manual</a>
+      <a href="/doc/">Manual</a>
       <a href="/packages.html">Packages</a>
-      <a class="nav-hide-sm" href="https://github.com/karsa-app/karsa">GitHub</a>
+      <a class="nav-hide-sm" href="https://github.com/karsa-app">GitHub</a>
     </nav>
   </header>
   <main>
-    <article class="wrap" style="max-width:48rem;padding-top:2rem;padding-bottom:4rem">
-      <p><a href="/doc/index.html">← The Karsa Manual</a></p><h1>Data and storage</h1>
+    <article class="wrap" style="max-width:48rem;padding:2rem 1.25rem 4rem">
+      <p><a href="/doc/">← The Karsa Manual</a></p><h1>Data and storage</h1>
 <p>When you work inside a Karsa project and a task produces something — a file, a table, a memo — that output has a <em>home</em>. The project root is never it. This page is the rule for <strong>where data goes by shape</strong>, and the <strong>Karsa HTTP API conventions</strong> you use to put it there. If you are an agent, read this before you save anything: dropping loose files at <code>$PROJECT_HOME</code> is the single most common way to make work that Karsa can't see, browse, or manage.</p>
 <h2>The one rule: route data by its shape</h2>
 <p>Every artifact a task produces has a shape, and each shape has a home that makes it a first-class, browsable record instead of loose bytes on disk:</p>

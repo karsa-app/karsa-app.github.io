@@ -16,19 +16,19 @@
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="/index.html" aria-label="Karsa home">
+    <a class="brand" href="/" aria-label="Karsa home">
       <img src="/karsa-logo.png" alt="" />
       <span class="wordmark">Karsa</span>
     </a>
     <nav class="nav">
-      <a href="/doc/index.html">Manual</a>
+      <a href="/doc/">Manual</a>
       <a href="/packages.html">Packages</a>
-      <a class="nav-hide-sm" href="https://github.com/karsa-app/karsa">GitHub</a>
+      <a class="nav-hide-sm" href="https://github.com/karsa-app">GitHub</a>
     </nav>
   </header>
   <main>
-    <article class="wrap" style="max-width:48rem;padding-top:2rem;padding-bottom:4rem">
-      <p><a href="/doc/index.html">← The Karsa Manual</a></p><h1>Automating with events, subscribers, and fns</h1>
+    <article class="wrap" style="max-width:48rem;padding:2rem 1.25rem 4rem">
+      <p><a href="/doc/">← The Karsa Manual</a></p><h1>Automating with events, subscribers, and fns</h1>
 <p>Read this when the user wants a <strong>system that keeps running</strong> — a pipeline, a watcher, a nightly job — not a one-shot answer. Don't reach for cron files, a background daemon, or an outside queue. Karsa gives you three primitives: <strong>events</strong>, <strong>subscribers</strong>, and <strong>fns</strong>. Build on them, through <code>$KARSA_API_BASE</code>.</p>
 <h2>The model in one breath</h2>
 <ul><li>Every write to a collection auto-emits an <strong>event</strong> — <code>karsa/{collection}/created</code> / <code>/updated</code> / <code>/deleted</code> — onto Karsa's single event queue. You can also <strong>publish your own</strong> event.</li><li>A <strong>fn</strong> is a unit of logic (code, or an agent-CLI wrapper). It's what actually <em>runs</em>.</li><li>A <strong>subscriber</strong> binds a <strong>trigger</strong> to a <strong>fn</strong>: <em>when this trigger fires, run that fn.</em> The trigger is either an <strong>event match</strong> or a <strong>time</strong> (<code>at</code> / <code>every</code>).</li></ul>

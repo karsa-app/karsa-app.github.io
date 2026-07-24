@@ -1,0 +1,28 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>@karsa/doc · Karsa packages</title>
+<link rel="icon" type="image/png" href="/karsa-logo.png"/>
+<link rel="stylesheet" href="/styles.css"/></head><body>
+<header class="site-header"><a class="brand" href="/" aria-label="Karsa home"><img src="/karsa-logo.png" alt="" width="28" height="28"/><span class="wordmark">Karsa</span></a>
+<nav class="nav"><a href="/">Home</a><a href="/doc/">Manual</a><a href="/packages/">Packages</a><a class="nav-hide-sm" href="https://github.com/karsa-app">GitHub</a></nav></header>
+<main><article class="wrap" style="max-width:48rem;padding:2rem 1.25rem 4rem">
+<p><a href="/packages/">← Packages</a></p>
+<h1>@karsa/doc</h1>
+<p>The Karsa manual — the single, maintained reference for <strong>agents and humans</strong> working inside a Karsa project.</p>
+<p>This is <strong>not</strong> Karsa's internal spec collection (those stay dev-facing under <code>karsa/proj_*/artifact/spec/</code>). <code>doc</code>'s audience is the <strong>user and the agent working inside a project</strong>: how to use Karsa, how to upgrade, how to build a Karsa app, and what <em>not</em> to do.</p>
+<h2>Three audiences, one source</h2>
+<ul><li><strong>Engines / agents — direct filesystem.</strong> Seeded to <code>$KARSA_HOME/doc/</code>. An engine reads <code>index.md</code>, then the relevant <code>doc_*.md</code>, straight off disk. <code>$KARSA_HOME</code> is already in the engine env, so the manual replaces bulk &quot;how Karsa works&quot; prose in per-engine system prompts.</li><li><strong>Humans — the web UI.</strong> The daemon serves <code>$KARSA_HOME/doc/*</code> read-only; <code>@karsa/web</code> renders it machine-level at <code>/doc</code> (doc home) and <code>/doc/&lt;id&gt;</code> (per topic), reusing the shared markdown + frontmatter renderers.</li><li><strong>Public — SEO.</strong> <code>@karsa/landing-web</code> pulls the released bundle at build time and statically pre-renders each topic to <code>karsa.app/doc/*</code> for crawlers.</li></ul>
+<h2>Shape</h2>
+<pre><code>src/
+  index.md                      # frontmatter index (ordered topic list) + doc-home body
+  doc_using-karsa.md
+  doc_upgrading.md
+  doc_building-a-karsa-app.md
+  doc_anti-patterns.md</code></pre>
+<p>Each <code>doc_*.md</code> carries frontmatter: <code>title</code>, <code>summary</code>, <code>order</code>, and an optional <code>audience: internal</code>.</p>
+<h2>Release + stripping</h2>
+<p><code>deno task build</code> produces the shipped bundle (<code>src/</code> → <code>dist/</code>) and <strong>strips internal content</strong>:</p>
+<ul><li>Any file with <code>audience: internal</code> in its frontmatter is dropped entirely.</li><li>Any fenced region between <code>&lt;!-- audience:internal --&gt;</code> and <code>&lt;!-- /audience:internal --&gt;</code> is removed from a file's body.</li></ul>
+<p>So the public + user-facing bundle never leaks Karsa-internal detail. The bundle is versioned (<code>kind: doc</code>), listed in the registry, and seeded/updated into <code>$KARSA_HOME/doc</code> on install + upgrade (reconcile policy: <code>replace</code> — users read these, they don't edit them).</p>
+<p><a href="README.md">Raw README</a> · <a href="karsa.package.json">Manifest</a></p>
+</article></main></body></html>

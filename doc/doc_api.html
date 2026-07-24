@@ -16,19 +16,19 @@
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="/index.html" aria-label="Karsa home">
+    <a class="brand" href="/" aria-label="Karsa home">
       <img src="/karsa-logo.png" alt="" />
       <span class="wordmark">Karsa</span>
     </a>
     <nav class="nav">
-      <a href="/doc/index.html">Manual</a>
+      <a href="/doc/">Manual</a>
       <a href="/packages.html">Packages</a>
-      <a class="nav-hide-sm" href="https://github.com/karsa-app/karsa">GitHub</a>
+      <a class="nav-hide-sm" href="https://github.com/karsa-app">GitHub</a>
     </nav>
   </header>
   <main>
-    <article class="wrap" style="max-width:48rem;padding-top:2rem;padding-bottom:4rem">
-      <p><a href="/doc/index.html">← The Karsa Manual</a></p><h1>The Karsa API</h1>
+    <article class="wrap" style="max-width:48rem;padding:2rem 1.25rem 4rem">
+      <p><a href="/doc/">← The Karsa Manual</a></p><h1>The Karsa API</h1>
 <p>You don't have to memorize a big endpoint list. Karsa's API is <strong>uniform and generated</strong>: the moment you expose a collection, it gets a full CRUD API, a schema, and CRUD events — automatically. Learn the one pattern below + the handful of special endpoints, and you can drive the whole system. Everything is under <strong><code>$KARSA_API_BASE</code></strong> (already project-scoped — never hard-code a host or <code>/api/...</code>).</p>
 <h2>The uniform CRUD pattern</h2>
 <p>For <strong>any</strong> collection <code>{c}</code> (its slug — <code>spec</code>, <code>task</code>, <code>deal</code>, …):</p>

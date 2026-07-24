@@ -16,19 +16,19 @@
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="/index.html" aria-label="Karsa home">
+    <a class="brand" href="/" aria-label="Karsa home">
       <img src="/karsa-logo.png" alt="" />
       <span class="wordmark">Karsa</span>
     </a>
     <nav class="nav">
-      <a href="/doc/index.html">Manual</a>
+      <a href="/doc/">Manual</a>
       <a href="/packages.html">Packages</a>
-      <a class="nav-hide-sm" href="https://github.com/karsa-app/karsa">GitHub</a>
+      <a class="nav-hide-sm" href="https://github.com/karsa-app">GitHub</a>
     </nav>
   </header>
   <main>
-    <article class="wrap" style="max-width:48rem;padding-top:2rem;padding-bottom:4rem">
-      <p><a href="/doc/index.html">← The Karsa Manual</a></p><h1>Upgrading</h1>
+    <article class="wrap" style="max-width:48rem;padding:2rem 1.25rem 4rem">
+      <p><a href="/doc/">← The Karsa Manual</a></p><h1>Upgrading</h1>
 <p>Karsa ships as a set of versioned packages — the daemon, the CLI, the web UI, project templates, and this manual (<code>@karsa/doc</code>). Upgrading is the act of pulling newer versions and letting the daemon <strong>reconcile</strong> them onto your machine. This page explains the model so an upgrade is never a mystery.</p>
 <h2>Packages and the registry</h2>
 <p>Everything shippable is a package with a <code>name</code>, a <code>version</code>, and a <code>kind</code>. The set of available packages — and where to fetch each one — is listed in a <strong>registry</strong> (<code>registry.json</code>). The registry is the source of truth for &quot;what versions exist&quot;; your install pulls from it.</p>

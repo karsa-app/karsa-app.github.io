@@ -1,0 +1,35 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>@karsa/project-template-minimum · Karsa packages</title>
+<link rel="icon" type="image/png" href="/karsa-logo.png"/>
+<link rel="stylesheet" href="/styles.css"/></head><body>
+<header class="site-header"><a class="brand" href="/" aria-label="Karsa home"><img src="/karsa-logo.png" alt="" width="28" height="28"/><span class="wordmark">Karsa</span></a>
+<nav class="nav"><a href="/">Home</a><a href="/doc/">Manual</a><a href="/packages/">Packages</a><a class="nav-hide-sm" href="https://github.com/karsa-app">GitHub</a></nav></header>
+<main><article class="wrap" style="max-width:48rem;padding:2rem 1.25rem 4rem">
+<p><a href="/packages/">← Packages</a></p>
+<h1>@karsa/project-template-minimum</h1>
+<p>Base template. Every Karsa project includes the minimum's kinds + defaults.</p>
+<p>The <code>src/</code> tree mirrors install destinations — copying <code>src/</code> into the user's machine (after substituting the literal <code>$KARSA_HOME</code>, <code>$PROJECT_HOME</code>, and <code>$projectId</code> segments) gives a working install.</p>
+<h2>Source layout</h2>
+<pre><code>src/
+  $KARSA_HOME/                              # machine-wide files
+    KARSA.md                     # → $KARSA_HOME/KARSA.md
+    README.md                            # → $KARSA_HOME/README.md
+  $PROJECT_HOME/
+    karsa/
+      README.md                          # → $PROJECT_HOME/karsa/README.md
+      $projectId/
+        artifact/
+          index.md
+          {chat,spec,exec,asset,…}/index.md
+          subscriber/
+            index.md
+            sber_template_*.md.tmpl      # → renamed to sber_&lt;new_ulid&gt;.md with placeholder substitutions</code></pre>
+<h2>What &quot;minimum&quot; includes</h2>
+<p>Artifact kinds: <strong>chat, spec, exec, asset, agent-profile, subscriber, event-handler, syslog</strong>.</p>
+<p>With these, an operator can talk to an AI engine that can act on their machine. SDLC concepts (PRD, RFC, task, workflow) live in <code>@karsa/project-template-sdlc</code>.</p>
+<h2>Install rules</h2>
+<p>The seeder applies these rules when walking <code>src/</code>:</p>
+<p>| Source file | Behavior | |---|---| | <code>sber_template_*.md.tmpl</code> | Rendered with fresh <code>sber_&lt;ulid&gt;</code> id and <code>{{PROJECT_ID}}</code>/<code>{{NOW}}</code>/<code>{{NEW_ULID}}</code> substitutions. Renamed to <code>sber_&lt;ulid&gt;.md</code>. | | <code>index.md</code>, <code>README.md</code>, <code>KARSA.md</code> | Installed only when absent at the destination (never clobbers operator edits). | | Other files | Copied with <code>{{PROJECT_ID}}</code>, <code>{{NOW}}</code>, <code>__CREATED_AT__</code> substitutions. |</p>
+<p><a href="README.md">Raw README</a> · <a href="karsa.package.json">Manifest</a></p>
+</article></main></body></html>
