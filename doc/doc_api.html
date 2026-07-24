@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Karsa API · Karsa Manual</title>
+  <meta name="description" content="The uniform CRUD surface every collection gets for free, the special endpoints, and how to discover it all." />
+  <link rel="canonical" href="https://karsa.app/doc/doc_api" />
+  <link rel="icon" type="image/png" href="/karsa-logo.png" />
+  <meta property="og:title" content="The Karsa API · Karsa Manual" />
+  <meta property="og:description" content="The uniform CRUD surface every collection gets for free, the special endpoints, and how to discover it all." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://karsa.app/doc/doc_api" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/index.html" aria-label="Karsa home">
+      <img src="/karsa-logo.png" alt="" />
+      <span class="wordmark">Karsa</span>
+    </a>
+    <nav class="nav">
+      <a href="/doc/index.html">Manual</a>
+      <a href="/packages.html">Packages</a>
+      <a class="nav-hide-sm" href="https://github.com/karsa-app/karsa">GitHub</a>
+    </nav>
+  </header>
+  <main>
+    <article class="wrap" style="max-width:48rem;padding-top:2rem;padding-bottom:4rem">
+      <p><a href="/doc/index.html">← The Karsa Manual</a></p><h1>The Karsa API</h1>
+<p>You don't have to memorize a big endpoint list. Karsa's API is <strong>uniform and generated</strong>: the moment you expose a collection, it gets a full CRUD API, a schema, and CRUD events — automatically. Learn the one pattern below + the handful of special endpoints, and you can drive the whole system. Everything is under <strong><code>$KARSA_API_BASE</code></strong> (already project-scoped — never hard-code a host or <code>/api/...</code>).</p>
+<h2>The uniform CRUD pattern</h2>
+<p>For <strong>any</strong> collection <code>{c}</code> (its slug — <code>spec</code>, <code>task</code>, <code>deal</code>, …):</p>
+<pre><code>GET    ${KARSA_API_BASE}/{c}             → list resources
+POST   ${KARSA_API_BASE}/{c}             → create   { frontmatter, body? }
+GET    ${KARSA_API_BASE}/{c}/{id}        → read one
+PATCH  ${KARSA_API_BASE}/{c}/{id}        → update   { patch, body? }
+DELETE ${KARSA_API_BASE}/{c}/{id}        → delete</code></pre>
+<ul><li><strong>Create</strong>: <code>POST { &quot;frontmatter&quot;: { …your fields… }, &quot;body&quot;: &quot;markdown…&quot; }</code>. The server mints the <code>id</code> and stamps <code>_t</code> / <code>created_at</code> / <code>created_by</code> / <code>updated_at</code> / <code>updated_by</code> — don't send those. The response is <code>{ id, path }</code>.</li><li><strong>Update</strong>: <code>PATCH { &quot;patch&quot;: { …changed fields… }, &quot;body&quot;?: &quot;…&quot; }</code>.</li><li>Every write automatically emits an event: <strong><code>{c}.created</code> / <code>{c}.updated</code> / <code>{c}.deleted</code></strong> — which a <a href="/doc/doc_automation">subscriber</a> can react to. You get eventing for free.</li></ul>
+<h3>Every resource has the same envelope</h3>
+<p>Whatever the collection, a read returns these baseline fields (plus the type's own fields):</p>
+<p>| field | meaning | |---|---| | <code>id</code> | the resource id (<code>{type}_{ULID}</code>) | | <code>_t</code> | its type | | <code>created_at</code> / <code>created_by</code> | when + who created it | | <code>updated_at</code> / <code>updated_by</code> | when + who last changed it |</p>
+<p><code>created_by</code>/<code>updated_by</code> is <code>user</code> or a subscriber id (<code>sber_…</code>) — that's what a subscriber's <code>updated_by: { $ne: &quot;$self&quot; }</code> filter keys on (see <a href="/doc/doc_automation">Automation</a>).</p>
+<h2>Types, schemas, and CRUD shapes</h2>
+<p>A collection <strong>enforces a type</strong>, and a type <strong>has a schema</strong> — so the server knows every CRUD shape derived from it. Inspect them:</p>
+<pre><code>GET ${KARSA_API_BASE}/type-registry            → all types in this project
+GET ${KARSA_API_BASE}/type-registry/{type}     → one type: its descriptor, base
+                                                  JSON Schema, and the derived
+                                                  variants:
+    variants.read     — the full resource (base + envelope)
+    variants.create   — the create input  (base minus the server-managed fields)
+    variants.update   — the update patch   (any subset)
+    variants.events   — {type}.created / .updated / .deleted payloads</code></pre>
+<p>Expose a new type (a <code>type/&lt;name&gt;/schema.json</code>) or a collection over it, and its CRUD API + schema + events are immediately live — nothing else to wire.</p>
+<h2>The special (non-CRUD) endpoints</h2>
+<p>A small set of endpoints aren't plain resource CRUD:</p>
+<p><strong>Storage</strong></p>
+<ul><li><code>POST ${KARSA_API_BASE}/collection</code> — create a collection (e.g. expose a SQL table; see <a href="/doc/doc_data-and-storage">Data and storage</a>).</li><li><code>POST ${KARSA_API_BASE}/file</code> (multipart, field <code>file</code>) — upload a file; <code>GET …/file/{id}</code> for its metadata + disk path.</li><li><code>GET ${KARSA_API_BASE}/collection/{slug}/rows?limit&amp;offset&amp;order&amp;dir</code> — page a <code>sqlite.row</code> collection's rows.</li><li><code>POST ${KARSA_API_BASE}/collection/{slug}/query</code> — one read-only <code>SELECT</code>.</li></ul>
+<p><strong>Automation</strong> (see <a href="/doc/doc_automation">Automation</a>)</p>
+<ul><li><code>POST ${KARSA_API_BASE}/subscriber</code> — a standing rule: event-triggered (<code>trigger.on</code>) or time-triggered (<code>trigger: { at | every }</code> — the scheduled-job form; no separate schedule object).</li></ul>
+<p><strong>Find + observe</strong></p>
+<ul><li><code>GET ${KARSA_API_BASE}/search?q=…</code> — full-text across the project.</li><li><code>GET ${KARSA_API_BASE}/browse</code> — the file tree.</li><li><code>GET ${KARSA_API_BASE}/exec/{id}</code> and <code>…/exec/{id}/log</code> — an agent run + its log.</li></ul>
+<h2>Secrets — declare, ask, use (never handle the value)</h2>
+<p>When you need a credential (an API key, a token), you <strong>never ask for the value in chat</strong> and <strong>never put it in a file or env var</strong>. Instead:</p>
+<p>1. <strong>Declare</strong> a secret with a Sentence-case title, a description, and a <strong>usage policy</strong> that scopes where it may go: ``<code> POST ${KARSA_API_BASE}/secret { &quot;frontmatter&quot;: { &quot;title&quot;: &quot;Resend API key&quot;, &quot;description&quot;: &quot;Send deal-flow notification emails.&quot;, &quot;policy&quot;: { &quot;via&quot;: &quot;http&quot;, &quot;allow&quot;: [ { &quot;host&quot;: &quot;api.resend.com&quot; } ] } } } → { &quot;id&quot;: &quot;secret_…&quot; } </code>`<code> For a CLI instead of HTTP: </code>&quot;policy&quot;: { &quot;via&quot;: &quot;tool&quot;, &quot;tools&quot;: [&quot;gh&quot;], &quot;inject&quot;: { &quot;env&quot;: &quot;GH_TOKEN&quot; } }<code>. 2. **Ask the user** to open the secret's link and paste the value — e.g. *&quot;I need the Resend API key — please add it here: secret_…&quot;*. They fill it through a masked field; it's encrypted and you're notified (a </code>secret.updated<code> event, status </code>set<code>). You never see the value. 3. **Use** it by reference — the daemon substitutes it and makes the call; the value never reaches you: </code>`<code> POST ${KARSA_API_BASE}/egress { &quot;method&quot;: &quot;POST&quot;, &quot;url&quot;: &quot;https://api.resend.com/emails&quot;, &quot;headers&quot;: { &quot;Authorization&quot;: &quot;Bearer {{secret_…}}&quot; }, &quot;body&quot;: { … } } </code>`<code> or for a tool: </code>POST ${KARSA_API_BASE}/tool-run { &quot;tool&quot;: &quot;gh&quot;, &quot;args&quot;: [...], &quot;use&quot;: [&quot;secret_…&quot;] }`.</p>
+<p>The daemon refuses to send a secret anywhere its policy doesn't allow (so a key bound to <code>api.resend.com</code> can't be redirected elsewhere). <code>GET ${KARSA_API_BASE}/secret</code> lists secrets (names + <code>has_value</code>, never the value). <strong>Do not</strong> ask the user to paste a key into chat, and don't try to read a secret's value — there is no endpoint that returns it.</p>
+<h2>Discover the whole surface</h2>
+<p>The complete, machine-readable contract is generated live — including the per-collection CRUD for <em>this</em> project's collections and every type's variant schemas:</p>
+<pre><code>GET ${KARSA_API_BASE}/openapi.json</code></pre>
+<p>That's the source of truth if you need an exact request/response shape. But for everyday work: <strong>the uniform CRUD pattern + the special endpoints above is the whole game.</strong></p>
+    </article>
+  </main>
+</body>
+</html>

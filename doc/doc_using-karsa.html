@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Using Karsa · Karsa Manual</title>
+  <meta name="description" content="Projects, collections, chat, and the daemon — the shape of day-to-day work." />
+  <link rel="canonical" href="https://karsa.app/doc/doc_using-karsa" />
+  <link rel="icon" type="image/png" href="/karsa-logo.png" />
+  <meta property="og:title" content="Using Karsa · Karsa Manual" />
+  <meta property="og:description" content="Projects, collections, chat, and the daemon — the shape of day-to-day work." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://karsa.app/doc/doc_using-karsa" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/index.html" aria-label="Karsa home">
+      <img src="/karsa-logo.png" alt="" />
+      <span class="wordmark">Karsa</span>
+    </a>
+    <nav class="nav">
+      <a href="/doc/index.html">Manual</a>
+      <a href="/packages.html">Packages</a>
+      <a class="nav-hide-sm" href="https://github.com/karsa-app/karsa">GitHub</a>
+    </nav>
+  </header>
+  <main>
+    <article class="wrap" style="max-width:48rem;padding-top:2rem;padding-bottom:4rem">
+      <p><a href="/doc/index.html">← The Karsa Manual</a></p><h1>Using Karsa</h1>
+<p>Karsa runs as a <strong>local daemon</strong> (<code>karsa-server</code>) with a <strong>web UI</strong> at <code>localhost:3100</code>. Everything you do lives in <strong>projects</strong>, and every project is just plain files on disk — versioned in git, yours to keep, readable without Karsa at all. This page is the lay of the land.</p>
+<h2>The daemon and <code>$KARSA_HOME</code></h2>
+<p>One daemon serves the whole machine. Its state lives under <code>$KARSA_HOME</code> (by default <code>~/.karsa</code>): the project registry (<code>projects.yaml</code>), machine config (<code>KARSA.md</code>), and this manual (<code>doc/</code>). The daemon is a pure function of its <code>--home</code> flag — there is no hidden environment fallback, so a misconfigured launch fails loudly instead of pointing at the wrong data.</p>
+<p>The <strong>Karsa System project</strong> is a special project whose <code>project_home</code> <em>is</em> <code>$KARSA_HOME</code>. Unlike a normal project it runs <strong>uncaged</strong> — it can manage, fix, create, and import your other projects, and install the tools Karsa depends on. Its home page is what you see at the root of the UI.</p>
+<h2>Projects</h2>
+<p>A project is a unit of work with its own data, its own worker, and its own cage. You create one by picking a template, or by <strong>describing the system you want</strong> and letting Karsa scaffold it — collections, workers, schedules — for your use case.</p>
+<p>On disk a project lives under <code>{project_home}/karsa/proj_*/</code>:</p>
+<ul><li><code>artifact/</code> — your <strong>collections</strong> (typed data: specs, notes, tables, files).</li><li><code>sqldb/</code> — application data (SQL tables backing your app).</li><li><code>index.md</code> — the project's home page; its body is yours to edit.</li></ul>
+<p>Everything is versioned in git per project. If you lose the registry, a project can be re-imported from its folder alone, because the folder is self-describing.</p>
+<h2>Collections</h2>
+<p>Collections are your <strong>typed data</strong>. Pick the shape that fits:</p>
+<ul><li><strong>Tabular data</strong> you'll filter, sort, and join → a Karsa SQL DB table, exposed as a collection.</li><li><strong>Files</strong> (CSV / PDF / images / datasets) → the <strong>Files</strong> collection.</li><li><strong>Notes, specs, memos</strong> → a markdown collection (one <code>.md</code> per resource, frontmatter + body).</li></ul>
+<p>Each markdown resource has YAML frontmatter (its typed fields) and a markdown body. The UI renders both with the shared frontmatter + markdown views; ids cross-link automatically.</p>
+<h2>Chat — plan, then work</h2>
+<p>Open <strong>Chat</strong> in a project and describe what you want. Two agents split the job:</p>
+<ul><li>The <strong>planner</strong> talks with you. For a quick question it just answers; for anything that <strong>changes</strong> things it records a short rationale, and for multi-step work it opens a <strong>workflow</strong> (its shared scratchpad) and breaks the goal into <strong>tasks</strong>. It never writes code itself.</li><li>The <strong>worker</strong> picks up each task the moment it's ready, runs it to completion (reading/writing files, running commands, using the SDK — all <strong>inside the project cage</strong>), and records the outcome. Several can run at once.</li></ul>
+<p>You watch it happen in the chat: as the worker moves a task (claimed → done / failed), a one-line status appears in the conversation, with ids that link to the task and its exec log.</p>
+<p>Both agents run on an <strong>agent CLI</strong> you install — <strong>Claude Code</strong> or <strong>Codex</strong> (each needs a paid subscription). Seed both if you like; Karsa uses whichever is installed (Claude first). If neither is present, the planner replies in chat telling you how to install one — or run <code>karsa doctor</code>.</p>
+<h2>Schedule, Browse, Search</h2>
+<ul><li><strong>Schedule</strong> — a one-off (&quot;run in 10 minutes&quot;) or a recurring job, so work happens without you sitting there.</li><li><strong>Browse</strong> — every file on disk under the project, with text preview.</li><li><strong>Search</strong> — full-text across everything the project holds.</li></ul>
+<h2>Where to go next</h2>
+<p>When a task produces data, read <strong>Data and storage</strong> — it's the rule for where each shape of output lives (assets, sqldb + collections, docdb docs) and the HTTP API conventions for putting it there. When the task shifts from &quot;organize data&quot; to &quot;<strong>build an app</strong>,&quot; read <strong>Building a Karsa app</strong> — the app belongs <em>inside</em> the project, on the Karsa SDK, not in a scratch directory wired to an outside service. If you find yourself reaching outside, read <strong>Anti-patterns</strong> first.</p>
+    </article>
+  </main>
+</body>
+</html>

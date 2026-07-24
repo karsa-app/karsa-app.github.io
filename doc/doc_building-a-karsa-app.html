@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Building a Karsa app · Karsa Manual</title>
+  <meta name="description" content="Build the app INSIDE the project, on the Karsa SDK — sqldb, docdb, blob, queue." />
+  <link rel="canonical" href="https://karsa.app/doc/doc_building-a-karsa-app" />
+  <link rel="icon" type="image/png" href="/karsa-logo.png" />
+  <meta property="og:title" content="Building a Karsa app · Karsa Manual" />
+  <meta property="og:description" content="Build the app INSIDE the project, on the Karsa SDK — sqldb, docdb, blob, queue." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://karsa.app/doc/doc_building-a-karsa-app" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/index.html" aria-label="Karsa home">
+      <img src="/karsa-logo.png" alt="" />
+      <span class="wordmark">Karsa</span>
+    </a>
+    <nav class="nav">
+      <a href="/doc/index.html">Manual</a>
+      <a href="/packages.html">Packages</a>
+      <a class="nav-hide-sm" href="https://github.com/karsa-app/karsa">GitHub</a>
+    </nav>
+  </header>
+  <main>
+    <article class="wrap" style="max-width:48rem;padding-top:2rem;padding-bottom:4rem">
+      <p><a href="/doc/index.html">← The Karsa Manual</a></p><h1>Building a Karsa app</h1>
+<p>When a task grows past organizing data into <strong>building software</strong> — a tool, a dashboard, an automation, a small service — Karsa is where it gets built. Not in a scratch directory. Not against someone else's cloud. <strong>Inside the project, on the Karsa SDK.</strong></p>
+<p>This is the single most important idea for an agent working in Karsa: <em>the app you build runs caged inside the project, and it talks to infrastructure only through the Karsa SDK.</em> Read this whole page before you scaffold anything.</p>
+<h2>The shape of a Karsa app</h2>
+<p>A Karsa app is a per-project program that the daemon runs as a subprocess and surfaces in the UI (today via an iframe). It is <strong>caged</strong>: it gets capability through a gatekept SDK surface, not raw access to the machine. That cage is a feature — it means an app can be powerful without being dangerous, and it means &quot;expand to the cloud later&quot; is a config change, not a rewrite.</p>
+<p>You build the app <em>in the project tree</em> (under <code>karsa/proj_*/</code>), versioned in git like everything else. Its data lives in the project's <code>sqldb/</code>. Its files live in the project. Nothing escapes the cage by default.</p>
+<h2>The SDK is the whole interface to infrastructure</h2>
+<p>Everything an app needs from the outside world comes through <code>@karsa/*</code> SDK packages. You do not open sockets, spin up servers, or sign up for external accounts. You call the SDK:</p>
+<ul><li><strong><code>@karsa/sqldb</code></strong> — relational storage. This is the <strong>sole storage chokepoint</strong>: it is what makes a local app able to &quot;expand&quot; to the cloud unchanged. Tabular data, app state, anything you'd reach for Postgres for — it goes here.</li><li><strong><code>@karsa/docdb</code></strong> — document storage (markdown-truth documents with a derived index). Built <em>on top of</em> <code>@karsa/sqldb</code>, not its own database. Use it for notes, specs, content — anything document-shaped.</li><li><strong><code>@karsa/blob</code></strong> — large binary objects: uploads, images, generated artifacts.</li><li><strong><code>@karsa/queue</code></strong> — background work and message passing between parts of your app.</li><li>Plus the rest of the gatekept surface as you need it: schedule, agents, http, secrets.</li></ul>
+<p>Because these are the only doors, the daemon can enforce the cage, swap a local backend for a cloud one, and keep the app portable. An app written to the SDK is an app that survives &quot;let's deploy this for real.&quot;</p>
+<h2>How to build, step by step</h2>
+<p>1. <strong>Stay in the project.</strong> Scaffold the app in the project tree. Do not create it in <code>/tmp</code>, your home directory, or a sibling folder outside Karsa. 2. <strong>Pick the right storage.</strong> Tabular / relational → <code>@karsa/sqldb</code>. Document-shaped → <code>@karsa/docdb</code>. Files → <code>@karsa/blob</code>. Background jobs → <code>@karsa/queue</code>. Don't introduce a second database. 3. <strong>Use the SDK for every external need.</strong> Need persistence, files, jobs, scheduling? There's an SDK door for it. If you think there isn't, check again before reaching outside — that instinct is usually wrong (see <strong>Anti-patterns</strong>). 4. <strong>Keep it caged.</strong> Don't try to break out of the cage for &quot;convenience.&quot; The cage is what lets the app be trusted and later expanded. 5. <strong>Version it.</strong> It's all plain files under <code>karsa/</code>, in git. Commit as you go.</p>
+<h2>Local now, cloud later — for free</h2>
+<p>The reason the SDK matters so much: a Karsa app written against <code>@karsa/sqldb</code> runs <strong>locally today</strong> and can <strong>expand to the cloud</strong> without a rewrite, because the storage chokepoint is the seam Karsa controls. The moment you go around the SDK — embed a raw SQLite file, call an external API directly, hardcode a connection string — you break that seam, and &quot;expand&quot; becomes &quot;rebuild.&quot;</p>
+<p>So: build inside, build on the SDK, and the path to production is already laid.</p>
+<h2>Where to go next</h2>
+<p>Read <strong>Anti-patterns</strong> next — it names the exact wrong turns (building outside Karsa, reaching for Supabase or another external service) and why each one quietly costs you the cage and the expand path.</p>
+    </article>
+  </main>
+</body>
+</html>

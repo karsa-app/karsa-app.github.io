@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-07-24T17:21:55.294Z",
+  "packages": [
+    {
+      "name": "karsa",
+      "kind": "cli",
+      "version": "0.1.0",
+      "description": "Karsa CLI launcher",
+      "artifacts": [
+        {
+          "platform": "darwin-x86_64",
+          "url": "https://github.com/karsa-app/karsa/releases/download/cli-v0.1.0/karsa-darwin-x86_64",
+          "sha256": "ff1d4955a59dd566fdb6744009c20195e0da85e73d43ee3dc153dfb3af1b5dd9",
+          "size": 84257616
+        }
+      ],
+      "readme_url": "https://karsa.app/packages/karsa/README.md",
+      "manifest_url": "https://karsa.app/packages/karsa/karsa.package.json"
+    },
+    {
+      "name": "karsa-server",
+      "kind": "daemon",
+      "version": "0.1.0",
+      "description": "Karsa daemon (karsa-server)",
+      "artifacts": [
+        {
+          "platform": "darwin-x86_64",
+          "url": "https://github.com/karsa-app/karsa/releases/download/daemon-v0.1.0/karsa-server-darwin-x86_64",
+          "sha256": "720c675fd09084015505ab61c2d419d14d3c1cba6f9ae8fd97e62638f2540aed",
+          "size": 87113152
+        }
+      ],
+      "readme_url": "https://karsa.app/packages/karsa-server/README.md",
+      "manifest_url": "https://karsa.app/packages/karsa-server/karsa.package.json"
+    },
+    {
+      "name": "@karsa/web",
+      "kind": "web",
+      "version": "0.1.0",
+      "description": "Karsa web UI",
+      "artifacts": [
+        {
+          "platform": "any",
+          "url": "https://github.com/karsa-app/karsa/releases/download/web-v0.1.0/karsa-web.tar.gz",
+          "sha256": "120ef63122821fbbe15d086aca53649c132a058298052b1e00137a245e303abf",
+          "size": 396321
+        }
+      ],
+      "requires": {
+        "karsa": ">=0.1.0"
+      },
+      "readme_url": "https://karsa.app/packages/@karsa/web/README.md",
+      "manifest_url": "https://karsa.app/packages/@karsa/web/karsa.package.json"
+    },
+    {
+      "name": "@karsa/doc",
+      "kind": "doc",
+      "version": "0.1.0",
+      "description": "The Karsa manual (read by engines, humans at /doc, and karsa.app/doc)",
+      "artifacts": [
+        {
+          "platform": "any",
+          "url": "https://github.com/karsa-app/karsa/releases/download/doc-v0.1.0/karsa-doc.tar.gz",
+          "sha256": "bfd92569073cc95e04d332e9e78254065474714d8e587a0a4eaf326be23a522f",
+          "size": 16754
+        }
+      ],
+      "requires": {
+        "karsa": ">=0.1.0"
+      },
+      "readme_url": "https://karsa.app/packages/@karsa/doc/README.md",
+      "manifest_url": "https://karsa.app/packages/@karsa/doc/karsa.package.json"
+    },
+    {
+      "name": "@karsa/landing-web",
+      "kind": "landing",
+      "version": "0.1.0",
+      "description": "karsa.app landing site",
+      "artifacts": [
+        {
+          "platform": "any",
+          "url": "https://github.com/karsa-app/karsa/releases/download/landing-v0.1.0/karsa-landing-web.tar.gz",
+          "sha256": "935929a8ba0237fcbd55ef75e9aefeb35c8c61152ae5a59c37cbcd63859045b3",
+          "size": 125592
+        }
+      ]
+    },
+    {
+      "name": "@karsa/project-template-productive",
+      "kind": "template",
+      "version": "0.1.0",
+      "description": "A two-agent reconciler task system — a chat agent that plans, a worker agent that executes, autonomously.",
+      "artifacts": [
+        {
+          "platform": "any",
+          "url": "https://github.com/karsa-app/karsa/releases/download/template-v0.1.0/karsa-project-template-productive-0.1.0.tar.gz",
+          "sha256": "ea1e38bc426f56583b2dcbeff79a7a8477bf72ff13c1a8c36b0215d00527f95e",
+          "size": 36873
+        }
+      ],
+      "requires": {
+        "karsa": ">=0.1.0"
+      },
+      "readme_url": "https://karsa.app/packages/@karsa/project-template-productive/README.md",
+      "manifest_url": "https://karsa.app/packages/@karsa/project-template-productive/karsa.package.json"
+    }
+  ]
+}

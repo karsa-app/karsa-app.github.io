@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Upgrading · Karsa Manual</title>
+  <meta name="description" content="How packages are versioned, seeded, and reconciled into $KARSA_HOME." />
+  <link rel="canonical" href="https://karsa.app/doc/doc_upgrading" />
+  <link rel="icon" type="image/png" href="/karsa-logo.png" />
+  <meta property="og:title" content="Upgrading · Karsa Manual" />
+  <meta property="og:description" content="How packages are versioned, seeded, and reconciled into $KARSA_HOME." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://karsa.app/doc/doc_upgrading" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/index.html" aria-label="Karsa home">
+      <img src="/karsa-logo.png" alt="" />
+      <span class="wordmark">Karsa</span>
+    </a>
+    <nav class="nav">
+      <a href="/doc/index.html">Manual</a>
+      <a href="/packages.html">Packages</a>
+      <a class="nav-hide-sm" href="https://github.com/karsa-app/karsa">GitHub</a>
+    </nav>
+  </header>
+  <main>
+    <article class="wrap" style="max-width:48rem;padding-top:2rem;padding-bottom:4rem">
+      <p><a href="/doc/index.html">← The Karsa Manual</a></p><h1>Upgrading</h1>
+<p>Karsa ships as a set of versioned packages — the daemon, the CLI, the web UI, project templates, and this manual (<code>@karsa/doc</code>). Upgrading is the act of pulling newer versions and letting the daemon <strong>reconcile</strong> them onto your machine. This page explains the model so an upgrade is never a mystery.</p>
+<h2>Packages and the registry</h2>
+<p>Everything shippable is a package with a <code>name</code>, a <code>version</code>, and a <code>kind</code>. The set of available packages — and where to fetch each one — is listed in a <strong>registry</strong> (<code>registry.json</code>). The registry is the source of truth for &quot;what versions exist&quot;; your install pulls from it.</p>
+<p>A package's <code>kind</code> says how it's handled:</p>
+<ul><li><code>daemon</code> / <code>cli</code> — the binaries that run Karsa.</li><li><code>web</code> / <code>landing</code> — the UIs.</li><li><code>template</code> — project provisioning templates (what gets seeded when you create a project).</li><li><code>doc</code> — this manual, seeded to <code>$KARSA_HOME/doc</code>.</li><li><code>engine</code> — an AI engine plugin (e.g. a local-model engine).</li></ul>
+<h2>Installing</h2>
+<p>The install script reads the registry, downloads the package list it names — the daemon and CLI binaries plus the default content packages (web, this manual, the base project template, and any default engines) — verifies each by checksum, and places it by kind: binaries on your <code>PATH</code> (the <code>karsa</code> command), the web UI and manual and templates under <code>$KARSA_HOME</code>. Then it points you at <code>karsa start</code>. Starting the daemon <strong>registers</strong> what's on disk so it's live.</p>
+<h2>Seeding and reconcile</h2>
+<p>When you install or upgrade, the daemon <strong>seeds</strong> package content onto disk and then <strong>reconciles</strong> it — an idempotent pass that makes the on-disk state match what the installed packages declare. Reconcile never deletes your data; it ensures the directories and package-owned files are present and current.</p>
+<p>Each package declares a <strong>reconcile policy</strong> for its files:</p>
+<ul><li><strong><code>replace</code></strong> — the file is package-owned; on upgrade the newer version wins. The manual (<code>doc/</code>) is <code>replace</code>: you read it, you don't edit it, so a newer manual simply takes over.</li><li><strong><code>merge</code></strong> — the file may carry local edits, so an upgrade layers changes in rather than clobbering.</li><li><strong>install-if-absent</strong> — files like a project's <code>index.md</code> are written only when missing, so your edits are never overwritten.</li></ul>
+<p>This is why upgrading is safe: package-owned content refreshes, your content stays put.</p>
+<h2>Live upgrades vs. restart</h2>
+<p>Karsa hot-swaps packages at runtime — almost every upgrade applies <strong>without downtime</strong>, and you don't stop anything. A package is just files the daemon reads, and registering a newly-installed one is a live, in-place action:</p>
+<ul><li><strong>Served fresh every request</strong> — the web UI and this manual. Swap the files and the next page load has the new version.</li><li><strong>Re-registered on reconcile</strong> — your project's collections, types, agent profiles, subscribers, <strong>and engine / event-handler plugins</strong>. A reconcile pass re-reads them (re-importing changed plugin code) while the server keeps running.</li><li><strong>The CLI</strong> (<code>karsa</code>) is a separate, short-lived program — it just talks to the running daemon. Upgrading the <code>karsa</code> binary changes nothing about the server; the next command you run is simply the new version.</li></ul>
+<p>The <strong>one</strong> thing that can't update live is the running daemon itself: upgrading the <strong>Karsa server</strong> binary means new server code, so the daemon re-execs (a quick, automatic handoff — your data lives on disk and is reloaded on start). Engines built into the server come along with it; engine <em>plugins</em> installed alongside register without a restart. In short: upgrading the <em>Karsa server</em> gives the daemon a brief, self-managed bounce; <strong>everything else — the CLI, plugins, web, docs, templates — is seamless.</strong></p>
+<p><strong>Your running agents survive that bounce.</strong> A chat or task that's mid-run isn't tied to the daemon's life: each engine runs behind a thin wrapper that keeps going and keeps writing its log to disk even while the server is down. When the new daemon comes back it <strong>reattaches</strong> — it picks the run's log back up, finishes streaming the reply into your chat, and marks it complete, exactly as if nothing happened. If a run genuinely died during the gap (its process was hard-killed), the daemon notices it went quiet, confirms it's gone, and finalizes it as failed rather than leaving it spinning. Either way you don't lose work to an upgrade or a restart.</p>
+<h2>Upgrading the manual specifically</h2>
+<p><code>@karsa/doc</code> is <code>kind: doc</code>, policy <code>replace</code>. On upgrade the daemon re-seeds <code>$KARSA_HOME/doc</code> from the newer bundle. Agents reading the manual off the filesystem, humans reading it at <code>/doc</code>, and the public reading <code>karsa.app/doc</code> all move to the new version together — one source, three surfaces.</p>
+<h2>Tools and <code>karsa doctor</code></h2>
+<p>Beyond Karsa's own packages, your projects depend on external <strong>tools</strong> (git, ripgrep, an AI engine, etc.). These aren't upgraded by the reconcile pass — they live on your system. Run <code>karsa doctor</code> (or open the <strong>Tools</strong> collection in the System project) to see what's installed and install or update what's missing in a click.</p>
+<h2>Where to go next</h2>
+<p>For what to <em>do</em> with an up-to-date Karsa, read <strong>Using Karsa</strong> and <strong>Building a Karsa app</strong>.</p>
+    </article>
+  </main>
+</body>
+</html>

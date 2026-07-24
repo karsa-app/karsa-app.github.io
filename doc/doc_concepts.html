@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How Karsa works · Karsa Manual</title>
+  <meta name="description" content="The mental model — artifacts, types, collections, resources, events, and subscribers." />
+  <link rel="canonical" href="https://karsa.app/doc/doc_concepts" />
+  <link rel="icon" type="image/png" href="/karsa-logo.png" />
+  <meta property="og:title" content="How Karsa works · Karsa Manual" />
+  <meta property="og:description" content="The mental model — artifacts, types, collections, resources, events, and subscribers." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://karsa.app/doc/doc_concepts" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/index.html" aria-label="Karsa home">
+      <img src="/karsa-logo.png" alt="" />
+      <span class="wordmark">Karsa</span>
+    </a>
+    <nav class="nav">
+      <a href="/doc/index.html">Manual</a>
+      <a href="/packages.html">Packages</a>
+      <a class="nav-hide-sm" href="https://github.com/karsa-app/karsa">GitHub</a>
+    </nav>
+  </header>
+  <main>
+    <article class="wrap" style="max-width:48rem;padding-top:2rem;padding-bottom:4rem">
+      <p><a href="/doc/index.html">← The Karsa Manual</a></p><h1>How Karsa works</h1>
+<p>A few ideas explain almost everything in Karsa. Hold these and the rest follows.</p>
+<h2>Artifacts</h2>
+<p>Any piece of data a project can reach is an <strong>artifact</strong>. An artifact can be an arbitrary <strong>file</strong>, but most are <strong>structured</strong> (rows in a SQL DB) or <strong>semi-structured</strong> (documents — markdown + frontmatter, JSON). Structured data follows a <strong>schema</strong> — its <strong>type</strong>.</p>
+<h2>Collections and resources</h2>
+<p>Artifacts of the same type are grouped into a <strong>collection</strong>, and an artifact inside a collection is a <strong>resource</strong>. A collection is the usual way you see and work with data in Karsa: it holds the configuration for <em>where its resources live</em> (a SQL table, a documents folder, …) and it guarantees every resource in it shares the same schema.</p>
+<p>Collections are defined <strong>per project</strong> — what collections a project has, and how each renders, lives in the project's own files, not baked into Karsa.</p>
+<h2>Every resource looks the same</h2>
+<p>Whatever the data source, every resource carries the same baseline fields:</p>
+<ul><li><strong><code>id</code></strong> — its identifier;</li><li><strong><code>_t</code></strong> — its type;</li><li><strong><code>created_at</code> / <code>created_by</code></strong> and <strong><code>updated_at</code> / <code>updated_by</code></strong> — when, and by whom.</li></ul>
+<p>&quot;By whom&quot; is an actor: a worker (an agent) or <code>user</code>. That small fact is what lets an agent safely react to changes without reacting to <em>its own</em> changes — the basis of a stable agent loop.</p>
+<p>An id reads <code>{type}_{unique}</code> — e.g. <code>spec_01KVSRJ0RG2G</code>. Some resources also have a <strong>slug</strong> for readability, and you'll see the <code>{id}_{slug}</code> form in URLs and links — but Karsa resolves links by the id alone, so a slug going stale never breaks anything.</p>
+<h2>CRUD and events — the same for everything</h2>
+<p>Karsa gives every configured collection a <strong>uniform CRUD API</strong> — create / read / update / delete — that works out of the box for SQL- and document-backed collections (and takes a custom handler when a source needs one). Every write automatically emits an <strong>event</strong>: <code>{collection}.created</code>, <code>{collection}.updated</code>, <code>{collection}.deleted</code>.</p>
+<p>All events flow onto <strong>one queue</strong>. You can <strong>filter</strong> that queue and <strong>subscribe</strong> to it; when a matching event fires, Karsa notifies your subscriber.</p>
+<h2>Subscribers — where work happens</h2>
+<p>A <strong>subscriber</strong> binds a <strong>trigger</strong> to a <strong>fn</strong>: <em>when this trigger fires, run that fn.</em> The trigger is either an <strong>event match</strong> (e.g. <code>msg.created</code> where <code>role: user</code>) or a <strong>time</strong> (<code>at</code> / <code>every</code>) — an event-driven subscriber and a scheduled job are the same object, just a different trigger. There is no separate &quot;event handler&quot; or &quot;scheduler&quot; object to create. A fn is the unit of logic that runs — plain code, or an agent-CLI wrapper; a role fn reads its instructions from an <strong>agent profile</strong> passed in its params, so behavior is data you edit, not code. (See <strong>Automating with events, subscribers, and fns</strong>.)</p>
+<h2>Putting it together</h2>
+<p>Typed collections + a uniform CRUD surface + one event queue + subscribers that bind triggers to fns is enough to stand up a <strong>long-running agent doing real work</strong>: it reacts to data changes and to the clock, writes typed resources back, and those writes are themselves events that drive the next step. The chat loop you use day-to-day (see <strong>Using Karsa</strong>) is the first worked example of exactly this.</p>
+<p><em>(Coming: the per-project <strong>Karsa app</strong> — each project as a self-contained, caged app over the Karsa SDK, not just data + subscribers.)</em></p>
+    </article>
+  </main>
+</body>
+</html>

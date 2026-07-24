@@ -1,0 +1,113 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Packages — Karsa</title><meta name="description" content="The Karsa package registry — templates, engines, and core units, each with its own version." /><link rel="icon" type="image/png" href="./karsa-logo.png" /><link rel="stylesheet" href="./styles.css" /></head><body><header class="site-header"><a class="brand" href="./index.html" aria-label="Karsa home"><img src="./karsa-logo.png" alt="" /><span class="wordmark">Karsa</span></a><nav class="nav"><a href="./index.html">Home</a><a href="./doc/index.html">Manual</a><a class="nav-hide-sm" href="https://github.com/karsa-app/karsa">GitHub</a></nav></header><main><section class="wrap pkg-head"><p class="eyebrow">Registry</p><h1 class="display">Packages</h1><p class="lead"> Every shippable Karsa unit — the CLI, the daemon, the web UI, templates, and engines — each versioned independently. The list below is read live from the registry. </p></section><section class="wrap"><p class="section-rule" id="registry-meta">Loading registry</p><div class="state" id="state-loading"><p class="state-title">Loading packages…</p><p class="state-body">Fetching the registry.</p></div><div class="state hidden" id="state-error"><p class="state-title">Registry unavailable</p><p class="state-body"> Couldn't load <code>/registry.json</code> right now. It's published with each release — check back shortly, or install Karsa and run <code>karsa status</code>. </p></div><div class="state hidden" id="state-empty"><p class="state-title">No packages yet</p><p class="state-body">The registry is published but lists no packages. Nothing to show.</p></div><ul class="pkg-list hidden" id="pkg-list"></ul></section></main><footer class="site-footer"><div class="wrap"><span class="copy">© 2026 Karsa</span><a href="./doc/index.html">Manual</a><a href="./index.html">Home</a><a href="https://github.com/karsa-app/karsa">GitHub</a></div></footer> <script>
+    (function () {
+      var els = {
+        meta: document.getElementById("registry-meta"),
+        loading: document.getElementById("state-loading"),
+        error: document.getElementById("state-error"),
+        empty: document.getElementById("state-empty"),
+        list: document.getElementById("pkg-list"),
+      };
+
+      function show(el) { if (el) el.classList.remove("hidden"); }
+      function hide(el) { if (el) el.classList.add("hidden"); }
+
+      function text(value) {
+        return document.createTextNode(value == null ? "" : String(value));
+      }
+
+      function el(tag, className, child) {
+        var node = document.createElement(tag);
+        if (className) node.className = className;
+        if (child != null) {
+          if (typeof child === "string") node.appendChild(text(child));
+          else node.appendChild(child);
+        }
+        return node;
+      }
+
+      function safeUrl(u) {
+        if (typeof u !== "string") return null;
+        return (/^https?:\/\//i.test(u) || u.charAt(0) === "/") ? u : null;
+      }
+
+      function renderRow(pkg) {
+        var row = el("li", "pkg-row");
+
+        // Name + kind/version meta
+        var nameCol = el("div", "pkg-name");
+        nameCol.appendChild(el("span", "name", pkg && pkg.name ? String(pkg.name) : "(unnamed)"));
+        var meta = el("div", "pkg-meta");
+        if (pkg && pkg.kind) meta.appendChild(el("span", "pkg-kind", String(pkg.kind)));
+        if (pkg && pkg.version) meta.appendChild(el("span", "pkg-version", "v" + String(pkg.version)));
+        nameCol.appendChild(meta);
+        row.appendChild(nameCol);
+
+        // Description
+        row.appendChild(el("p", "pkg-desc", pkg && pkg.description ? String(pkg.description) : "—"));
+
+        // Links (README + manifest)
+        var links = el("div", "pkg-links");
+        var readme = safeUrl(pkg && pkg.readme_url);
+        if (readme) {
+          var a = el("a", null, "Readme");
+          a.href = readme;
+          a.rel = "noopener noreferrer";
+          links.appendChild(a);
+        }
+        var manifest = safeUrl(pkg && pkg.manifest_url);
+        if (manifest) {
+          var m = el("a", null, "Manifest");
+          m.href = manifest;
+          m.rel = "noopener noreferrer";
+          links.appendChild(m);
+        }
+        row.appendChild(links);
+
+        return row;
+      }
+
+      function fail() {
+        hide(els.loading);
+        hide(els.list);
+        hide(els.empty);
+        show(els.error);
+        els.meta.textContent = "Registry unavailable";
+      }
+
+      fetch("/registry.json", { cache: "no-cache" })
+        .then(function (res) {
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          return res.json();
+        })
+        .then(function (data) {
+          var packages = (data && Array.isArray(data.packages)) ? data.packages : null;
+          hide(els.loading);
+
+          if (!packages || packages.length === 0) {
+            hide(els.list);
+            show(els.empty);
+            els.meta.textContent = (data && data.generated_at)
+              ? "Generated " + new Date(data.generated_at).toISOString().slice(0, 10)
+              : "Registry";
+            return;
+          }
+
+          els.list.textContent = "";
+          packages.forEach(function (pkg) {
+            els.list.appendChild(renderRow(pkg));
+          });
+          show(els.list);
+
+          var count = packages.length + (packages.length === 1 ? " package" : " packages");
+          if (data && data.generated_at) {
+            var d = new Date(data.generated_at);
+            els.meta.textContent = count + " · generated " +
+              (isNaN(d.getTime()) ? String(data.generated_at) : d.toISOString().slice(0, 10));
+          } else {
+            els.meta.textContent = count;
+          }
+        })
+        .catch(fail);
+    })();
+  </script>
+</body></html>

@@ -1,0 +1,26 @@
+{
+  "name": "@karsa/project-template-productive",
+  "kind": "template",
+  "version": "0.1.0",
+  "description": "Productive template (the new default) — a standalone two-agent reconciler task system: a chat agent that turns goals into tasks + a worker agent that executes them. Sibling of minimum, not an extension (spec_01KXKN88BDFF).",
+  "provides": {
+    "artifact_kinds": ["chat", "spec", "exec", "file", "syslog", "agent-profile", "subscriber", "event-handler", "task", "fn"]
+  },
+  "requires": {
+    "karsa": ">=0.1.0"
+  },
+  "install": {
+    "dest": "$KARSA_HOME/packages/@karsa/project-template-productive",
+    "archive": "tar.gz"
+  },
+  "upgrade": {
+    "policy": {
+      "index.md": "keep",
+      "README.md": "keep",
+      "schemas/**": "replace",
+      "src/**": "merge",
+      "*": "merge"
+    },
+    "note": "Standalone template (does NOT extend minimum). User-facing project home (index.md) is kept on upgrade; schemas are replaced; seed content is three-way merged (spec_01KVGG48KT08)."
+  }
+}

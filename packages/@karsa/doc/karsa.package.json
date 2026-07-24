@@ -1,0 +1,16 @@
+{
+  "name": "@karsa/doc",
+  "kind": "doc",
+  "version": "0.1.0",
+  "description": "The Karsa manual — how to use Karsa, upgrade, build a Karsa app, and avoid anti-patterns. Read by engines via $KARSA_HOME/doc, by humans at /doc, and by the public at karsa.app/doc.",
+  "install": {
+    "dest": "$KARSA_HOME/doc",
+    "archive": "tar.gz"
+  },
+  "upgrade": {
+    "policy": {
+      "*": "replace"
+    },
+    "note": "Users read the manual, they don't edit it — always replace on upgrade (spec_01KVE4X4BM2A §6.5 tier 1)."
+  }
+}

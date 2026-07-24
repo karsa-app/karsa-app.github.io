@@ -1,0 +1,22 @@
+{
+  "name": "@karsa/web",
+  "kind": "web",
+  "version": "0.1.0",
+  "description": "The Karsa web UI — the single-page app the daemon serves at /. Minified, source-map-free static bundle.",
+  "provides": {
+    "web_bundle": true
+  },
+  "requires": {
+    "karsa": ">=0.1.0"
+  },
+  "install": {
+    "dest": "$KARSA_HOME/packages/@karsa/web/dist",
+    "archive": "tar.gz"
+  },
+  "upgrade": {
+    "policy": {
+      "*": "replace"
+    },
+    "note": "The daemon reads the bundle fresh per request; swap the dist/ files and the next request serves them — zero downtime (spec_01KVE4X4BM2A §6.5 tier 1)."
+  }
+}

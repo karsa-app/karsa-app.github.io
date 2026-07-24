@@ -1,0 +1,24 @@
+{
+  "name": "karsa-server",
+  "kind": "daemon",
+  "version": "0.1.0",
+  "description": "The Karsa daemon. Serves the HTTP API + web UI, runs the per-project schedulers, and gatekeeps engine subprocesses.",
+  "provides": {
+    "binaries": ["karsa-server"],
+    "api": {
+      "openapi": "/api/openapi.json",
+      "capabilities": "/api/capabilities"
+    }
+  },
+  "install": {
+    "dest": "~/.local/bin/karsa-server",
+    "executable": true,
+    "platform_asset": true
+  },
+  "upgrade": {
+    "policy": {
+      "*": "replace"
+    },
+    "note": "Upgrading the daemon binary is the one package that needs the running process to re-exec (new daemon code); state lives on disk and rebuilds on boot (spec_01KVE4X4BM2A §6.5 tier 3)."
+  }
+}

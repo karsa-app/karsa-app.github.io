@@ -1,0 +1,20 @@
+{
+  "name": "karsa",
+  "kind": "cli",
+  "version": "0.1.0",
+  "description": "The Karsa CLI launcher. Starts/stops the daemon, reports status, runs doctor, and installs/upgrades packages.",
+  "provides": {
+    "binaries": ["karsa"]
+  },
+  "install": {
+    "dest": "~/.local/bin/karsa",
+    "executable": true,
+    "platform_asset": true
+  },
+  "upgrade": {
+    "policy": {
+      "*": "replace"
+    },
+    "note": "The CLI is a single short-lived binary; upgrading it just replaces the file — no daemon restart needed (the next invocation is the new one)."
+  }
+}

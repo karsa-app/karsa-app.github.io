@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Automating with events, subscribers, and fns · Karsa Manual</title>
+  <meta name="description" content="How an agent wires up reactive + scheduled work on Karsa's infra — publish events, create subscribers, bind them to fns." />
+  <link rel="canonical" href="https://karsa.app/doc/doc_automation" />
+  <link rel="icon" type="image/png" href="/karsa-logo.png" />
+  <meta property="og:title" content="Automating with events, subscribers, and fns · Karsa Manual" />
+  <meta property="og:description" content="How an agent wires up reactive + scheduled work on Karsa's infra — publish events, create subscribers, bind them to fns." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://karsa.app/doc/doc_automation" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/index.html" aria-label="Karsa home">
+      <img src="/karsa-logo.png" alt="" />
+      <span class="wordmark">Karsa</span>
+    </a>
+    <nav class="nav">
+      <a href="/doc/index.html">Manual</a>
+      <a href="/packages.html">Packages</a>
+      <a class="nav-hide-sm" href="https://github.com/karsa-app/karsa">GitHub</a>
+    </nav>
+  </header>
+  <main>
+    <article class="wrap" style="max-width:48rem;padding-top:2rem;padding-bottom:4rem">
+      <p><a href="/doc/index.html">← The Karsa Manual</a></p><h1>Automating with events, subscribers, and fns</h1>
+<p>Read this when the user wants a <strong>system that keeps running</strong> — a pipeline, a watcher, a nightly job — not a one-shot answer. Don't reach for cron files, a background daemon, or an outside queue. Karsa gives you three primitives: <strong>events</strong>, <strong>subscribers</strong>, and <strong>fns</strong>. Build on them, through <code>$KARSA_API_BASE</code>.</p>
+<h2>The model in one breath</h2>
+<ul><li>Every write to a collection auto-emits an <strong>event</strong> — <code>karsa/{collection}/created</code> / <code>/updated</code> / <code>/deleted</code> — onto Karsa's single event queue. You can also <strong>publish your own</strong> event.</li><li>A <strong>fn</strong> is a unit of logic (code, or an agent-CLI wrapper). It's what actually <em>runs</em>.</li><li>A <strong>subscriber</strong> binds a <strong>trigger</strong> to a <strong>fn</strong>: <em>when this trigger fires, run that fn.</em> The trigger is either an <strong>event match</strong> or a <strong>time</strong> (<code>at</code> / <code>every</code>).</li></ul>
+<p>So a pipeline is: <em>something happens → an event fires (or a timer comes due) → a subscriber runs its fn → the fn's writes fire the next events.</em> That's the whole engine. (Read <code>doc_concepts</code> for the model, <code>doc_data-and-storage</code> for collections.)</p>
+<p>&gt; <strong>One shape for everything.</strong> An event-triggered subscriber and a scheduled job are the <em>same thing</em> — a subscriber whose trigger is an event vs a time. There is no separate &quot;scheduler&quot; object to create and no separate &quot;handler&quot; object: a subscriber points straight at a <code>fn</code>.</p>
+<h2>Publish an event</h2>
+<p>Any code (an fn, or the agent during its run) can put an event on the queue:</p>
+<pre><code>POST ${KARSA_API_BASE}/event
+{ &quot;type&quot;: &quot;karsa/deal/enriched&quot;, &quot;payload&quot;: { &quot;deal_id&quot;: &quot;deal_01…&quot;, &quot;risk&quot;: &quot;medium&quot; } }</code></pre>
+<p>Collection writes publish their CRUD events for you — you only publish custom events for signals that aren't a plain create/update/delete (e.g. <code>karsa/deal/refresh_due</code>, <code>karsa/report/ready</code>).</p>
+<h2>Create a subscriber (event-triggered)</h2>
+<p>Deals land in a <code>deal</code> collection; enrich each new one. Create a subscriber whose trigger matches <code>karsa/deal/created</code> and whose fn is your agent wrapper:</p>
+<pre><code>POST ${KARSA_API_BASE}/subscriber
+{
+  &quot;frontmatter&quot;: {
+    &quot;trigger&quot;: { &quot;on&quot;: { &quot;type&quot;: &quot;karsa/deal/created&quot;, &quot;attrs&quot;: { &quot;updated_by&quot;: { &quot;$ne&quot;: &quot;$self&quot; } } } },
+    &quot;fn&quot;: &quot;&lt;the run-agent fn id&gt;&quot;,
+    &quot;params&quot;: { &quot;agent&quot;: &quot;&lt;the planner user id&gt;&quot;, &quot;instruction&quot;: &quot;A new deal was created (see the event). Fetch its public filings, summarize the risk, and PATCH the summary back onto the deal via the API.&quot; },
+    &quot;run_mode&quot;: &quot;running&quot;
+  }
+}</code></pre>
+<p>&gt; <strong>Which fn for agent work?</strong> Bind the project's <strong>run-agent fn</strong> (Productive seeds it — slug <code>run_agent</code>; your instructions carry its minted id). It runs an agent USER (<code>params.agent</code> — the record's body is its instructions, its <code>fns:</code> list the harness preference, first installed wins), passes your <code>params.instruction</code> for this fire, and — with <code>params.chat_id</code> — streams the output into that chat authored as the agent. Don't bind a raw harness fn (<code>claude_code</code>/<code>codex</code>) from a subscriber: it won't pick a fallback or detach. &gt; &gt; <strong>Report vs work.</strong> Bind the PLANNER as the agent and let it decide each fire: reports it answers into the chat; work it turns into a <code>ready</code> task the <strong>worker</strong> executes — serialized, retried, on the board. The task system stays the single executor for work; a timer is just one more producer feeding it.</p>
+<ul><li><strong><code>trigger.on</code></strong> — the event filter: <code>{ type, attrs }</code>. <code>type</code> is an event type (a <code>{collection}.created/updated/deleted</code>, or a custom one you published). <code>attrs</code> matches fields on the event payload.</li><li><strong><code>fn</code></strong> — the fn to run. An <strong>agent</strong> is just a fn (an agent-CLI wrapper like <code>fn_claude_code</code>); a pure-code reaction is a fn too. &quot;Which agent / how it's configured&quot; lives in the fn (or its <code>params</code>) — <strong>not</strong> on the subscriber.</li><li><strong><code>params</code></strong> — static input handed to the fn on each fire (e.g. the agent's standing instruction). The event is also passed to the fn.</li><li><strong><code>updated_by: { &quot;$ne&quot;: &quot;$self&quot; }</code></strong> — the <strong>loop-safety filter</strong>: it stops a subscriber waking on <em>its own</em> writes. Use it whenever the fn writes into a collection it also listens to (<code>doc_concepts</code>).</li><li><strong><code>run_mode</code></strong> — <code>running</code> (live) or <code>paused</code>.</li></ul>
+<h2>Create a subscriber (time-triggered = the &quot;schedule&quot;)</h2>
+<p>A scheduled job is just a subscriber with a <strong>time trigger</strong> — no separate schedule object:</p>
+<pre><code>POST ${KARSA_API_BASE}/subscriber
+{
+  &quot;frontmatter&quot;: {
+    &quot;trigger&quot;: { &quot;every&quot;: &quot;24h&quot;, &quot;at&quot;: &quot;2026-06-24T07:00:00Z&quot; },
+    &quot;fn&quot;: &quot;&lt;the run-agent fn id&gt;&quot;,
+    &quot;params&quot;: { &quot;agent&quot;: &quot;&lt;the planner user id&gt;&quot;, &quot;instruction&quot;: &quot;Re-fetch each deal’s latest data, update its row, and note anything material that changed.&quot;, &quot;chat_id&quot;: &quot;&lt;optional: chat to deliver into&gt;&quot; },
+    &quot;run_mode&quot;: &quot;running&quot;
+  }
+}</code></pre>
+<ul><li><strong><code>trigger.at</code></strong> — first (or only) fire time, ISO-8601. Omit <code>every</code> for a <strong>one-off</strong> (fires once, then done).</li><li><strong><code>trigger.every</code></strong> — makes it <strong>recurring</strong>: an interval like <code>30m</code> / <code>1h</code> / <code>24h</code> / <code>7d</code> (cron expressions later). <code>at</code> is the anchor; a job that fell behind catches up to the next future slot without replaying missed fires.</li></ul>
+<p>When the timer comes due, Karsa runs the subscriber's <code>fn</code> directly. (You <em>can</em> have the fn publish a custom event instead of doing the work inline — then a second subscriber reacts to it — but usually the fn just does the work.)</p>
+<p>&gt; <strong>Deferring a task?</strong> Don't hand-roll a wake. In Productive, set the task to <code>status: &quot;blocked&quot;</code> + <code>wake_at: &quot;&lt;ISO&gt;&quot;</code> — the seeded task-defer controller creates the one-shot wake for you and flips the task to <code>ready</code> at that moment (cancel or re-aim by editing the task).</p>
+<h2>Putting a pipeline together</h2>
+<p>A deal-flow pipeline is a handful of subscribers:</p>
+<p>1. A <strong><code>deal</code> collection</strong> (docdb or sqldb) — the records (<code>doc_data-and-storage</code>). 2. An <strong>event-triggered subscriber on <code>karsa/deal/created</code></strong> — enrich each new deal. 3. A <strong>time-triggered subscriber</strong> (<code>every: 24h</code>) — keep deals current. 4. The fn does the fetching/summarizing <strong>during its run</strong> (an agent exec can use the network) and writes results back as resources — whose writes emit the next events.</p>
+<p>Build each piece through <code>$KARSA_API_BASE</code>, put the standing instruction in each subscriber's <code>params</code>, and the system runs itself between your chats.</p>
+<h2>Where fns live (you rarely author the plumbing)</h2>
+<ul><li><strong>The run-agent fn</strong> (slug <code>run_agent</code>), the <strong>harness fns</strong> it drives (<code>claude_code</code>, <code>codex</code>), and the <strong>core built-ins</strong> (indexing, retry, the scheduler-sync) already exist — reference them; don't rewrite them.</li><li><strong>Your own logic</strong> is a fn you write into the project's <code>fn/</code> collection (<code>doc_building-a-karsa-app</code> for the SDK). But for most automation you just point a subscriber at the run-agent fn (agent = the planner) and describe the work in <code>params.instruction</code> — no new code.</li></ul>
+<h2>Anti-patterns</h2>
+<ul><li><strong>Don't</strong> write cron files, spawn your own daemon, or sleep-loop. Use a time-triggered subscriber.</li><li><strong>Don't</strong> hand-roll retries or backoff inside your fn. Declare a <code>retry</code> plan on the subscriber and Karsa wraps the fn (<code>doc_concepts</code> → retry).</li><li><strong>Don't</strong> poll a collection on a timer to find changes. Subscribe to its <code>.created/.updated</code> events.</li><li><strong>Don't</strong> forget the <code>updated_by: { &quot;$ne&quot;: &quot;$self&quot; }</code> loop-safety filter when a fn writes into a collection it also watches.</li></ul>
+    </article>
+  </main>
+</body>
+</html>

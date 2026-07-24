@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anti-patterns · Karsa Manual</title>
+  <meta name="description" content="The two big mistakes — building outside Karsa, and reaching for external services." />
+  <link rel="canonical" href="https://karsa.app/doc/doc_anti-patterns" />
+  <link rel="icon" type="image/png" href="/karsa-logo.png" />
+  <meta property="og:title" content="Anti-patterns · Karsa Manual" />
+  <meta property="og:description" content="The two big mistakes — building outside Karsa, and reaching for external services." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://karsa.app/doc/doc_anti-patterns" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/index.html" aria-label="Karsa home">
+      <img src="/karsa-logo.png" alt="" />
+      <span class="wordmark">Karsa</span>
+    </a>
+    <nav class="nav">
+      <a href="/doc/index.html">Manual</a>
+      <a href="/packages.html">Packages</a>
+      <a class="nav-hide-sm" href="https://github.com/karsa-app/karsa">GitHub</a>
+    </nav>
+  </header>
+  <main>
+    <article class="wrap" style="max-width:48rem;padding-top:2rem;padding-bottom:4rem">
+      <p><a href="/doc/index.html">← The Karsa Manual</a></p><h1>Anti-patterns</h1>
+<p>Most ways to misuse Karsa look reasonable in the moment. They're the habits you bring from building software <em>outside</em> a system like this. This page names the wrong turns — especially the two that matter most — so you recognize them before you take them. <strong>If you are an agent, read this before you decide to install a service or scaffold an app somewhere &quot;convenient.&quot;</strong></p>
+<h2>Anti-pattern 1 — Building the app <em>outside</em> Karsa</h2>
+<p><strong>The mistake:</strong> the task is &quot;build an app,&quot; so you scaffold a project in <code>/tmp</code>, in the home directory, or in a folder next to the Karsa project — anywhere but inside the project tree. Maybe you spin up a dev server, wire it to your own files, and treat Karsa as a chat window you're talking to from the outside.</p>
+<p><strong>Why it's wrong:</strong> the app is now <strong>outside the cage</strong>. It has no enforced blast radius, it isn't versioned with the project, it isn't surfaced in the UI, and it can't be run, scheduled, or trusted by the daemon. You've rebuilt the exact thing Karsa exists to replace — an ungoverned program loosely associated with some data — and thrown away every guarantee the project gives you. There is also no path to &quot;expand to the cloud later,&quot; because none of it went through the seam Karsa controls.</p>
+<p><strong>Do instead:</strong> build the app <strong>inside the project</strong>, in its tree, versioned in git, run by the daemon, caged. See <strong>Building a Karsa app</strong>. The project <em>is</em> the place the app lives — not a thing you point an external app at.</p>
+<h2>Anti-pattern 2 — Reaching for an external service instead of the SDK</h2>
+<p><strong>The mistake:</strong> you need a database, so you reach for <strong>Supabase</strong>. Or Postgres on some cloud, or Firebase, or a hosted Redis, or an S3 bucket, or a third-party queue. You sign up, grab a connection string, and wire the app straight to it.</p>
+<p><strong>Why it's wrong:</strong> the Karsa SDK already provides every one of these, and the SDK is the <em>only</em> interface that keeps the cage intact and the expand-to-cloud path open:</p>
+<ul><li>Need a relational database? Use <strong><code>@karsa/sqldb</code></strong> — not Supabase, not raw Postgres. <code>@karsa/sqldb</code> is the <strong>sole storage chokepoint</strong>; going around it is what breaks &quot;local now, cloud later.&quot;</li><li>Need document storage? Use <strong><code>@karsa/docdb</code></strong> — not a hosted document DB. It's built on <code>@karsa/sqldb</code>, so it inherits the same expand path.</li><li>Need file/object storage? Use <strong><code>@karsa/blob</code></strong> — not an S3 bucket you manage.</li><li>Need background jobs or messaging? Use <strong><code>@karsa/queue</code></strong> — not an external broker.</li></ul>
+<p>When you wire the app to an outside service, you put your data and your credentials <em>outside the cage</em>. The daemon can't govern it, can't swap the backend, can't expand it. You've coupled the project to an account someone has to own and pay for, and you've broken portability for nothing — because the SDK door was right there.</p>
+<p><strong>The rule of thumb:</strong> if you're about to add an external dependency for persistence, files, jobs, or scheduling, <strong>stop</strong> — there is almost certainly an SDK package for it. Reach for <code>@karsa/*</code> first. If you genuinely believe no SDK door exists, that's a signal to re-check, not a license to go outside.</p>
+<h2>Anti-pattern 3 — Trying to break out of the cage</h2>
+<p>The cage isn't an obstacle to route around — it's the property that makes a Karsa app trustworthy and portable. Shelling out to escape the project, hardcoding absolute paths to the host, or stashing state outside the project tree all quietly forfeit those guarantees. Keep work inside the project.</p>
+<h2>Anti-pattern 4 — Editing package-owned files in place</h2>
+<p>Files Karsa owns — this manual, template-seeded scaffolding marked <code>replace</code> — are refreshed on upgrade. Editing them in place means your changes vanish on the next reconcile. Put your own content in <em>your</em> collections and files; leave package-owned files to the package. (See <strong>Upgrading</strong>.)</p>
+<h2>Where to go next</h2>
+<p>The positive version of all of this is <strong>Building a Karsa app</strong>. Read it, build inside, build on the SDK, and none of these anti-patterns will tempt you.</p>
+    </article>
+  </main>
+</body>
+</html>

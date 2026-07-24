@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data and storage · Karsa Manual</title>
+  <meta name="description" content="Where data goes by shape, and the Karsa HTTP API conventions an agent uses to put it there." />
+  <link rel="canonical" href="https://karsa.app/doc/doc_data-and-storage" />
+  <link rel="icon" type="image/png" href="/karsa-logo.png" />
+  <meta property="og:title" content="Data and storage · Karsa Manual" />
+  <meta property="og:description" content="Where data goes by shape, and the Karsa HTTP API conventions an agent uses to put it there." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://karsa.app/doc/doc_data-and-storage" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/index.html" aria-label="Karsa home">
+      <img src="/karsa-logo.png" alt="" />
+      <span class="wordmark">Karsa</span>
+    </a>
+    <nav class="nav">
+      <a href="/doc/index.html">Manual</a>
+      <a href="/packages.html">Packages</a>
+      <a class="nav-hide-sm" href="https://github.com/karsa-app/karsa">GitHub</a>
+    </nav>
+  </header>
+  <main>
+    <article class="wrap" style="max-width:48rem;padding-top:2rem;padding-bottom:4rem">
+      <p><a href="/doc/index.html">← The Karsa Manual</a></p><h1>Data and storage</h1>
+<p>When you work inside a Karsa project and a task produces something — a file, a table, a memo — that output has a <em>home</em>. The project root is never it. This page is the rule for <strong>where data goes by shape</strong>, and the <strong>Karsa HTTP API conventions</strong> you use to put it there. If you are an agent, read this before you save anything: dropping loose files at <code>$PROJECT_HOME</code> is the single most common way to make work that Karsa can't see, browse, or manage.</p>
+<h2>The one rule: route data by its shape</h2>
+<p>Every artifact a task produces has a shape, and each shape has a home that makes it a first-class, browsable record instead of loose bytes on disk:</p>
+<ul><li><strong>A file</strong> — a CSV, PDF, image, dataset, export, anything you'd hand someone as a file → <strong>upload it as an asset.</strong> It lands under <code>karsa/&lt;project&gt;/artifact/file/</code> as a record the UI can list and preview, not stray bytes the daemon can't see.</li><li><strong>Tabular data</strong> you'd filter, sort, join, or aggregate → the project's <strong>Karsa SQL DB</strong> (<code>karsa/&lt;project&gt;/sqldb/default.db</code>), not a stray spreadsheet on disk. To make a table browsable in the UI, put a <strong>collection</strong> over it.</li><li><strong>Prose</strong> — a memo, notes, a writeup, a report → a <strong>markdown document</strong> in a docdb collection under <code>artifact/</code>, not a loose <code>.md</code> at the project root.</li></ul>
+<p>If you are unsure where something belongs, ask. But the project root is never the answer — a file written there is invisible to Karsa, unversioned as a record, and lost to every view the user has.</p>
+<h2>The Karsa HTTP API: conventions first</h2>
+<p>The daemon exposes a local HTTP API, and the active project is already baked into one environment variable.</p>
+<ul><li><strong>Always use <code>$KARSA_API_BASE</code>.</strong> It encodes the daemon host <em>and the active project</em> — every call you make through it operates on <em>this</em> project. Build every request as <code>${KARSA_API_BASE}/&lt;path&gt;</code>.</li><li><strong>Never hard-code <code>/api/...</code> paths or a host.</strong> Don't write <code>http://localhost:3100/api/...</code> or assume a path prefix. <code>$KARSA_API_BASE</code> is the only base you need; hard-coding anything else will hit the wrong project or no project at all.</li><li><strong>You're already cwd'd into the project.</strong> Your working directory is <code>$PROJECT_HOME</code>, so filesystem tools act on the real project tree — but <em>records</em> (assets, rows, docs) are created through the API, not by writing files into <code>artifact/</code> by hand.</li></ul>
+<p>Everything below is a specific application of these two ideas: use <code>$KARSA_API_BASE</code>, and let the API create the record.</p>
+<h2>Titling the chat</h2>
+<p>Once the user's intent is clear, give the conversation a short title — a 3-7 word noun phrase:</p>
+<pre><code>PATCH ${KARSA_API_BASE}/chat/&lt;chat_id&gt;
+{ &quot;title&quot;: &quot;Quarterly revenue cleanup&quot; }</code></pre>
+<p>Do this once, early, when intent is clear. It's how the conversation becomes findable later.</p>
+<h2>Uploading a file (assets)</h2>
+<p>A file becomes a browsable asset record with a single multipart upload — field name <code>file</code>:</p>
+<pre><code>POST ${KARSA_API_BASE}/file       (multipart/form-data, field: file)</code></pre>
+<p>The response is the asset record. The bytes land under <code>karsa/&lt;project&gt;/artifact/file/</code>, and the file shows up in the project's <strong>Files</strong> view. Use this for any genuine <em>file</em>: a generated CSV, a downloaded PDF, an image, a dataset export. Don't <code>cp</code> it into the project tree and hope — upload it, so it's a record.</p>
+<h2>Tabular data (sqldb + collections)</h2>
+<p>Tabular data goes into the project's Karsa SQL DB, and you make it browsable by laying a <strong>collection</strong> over the table.</p>
+<p>1. Write your rows into a table in the project's SQL DB (<code>karsa/&lt;project&gt;/sqldb/default.db</code>). 2. Create a collection that exposes the table in the UI:</p>
+<pre><code>POST ${KARSA_API_BASE}/collection
+{
+  &quot;slug&quot;: &quot;invoices&quot;,
+  &quot;source&quot;: &quot;sqlite.row&quot;,
+  &quot;sqlite&quot;: { &quot;table&quot;: &quot;invoices&quot; },
+  &quot;name&quot;: &quot;Invoice&quot;,
+  &quot;plural&quot;: &quot;Invoices&quot;
+}</code></pre>
+<p>Now the table's rows are a typed, sortable, filterable collection in the project — not a spreadsheet nobody can find. It appears in the sidebar under <strong>Artifacts</strong> by default; pass <code>&quot;ui&quot;: { &quot;group&quot;: &quot;operate&quot; }</code> to place it elsewhere. This is also the path to &quot;expand to the cloud later&quot;: data in the Karsa SQL DB is data on the seam Karsa controls (see <strong>Building a Karsa app</strong>).</p>
+<h2>Prose (docdb docs)</h2>
+<p>A memo, notes, a writeup, a report — anything document-shaped — goes into a docdb collection as a markdown document (YAML frontmatter for typed fields, a markdown body), under <code>artifact/</code>. Create the document through the API against <code>${KARSA_API_BASE}</code> so it becomes a real resource in a collection, cross-linkable by id and rendered in the UI — not a loose <code>.md</code> at the project root that no view will ever surface.</p>
+<h2>Where to go next</h2>
+<p>When the task grows from <em>organizing data</em> into <em>building software</em> on top of it, read <strong>Building a Karsa app</strong> — the app, like the data, belongs inside the project, on the Karsa SDK. And if you ever feel the pull to write a file to the project root or reach for an outside database, read <strong>Anti-patterns</strong> first.</p>
+    </article>
+  </main>
+</body>
+</html>
