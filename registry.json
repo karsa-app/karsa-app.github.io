@@ -109,24 +109,10 @@
       "manifest_url": "https://karsa.app/packages/@karsa/doc/karsa.package.json"
     },
     {
-      "name": "@karsa/landing-web",
-      "kind": "landing",
-      "version": "0.1.0",
-      "description": "karsa.app landing site",
-      "artifacts": [
-        {
-          "platform": "any",
-          "url": "https://github.com/karsa-app/packages/releases/download/cli-v0.1.0/karsa-landing-web.tar.gz",
-          "sha256": "8904208107f9e47bef19210bfa0a5e9383a52ed933eb8fa2ecf686d165a1befe",
-          "size": 126185
-        }
-      ]
-    },
-    {
       "name": "@karsa/project-template-productive",
       "kind": "template",
       "version": "0.1.0",
-      "description": "A two-agent reconciler task system — a chat agent that plans, a worker agent that executes, autonomously.",
+      "description": "A two-agent reconciler task system \u2014 a chat agent that plans, a worker agent that executes, autonomously.",
       "artifacts": [
         {
           "platform": "any",

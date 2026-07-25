@@ -1,4 +1,114 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Karsa — the AI you already use, working even when you aren't</title><meta name="description" content="Karsa turns your Claude Code or Codex subscription into systems that keep running on your own machine — morning briefs, standing reactions, a backlog worked overnight. Local-first, plain files, no account. Install with one command." /><link rel="icon" type="image/png" href="/karsa-logo.png" /><meta property="og:title" content="Karsa" /><meta property="og:description" content="The AI you already use, working even when you aren't. A local-first runtime where AI-powered systems live — on your machine, in plain files." /><meta property="og:image" content="./karsa-logo.png" /><link rel="stylesheet" href="/styles.css" /></head><body><header class="site-header"><a class="brand" href="/" aria-label="Karsa home"><img src="/karsa-logo.png" alt="" /><span class="wordmark">Karsa</span></a><nav class="nav"><a href="/doc/">Manual</a><a href="/packages/">Packages</a></nav></header><main><section class="wrap hero"><p class="eyebrow">Runs on the AI you already pay for — Claude Code or Codex</p><h1 class="display"> The AI you already use, <span class="accent">working even when you aren't</span>. </h1><p class="lead"> Tell Karsa what you want in chat — once. It becomes a system that keeps running on your machine: briefing you every morning, reacting when things change, working through a backlog overnight. Your subscription does the thinking; Karsa keeps it working. </p><div class="install"> <code id="install-cmd"><span class="prompt">$</span>curl -fsSL https://karsa.app/install.sh | sh</code> <button class="copy-btn" id="copy-btn" type="button" aria-label="Copy install command">Copy</button></div><p class="install-note">Requires <a href="https://docs.anthropic.com/en/docs/claude-code">Claude Code</a> or <a href="https://github.com/openai/codex">Codex</a> — you probably already have one. No account, no new AI bill. macOS &amp; Linux.</p><p class="install-note">New here? Read the <a href="/doc/">manual</a> or browse the <a href="/packages/">packages</a>.</p></section><section class="wrap section" id="demo"><p class="section-rule">One sentence, then it runs itself</p><div class="demo" aria-label="Illustrative chat transcript"><div class="demo-row"><span class="demo-role you">you · 4:42 PM</span><p class="demo-msg">brief me on this repo every morning at 7</p></div><div class="demo-row"><span class="demo-role">karsa · 4:42 PM</span><p class="demo-msg">Done — every day at 07:00 I'll post a brief in this chat. Pause or delete it anytime.</p></div><div class="demo-row"><span class="demo-role">karsa · next day, 7:00 AM</span><p class="demo-msg">Morning brief: 3 commits since yesterday — the payment-retry fix landed and tests are green. One PR is waiting on your review. CI is clean; nothing overdue.</p></div></div><p class="demo-caption">Illustrative transcript — the chat UI streams real runs live. Behind it: a planner turned your sentence into a standing job; a timer woke your own machine at 07:00; your Claude/Codex subscription did the reading.</p></section><section class="wrap section" id="what"><p class="section-rule">Why Karsa</p><ol class="bullets"><li><span class="num">01</span><div><p class="b-title">Persistent — not another chat window</p><p class="b-body">Most AI tools answer a prompt and forget. Karsa keeps state: standing schedules, reactions to your data, and a task backlog a worker agent executes — with retries, ordering, and progress reported back to your chat. It runs whether or not you're at the keyboard.</p></div></li><li><span class="num">02</span><div><p class="b-title">Runs on the subscription you already have</p><p class="b-body">Karsa is engine-agnostic: it drives Claude Code today and Codex tomorrow, and your systems don't care which. That $20–200/month you already pay sits idle most of the day — Karsa is how it works the other 22 hours. No new AI bill, no per-token markup.</p></div></li><li><span class="num">03</span><div><p class="b-title">Yours — on your machine, in plain files</p><p class="b-body">Everything runs locally. Your systems, schedules, and data are readable files under your home, versioned in git — inspectable, editable, and yours to back up. No account required to start.</p></div></li><li><span class="num">04</span><div><p class="b-title">A real runtime underneath</p><p class="b-body">Karsa is a local-first runtime where AI-powered systems live — think an application server whose primitives are agents, events, schedules, tasks, and storage instead of HTTP and SQL. Engines are interchangeable muscle; the runtime — and everything it holds — is yours. Designed so the same project can lift to the cloud when you scale.</p></div></li></ol></section></main><footer class="site-footer"><div class="wrap"><span class="copy">© 2026 Karsa</span><a href="/doc/">Manual</a><a href="/packages/">Packages</a></div></footer> <script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Karsa — the AI you already use, working even when you aren't</title>
+  <meta name="description" content="Karsa turns your Claude Code or Codex subscription into systems that keep running on your own machine — morning briefs, standing reactions, a backlog worked overnight. Local-first, plain files, no account. Install with one command." />
+  <link rel="icon" type="image/png" href="/karsa-logo.png" />
+  <meta property="og:title" content="Karsa" />
+  <meta property="og:description" content="The AI you already use, working even when you aren't. A local-first runtime where AI-powered systems live — on your machine, in plain files." />
+  <meta property="og:image" content="./karsa-logo.png" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="Karsa home">
+      <img src="/karsa-logo.png" alt="" />
+      <span class="wordmark">Karsa</span>
+    </a>
+    <nav class="nav">
+      <a href="/doc/">Manual</a>
+      <a href="/packages/">Packages</a>
+      </nav>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="wrap hero">
+      <p class="eyebrow">Runs on the AI you already pay for — Claude Code or Codex</p>
+      <h1 class="display">
+        The AI you already use, <span class="accent">working even when you aren't</span>.
+      </h1>
+      <p class="lead">
+        Tell Karsa what you want in chat — once. It becomes a system that keeps running on your
+        machine: briefing you every morning, reacting when things change, working through a
+        backlog overnight. Your subscription does the thinking; Karsa keeps it working.
+      </p>
+
+      <div class="install">
+        <code id="install-cmd"><span class="prompt">$</span>curl -fsSL https://karsa.app/install.sh | sh</code>
+        <button class="copy-btn" id="copy-btn" type="button" aria-label="Copy install command">Copy</button>
+      </div>
+      <p class="install-note">Requires <a href="https://docs.anthropic.com/en/docs/claude-code">Claude Code</a> or <a href="https://github.com/openai/codex">Codex</a> — you probably already have one. No account, no new AI bill. macOS &amp; Linux.</p>
+      <p class="install-note">New here? Read the <a href="/doc/">manual</a> or browse the <a href="/packages/">packages</a>.</p>
+    </section>
+
+    <!-- What it looks like -->
+    <section class="wrap section" id="demo">
+      <p class="section-rule">One sentence, then it runs itself</p>
+      <div class="demo" aria-label="Illustrative chat transcript">
+        <div class="demo-row">
+          <span class="demo-role you">you · 4:42 PM</span>
+          <p class="demo-msg">brief me on this repo every morning at 7</p>
+        </div>
+        <div class="demo-row">
+          <span class="demo-role">karsa · 4:42 PM</span>
+          <p class="demo-msg">Done — every day at 07:00 I'll post a brief in this chat. Pause or delete it anytime.</p>
+        </div>
+        <div class="demo-row">
+          <span class="demo-role">karsa · next day, 7:00 AM</span>
+          <p class="demo-msg">Morning brief: 3 commits since yesterday — the payment-retry fix landed and tests are green. One PR is waiting on your review. CI is clean; nothing overdue.</p>
+        </div>
+      </div>
+      <p class="demo-caption">Illustrative transcript — the chat UI streams real runs live. Behind it: a planner turned your sentence into a standing job; a timer woke your own machine at 07:00; your Claude/Codex subscription did the reading.</p>
+    </section>
+
+    <!-- What is Karsa -->
+    <section class="wrap section" id="what">
+      <p class="section-rule">Why Karsa</p>
+      <ol class="bullets">
+        <li>
+          <span class="num">01</span>
+          <div>
+            <p class="b-title">Persistent — not another chat window</p>
+            <p class="b-body">Most AI tools answer a prompt and forget. Karsa keeps state: standing schedules, reactions to your data, and a task backlog a worker agent executes — with retries, ordering, and progress reported back to your chat. It runs whether or not you're at the keyboard.</p>
+          </div>
+        </li>
+        <li>
+          <span class="num">02</span>
+          <div>
+            <p class="b-title">Runs on the subscription you already have</p>
+            <p class="b-body">Karsa is engine-agnostic: it drives Claude Code today and Codex tomorrow, and your systems don't care which. That $20–200/month you already pay sits idle most of the day — Karsa is how it works the other 22 hours. No new AI bill, no per-token markup.</p>
+          </div>
+        </li>
+        <li>
+          <span class="num">03</span>
+          <div>
+            <p class="b-title">Yours — on your machine, in plain files</p>
+            <p class="b-body">Everything runs locally. Your systems, schedules, and data are readable files under your home, versioned in git — inspectable, editable, and yours to back up. No account required to start.</p>
+          </div>
+        </li>
+        <li>
+          <span class="num">04</span>
+          <div>
+            <p class="b-title">A real runtime underneath</p>
+            <p class="b-body">Karsa is a local-first runtime where AI-powered systems live — think an application server whose primitives are agents, events, schedules, tasks, and storage instead of HTTP and SQL. Engines are interchangeable muscle; the runtime — and everything it holds — is yours. Designed so the same project can lift to the cloud when you scale.</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span class="copy">© 2026 Karsa</span>
+      <a href="/doc/">Manual</a>
+      <a href="/packages/">Packages</a>
+      </div>
+  </footer>
+
+  <script>
     (function () {
       var btn = document.getElementById("copy-btn");
       var cmd = "curl -fsSL https://karsa.app/install.sh | sh";
@@ -30,4 +140,5 @@
       });
     })();
   </script>
-</body></html>
+</body>
+</html>

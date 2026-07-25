@@ -1,4 +1,73 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Packages — Karsa</title><meta name="description" content="The Karsa package registry — templates, engines, and core units, each with its own version." /><link rel="icon" type="image/png" href="/karsa-logo.png" /><link rel="stylesheet" href="/styles.css" /></head><body><header class="site-header"><a class="brand" href="/" aria-label="Karsa home"><img src="/karsa-logo.png" alt="" /><span class="wordmark">Karsa</span></a><nav class="nav"><a href="/">Home</a><a href="/doc/">Manual</a></nav></header><main><section class="wrap pkg-head"><p class="eyebrow">Registry</p><h1 class="display">Packages</h1><p class="lead"> Every shippable Karsa unit — the CLI, the daemon, the web UI, templates, and engines — each versioned independently. The list below is read live from the registry. </p></section><section class="wrap"><p class="section-rule" id="registry-meta">Loading registry</p><div class="state" id="state-loading"><p class="state-title">Loading packages…</p><p class="state-body">Fetching the registry.</p></div><div class="state hidden" id="state-error"><p class="state-title">Registry unavailable</p><p class="state-body"> Couldn't load <code>/registry.json</code> right now. It's published with each release — check back shortly, or install Karsa and run <code>karsa status</code>. </p></div><div class="state hidden" id="state-empty"><p class="state-title">No packages yet</p><p class="state-body">The registry is published but lists no packages. Nothing to show.</p></div><ul class="pkg-list hidden" id="pkg-list"></ul></section></main><footer class="site-footer"><div class="wrap"><span class="copy">© 2026 Karsa</span><a href="/doc/">Manual</a><a href="/">Home</a></div></footer> <script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Packages — Karsa</title>
+  <meta name="description" content="The Karsa package registry — templates, engines, and core units, each with its own version." />
+  <link rel="icon" type="image/png" href="/karsa-logo.png" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="Karsa home">
+      <img src="/karsa-logo.png" alt="" />
+      <span class="wordmark">Karsa</span>
+    </a>
+    <nav class="nav">
+      <a href="/">Home</a>
+      <a href="/doc/">Manual</a>
+      </nav>
+  </header>
+
+  <main>
+    <section class="wrap pkg-head">
+      <p class="eyebrow">Registry</p>
+      <h1 class="display">Packages</h1>
+      <p class="lead">
+        Every shippable Karsa unit — the CLI, the daemon, the web UI, templates, and engines —
+        each versioned independently. The list below is read live from the registry.
+      </p>
+    </section>
+
+    <section class="wrap">
+      <p class="section-rule" id="registry-meta">Loading registry</p>
+
+      <!-- Loading state -->
+      <div class="state" id="state-loading">
+        <p class="state-title">Loading packages…</p>
+        <p class="state-body">Fetching the registry.</p>
+      </div>
+
+      <!-- Error state -->
+      <div class="state hidden" id="state-error">
+        <p class="state-title">Registry unavailable</p>
+        <p class="state-body">
+          Couldn't load <code>/registry.json</code> right now. It's published with each release —
+          check back shortly, or install Karsa and run <code>karsa status</code>.
+        </p>
+      </div>
+
+      <!-- Empty state -->
+      <div class="state hidden" id="state-empty">
+        <p class="state-title">No packages yet</p>
+        <p class="state-body">The registry is published but lists no packages. Nothing to show.</p>
+      </div>
+
+      <!-- Results -->
+      <ul class="pkg-list hidden" id="pkg-list"></ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span class="copy">© 2026 Karsa</span>
+      <a href="/doc/">Manual</a>
+      <a href="/">Home</a>
+      </div>
+  </footer>
+
+  <script>
     (function () {
       var els = {
         meta: document.getElementById("registry-meta"),
@@ -116,4 +185,5 @@
         .catch(fail);
     })();
   </script>
-</body></html>
+</body>
+</html>

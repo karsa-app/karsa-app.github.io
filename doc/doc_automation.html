@@ -22,7 +22,7 @@
     </a>
     <nav class="nav">
       <a href="/doc/">Manual</a>
-      <a href="/packages.html">Packages</a>
+      <a href="/packages/">Packages</a>
       </nav>
   </header>
   <main>
@@ -62,12 +62,12 @@
     &quot;run_mode&quot;: &quot;running&quot;
   }
 }</code></pre>
-<ul><li><strong><code>trigger.at</code></strong> — first (or only) fire time, ISO-8601. Omit <code>every</code> for a <strong>one-off</strong> (fires once, then done).</li><li><strong><code>trigger.every</code></strong> — makes it <strong>recurring</strong>: an interval like <code>30m</code> / <code>1h</code> / <code>24h</code> / <code>7d</code> (cron expressions later). <code>at</code> is the anchor; a job that fell behind catches up to the next future slot without replaying missed fires.</li></ul>
+<ul><li><strong><code>trigger.at</code></strong> — first (or only) fire time, ISO-undefined. Omit <code>every</code> for a <strong>one-off</strong> (fires once, then done).</li><li><strong><code>trigger.every</code></strong> — makes it <strong>recurring</strong>: an interval like <code>30m</code> / <code>1h</code> / <code>24h</code> / <code>7d</code> (cron expressions later). <code>at</code> is the anchor; a job that fell behind catches up to the next future slot without replaying missed fires.</li></ul>
 <p>When the timer comes due, Karsa runs the subscriber's <code>fn</code> directly. (You <em>can</em> have the fn publish a custom event instead of doing the work inline — then a second subscriber reacts to it — but usually the fn just does the work.)</p>
 <p>&gt; <strong>Deferring a task?</strong> Don't hand-roll a wake. In Productive, set the task to <code>status: &quot;blocked&quot;</code> + <code>wake_at: &quot;&lt;ISO&gt;&quot;</code> — the seeded task-defer controller creates the one-shot wake for you and flips the task to <code>ready</code> at that moment (cancel or re-aim by editing the task).</p>
 <h2>Putting a pipeline together</h2>
 <p>A deal-flow pipeline is a handful of subscribers:</p>
-<p>1. A <strong><code>deal</code> collection</strong> (docdb or sqldb) — the records (<code>doc_data-and-storage</code>). 2. An <strong>event-triggered subscriber on <code>karsa/deal/created</code></strong> — enrich each new deal. 3. A <strong>time-triggered subscriber</strong> (<code>every: 24h</code>) — keep deals current. 4. The fn does the fetching/summarizing <strong>during its run</strong> (an agent exec can use the network) and writes results back as resources — whose writes emit the next events.</p>
+<p><code>doc_data-and-storage</code>. A <strong><code>deal</code> collection</strong> (docdb or sqldb) — the records (<code>doc_data-and-storage</code>). <code>karsa/deal/created</code>. An <strong>event-triggered subscriber on <code>karsa/deal/created</code></strong> — enrich each new deal. <code>every: 24h</code>. A <strong>time-triggered subscriber</strong> (<code>every: 24h</code>) — keep deals current. undefined. The fn does the fetching/summarizing <strong>during its run</strong> (an agent exec can use the network) and writes results back as resources — whose writes emit the next events.</p>
 <p>Build each piece through <code>$KARSA_API_BASE</code>, put the standing instruction in each subscriber's <code>params</code>, and the system runs itself between your chats.</p>
 <h2>Where fns live (you rarely author the plumbing)</h2>
 <ul><li><strong>The run-agent fn</strong> (slug <code>run_agent</code>), the <strong>harness fns</strong> it drives (<code>claude_code</code>, <code>codex</code>), and the <strong>core built-ins</strong> (indexing, retry, the scheduler-sync) already exist — reference them; don't rewrite them.</li><li><strong>Your own logic</strong> is a fn you write into the project's <code>fn/</code> collection (<code>doc_building-a-karsa-app</code> for the SDK). But for most automation you just point a subscriber at the run-agent fn (agent = the planner) and describe the work in <code>params.instruction</code> — no new code.</li></ul>

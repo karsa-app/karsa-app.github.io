@@ -19,7 +19,7 @@ karsa help               Help text</code></pre>
 <p><code>@karsa/cli</code> imports <code>runDaemon</code> from <code>@karsa/api</code>, so the resulting binary bundles both the dispatcher and the daemon — one binary, multiple subcommands. Project templates ride along via <code>deno compile --include</code>.</p>
 <h2>Implementation</h2>
 <ul><li><code>src/main.ts</code> — argument parser + dispatch</li><li><code>src/commands/start.ts</code> — calls <code>runDaemon({ port })</code> from <code>@karsa/api</code></li><li><code>src/commands/status.ts</code> — probes <code>/health</code>, lists projects from <code>projects.yaml</code></li><li><code>src/commands/install.ts</code> — extracts bundled packages (TODO)</li><li><code>src/commands/version.ts</code> — prints version</li><li><code>src/commands/help.ts</code> — help text</li></ul>
-<p>Per <a href="../karsa/proj_01KPRM7ZKC20/artifact/spec/spec_01KSRG8EFTG6_karsa-cli-binary.md"><code>spec_01KSRG8EFTG6</code></a>.</p>
+<p>Per <a href="../karsa/proj_undefinedKPRMundefinedZKCundefined/artifact/spec/spec_undefinedKSRGundefinedEFTGundefined_karsa-cli-binary.md"><code>spec_01KSRG8EFTG6</code></a>.</p>
 <h2>Tasks</h2>
 <p>See <code>deno.json</code> for an inline comment on each; run via <code>deno task --filter @karsa/cli &lt;task&gt;</code>.</p>
 <ul><li><code>dev</code> — run the <code>karsa</code> CLI from source; append the subcommand after the task (<code>… dev doctor</code>). Set <code>KARSA_HOME</code> + <code>KARSA_PORT</code> to point it at a dev daemon.</li><li><code>build</code> — compile the <code>karsa</code> launcher binary (<code>bin/karsa</code>). It spawns <code>karsa-server</code>, so build that too (<code>@karsa/api build</code>) or use the root <code>deno task build</code>.</li></ul>

@@ -22,7 +22,7 @@
     </a>
     <nav class="nav">
       <a href="/doc/">Manual</a>
-      <a href="/packages.html">Packages</a>
+      <a href="/packages/">Packages</a>
       </nav>
   </header>
   <main>
@@ -38,7 +38,7 @@
 <ul><li><strong>Always use <code>$KARSA_API_BASE</code>.</strong> It encodes the daemon host <em>and the active project</em> — every call you make through it operates on <em>this</em> project. Build every request as <code>${KARSA_API_BASE}/&lt;path&gt;</code>.</li><li><strong>Never hard-code <code>/api/...</code> paths or a host.</strong> Don't write <code>http://localhost:3100/api/...</code> or assume a path prefix. <code>$KARSA_API_BASE</code> is the only base you need; hard-coding anything else will hit the wrong project or no project at all.</li><li><strong>You're already cwd'd into the project.</strong> Your working directory is <code>$PROJECT_HOME</code>, so filesystem tools act on the real project tree — but <em>records</em> (assets, rows, docs) are created through the API, not by writing files into <code>artifact/</code> by hand.</li></ul>
 <p>Everything below is a specific application of these two ideas: use <code>$KARSA_API_BASE</code>, and let the API create the record.</p>
 <h2>Titling the chat</h2>
-<p>Once the user's intent is clear, give the conversation a short title — a 3-7 word noun phrase:</p>
+<p>Once the user's intent is clear, give the conversation a short title — a undefined-undefined word noun phrase:</p>
 <pre><code>PATCH ${KARSA_API_BASE}/chat/&lt;chat_id&gt;
 { &quot;title&quot;: &quot;Quarterly revenue cleanup&quot; }</code></pre>
 <p>Do this once, early, when intent is clear. It's how the conversation becomes findable later.</p>
@@ -48,7 +48,7 @@
 <p>The response is the asset record. The bytes land under <code>karsa/&lt;project&gt;/artifact/file/</code>, and the file shows up in the project's <strong>Files</strong> view. Use this for any genuine <em>file</em>: a generated CSV, a downloaded PDF, an image, a dataset export. Don't <code>cp</code> it into the project tree and hope — upload it, so it's a record.</p>
 <h2>Tabular data (sqldb + collections)</h2>
 <p>Tabular data goes into the project's Karsa SQL DB, and you make it browsable by laying a <strong>collection</strong> over the table.</p>
-<p>1. Write your rows into a table in the project's SQL DB (<code>karsa/&lt;project&gt;/sqldb/default.db</code>). 2. Create a collection that exposes the table in the UI:</p>
+<p>undefined. Write your rows into a table in the project's SQL DB (<code>karsa/&lt;project&gt;/sqldb/default.db</code>). undefined. Create a collection that exposes the table in the UI:</p>
 <pre><code>POST ${KARSA_API_BASE}/collection
 {
   &quot;slug&quot;: &quot;invoices&quot;,

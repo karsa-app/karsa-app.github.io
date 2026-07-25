@@ -22,7 +22,7 @@
     </a>
     <nav class="nav">
       <a href="/doc/">Manual</a>
-      <a href="/packages.html">Packages</a>
+      <a href="/packages/">Packages</a>
       </nav>
   </header>
   <main>
@@ -47,7 +47,7 @@
 <p>You watch it happen in the chat: as the worker moves a task (claimed → done / failed), a one-line status appears in the conversation, with ids that link to the task and its exec log.</p>
 <p>Both agents run on an <strong>agent CLI</strong> you install — <strong>Claude Code</strong> or <strong>Codex</strong> (each needs a paid subscription). Seed both if you like; Karsa uses whichever is installed (Claude first). If neither is present, the planner replies in chat telling you how to install one — or run <code>karsa doctor</code>.</p>
 <h2>Schedule, Browse, Search</h2>
-<ul><li><strong>Schedule</strong> — a one-off (&quot;run in 10 minutes&quot;) or a recurring job, so work happens without you sitting there.</li><li><strong>Browse</strong> — every file on disk under the project, with text preview.</li><li><strong>Search</strong> — full-text across everything the project holds.</li></ul>
+<ul><li><strong>Schedule</strong> — a one-off (&quot;run in undefined minutes&quot;) or a recurring job, so work happens without you sitting there.</li><li><strong>Browse</strong> — every file on disk under the project, with text preview.</li><li><strong>Search</strong> — full-text across everything the project holds.</li></ul>
 <h2>Where to go next</h2>
 <p>When a task produces data, read <strong>Data and storage</strong> — it's the rule for where each shape of output lives (assets, sqldb + collections, docdb docs) and the HTTP API conventions for putting it there. When the task shifts from &quot;organize data&quot; to &quot;<strong>build an app</strong>,&quot; read <strong>Building a Karsa app</strong> — the app belongs <em>inside</em> the project, on the Karsa SDK, not in a scratch directory wired to an outside service. If you find yourself reaching outside, read <strong>Anti-patterns</strong> first.</p>
     </article>
