@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-25T18:49:25.710Z",
+  "generated_at": "2026-07-25T23:03:41.259Z",
   "packages": [
     {
       "name": "karsa",
@@ -17,7 +17,7 @@
         {
           "platform": "darwin-x86_64",
           "url": "https://github.com/karsa-app/packages/releases/download/cli-v0.1.0/karsa-darwin-x86_64",
-          "sha256": "e4380d81ccc9f32462867edd2bc6855996eb4d06e7e8e90230f7fbddcd7c6744",
+          "sha256": "7740974f493ea274e7adc8b55288bad29422b5a1a17ac05d17fbbc5a17c08ddf",
           "size": 84257280
         },
         {
@@ -45,26 +45,26 @@
         {
           "platform": "darwin-arm64",
           "url": "https://github.com/karsa-app/packages/releases/download/cli-v0.1.0/karsa-server-darwin-arm64",
-          "sha256": "8efe995be7e781f13b69895c34fb7a2de7d8c5223dfec25a8ad0fa63a6acc979",
+          "sha256": "eda18ea80d70dfc3cc1fa9fbb204a912538bde95e09fef16a8945abb4920fa8e",
           "size": 78897874
         },
         {
           "platform": "darwin-x86_64",
           "url": "https://github.com/karsa-app/packages/releases/download/cli-v0.1.0/karsa-server-darwin-x86_64",
-          "sha256": "6dff68ea37f1d286d1e93ec84ce9c161c7e71961d51289ad5266961aa798ac2f",
-          "size": 87104400
+          "sha256": "e084078d1297729d6c7fb99d902baba57e07902bdb50783267e6ccccb8f940dc",
+          "size": 87104880
         },
         {
           "platform": "linux-x86_64",
           "url": "https://github.com/karsa-app/packages/releases/download/cli-v0.1.0/karsa-server-linux-x86_64",
-          "sha256": "07fc4f98d73df17e34d5512b0e8b883f4582bef9e502cadaac2ecd0c85dc03ba",
-          "size": 97097596
+          "sha256": "9658942bcbc2f0d35dd2e4af3a7e80e5a82126beae70ddf90f47cab2f45ceafe",
+          "size": 97098072
         },
         {
           "platform": "linux-arm64",
           "url": "https://github.com/karsa-app/packages/releases/download/cli-v0.1.0/karsa-server-linux-arm64",
-          "sha256": "333ef6ec7dad5001ddab06e5c4b8c1660e1ea8fb7bbe52f7737e9d1003efb5ef",
-          "size": 90478404
+          "sha256": "9b7244e198bb23fafbc9ad4c738272d35b05f2f3e95a9bfeae07fc0c8cd5e883",
+          "size": 90478880
         }
       ],
       "readme_url": "https://karsa.app/packages/karsa-server/README.md",
@@ -79,8 +79,8 @@
         {
           "platform": "any",
           "url": "https://github.com/karsa-app/packages/releases/download/cli-v0.1.0/karsa-web.tar.gz",
-          "sha256": "73ad20339c88098fbb1b99195eef6c48f5c4563aff0016983542f3ef6bc90874",
-          "size": 396309
+          "sha256": "a6cf729481d4b8e3fb85a7b152d2936ecfb236697f22bd77388c1b1d27750756",
+          "size": 396279
         }
       ],
       "requires": {
@@ -98,8 +98,8 @@
         {
           "platform": "any",
           "url": "https://github.com/karsa-app/packages/releases/download/cli-v0.1.0/karsa-doc.tar.gz",
-          "sha256": "59ec44cb7384314e8cad5ef23994924abcbf2d96306d7b5ae91f8aa1b86f1c88",
-          "size": 16989
+          "sha256": "d5e025ca8b079d6d86ace591c18f0dfe1f19bef106cdaf1e48f155c8ef43fa6a",
+          "size": 16992
         }
       ],
       "requires": {
@@ -112,13 +112,13 @@
       "name": "@karsa/project-template-productive",
       "kind": "template",
       "version": "0.1.0",
-      "description": "A two-agent reconciler task system \u2014 a chat agent that plans, a worker agent that executes, autonomously.",
+      "description": "A two-agent reconciler task system — a chat agent that plans, a worker agent that executes, autonomously.",
       "artifacts": [
         {
           "platform": "any",
           "url": "https://github.com/karsa-app/packages/releases/download/cli-v0.1.0/karsa-project-template-productive-0.1.0.tar.gz",
-          "sha256": "e393ed662d4a2be034330332642458968a251122452b2553759e68adcaadf426",
-          "size": 36886
+          "sha256": "fe08e044b4ba1a9b7cf09b047d6cb04765a8d6ae895ed5ad00748f28cc754a0b",
+          "size": 36881
         }
       ],
       "requires": {
