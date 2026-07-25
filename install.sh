@@ -12,7 +12,7 @@
 #
 # Env vars (all passed through to `karsa install`):
 #   KARSA_VERSION            Pin a release tag (default: latest)
-#   KARSA_REPO               GitHub repo (default: karsa-app/karsa)
+#   KARSA_REPO               GitHub repo (default: karsa-app/packages)
 #   KARSA_INSTALL_DIR        Where binaries land (default: ~/.local/bin)
 #   KARSA_HOME               Karsa home (default: ~/.karsa)
 #   KARSA_INSTALL_WEB        Install the web UI bundle (default: 1)
@@ -26,7 +26,7 @@ set -euo pipefail
 
 VERSION="${KARSA_VERSION:-latest}"
 INSTALL_DIR="${KARSA_INSTALL_DIR:-$HOME/.local/bin}"
-REPO="${KARSA_REPO:-karsa-app/karsa}"
+REPO="${KARSA_REPO:-karsa-app/packages}"
 
 red()    { printf "\033[31m%s\033[0m" "$*"; }
 green()  { printf "\033[32m%s\033[0m" "$*"; }
