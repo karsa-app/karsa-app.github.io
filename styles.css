@@ -472,3 +472,23 @@ a { color: var(--color-accent); text-decoration: none; }
   .pkg-links { justify-self: start; }
   .nav .nav-hide-sm { display: none; }
 }
+
+/* ── Overflow containment (mobile) ─────────────────────────────────────
+   Wide content scrolls INSIDE its block — it never pushes the page wider
+   than the viewport (which would slide every other element's padding
+   off-canvas). */
+pre {
+  overflow-x: auto;
+  max-width: 100%;
+}
+/* Long unbroken strings (package names, URLs, hashes) may break anywhere. */
+.pkg-name .name,
+.pkg-desc {
+  overflow-wrap: anywhere;
+}
+/* Flex/grid children must be allowed to shrink (the min-width:auto trap —
+   a wide child would otherwise expand its container past the viewport). */
+.wrap > *,
+.pkg-row > * {
+  min-width: 0;
+}
