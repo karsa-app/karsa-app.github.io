@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-24T17:21:55.294Z",
+  "generated_at": "2026-07-25T18:49:25.710Z",
   "packages": [
     {
       "name": "karsa",
@@ -9,10 +9,28 @@
       "description": "Karsa CLI launcher",
       "artifacts": [
         {
+          "platform": "darwin-arm64",
+          "url": "https://github.com/karsa-app/packages/releases/download/cli-v0.1.0/karsa-darwin-arm64",
+          "sha256": "8a8029cdb9519986dc25bea05af7292a4262b02c8b6c370ac83ff2138aac19b0",
+          "size": 76057810
+        },
+        {
           "platform": "darwin-x86_64",
-          "url": "https://github.com/karsa-app/karsa/releases/download/cli-v0.1.0/karsa-darwin-x86_64",
-          "sha256": "ff1d4955a59dd566fdb6744009c20195e0da85e73d43ee3dc153dfb3af1b5dd9",
-          "size": 84257616
+          "url": "https://github.com/karsa-app/packages/releases/download/cli-v0.1.0/karsa-darwin-x86_64",
+          "sha256": "e4380d81ccc9f32462867edd2bc6855996eb4d06e7e8e90230f7fbddcd7c6744",
+          "size": 84257280
+        },
+        {
+          "platform": "linux-x86_64",
+          "url": "https://github.com/karsa-app/packages/releases/download/cli-v0.1.0/karsa-linux-x86_64",
+          "sha256": "d7e6cea508dee3576ae28fc72d654a1f85d0eaf016017b028a07523d67395714",
+          "size": 94272560
+        },
+        {
+          "platform": "linux-arm64",
+          "url": "https://github.com/karsa-app/packages/releases/download/cli-v0.1.0/karsa-linux-arm64",
+          "sha256": "4973f7c4a9fe523f9f5c7a10ff9bcb173c475bf4bea4492f1bf2d5f7d436083d",
+          "size": 87653368
         }
       ],
       "readme_url": "https://karsa.app/packages/karsa/README.md",
@@ -25,10 +43,28 @@
       "description": "Karsa daemon (karsa-server)",
       "artifacts": [
         {
+          "platform": "darwin-arm64",
+          "url": "https://github.com/karsa-app/packages/releases/download/cli-v0.1.0/karsa-server-darwin-arm64",
+          "sha256": "8efe995be7e781f13b69895c34fb7a2de7d8c5223dfec25a8ad0fa63a6acc979",
+          "size": 78897874
+        },
+        {
           "platform": "darwin-x86_64",
-          "url": "https://github.com/karsa-app/karsa/releases/download/daemon-v0.1.0/karsa-server-darwin-x86_64",
-          "sha256": "720c675fd09084015505ab61c2d419d14d3c1cba6f9ae8fd97e62638f2540aed",
-          "size": 87113152
+          "url": "https://github.com/karsa-app/packages/releases/download/cli-v0.1.0/karsa-server-darwin-x86_64",
+          "sha256": "6dff68ea37f1d286d1e93ec84ce9c161c7e71961d51289ad5266961aa798ac2f",
+          "size": 87104400
+        },
+        {
+          "platform": "linux-x86_64",
+          "url": "https://github.com/karsa-app/packages/releases/download/cli-v0.1.0/karsa-server-linux-x86_64",
+          "sha256": "07fc4f98d73df17e34d5512b0e8b883f4582bef9e502cadaac2ecd0c85dc03ba",
+          "size": 97097596
+        },
+        {
+          "platform": "linux-arm64",
+          "url": "https://github.com/karsa-app/packages/releases/download/cli-v0.1.0/karsa-server-linux-arm64",
+          "sha256": "333ef6ec7dad5001ddab06e5c4b8c1660e1ea8fb7bbe52f7737e9d1003efb5ef",
+          "size": 90478404
         }
       ],
       "readme_url": "https://karsa.app/packages/karsa-server/README.md",
@@ -42,9 +78,9 @@
       "artifacts": [
         {
           "platform": "any",
-          "url": "https://github.com/karsa-app/karsa/releases/download/web-v0.1.0/karsa-web.tar.gz",
-          "sha256": "120ef63122821fbbe15d086aca53649c132a058298052b1e00137a245e303abf",
-          "size": 396321
+          "url": "https://github.com/karsa-app/packages/releases/download/cli-v0.1.0/karsa-web.tar.gz",
+          "sha256": "73ad20339c88098fbb1b99195eef6c48f5c4563aff0016983542f3ef6bc90874",
+          "size": 396309
         }
       ],
       "requires": {
@@ -61,9 +97,9 @@
       "artifacts": [
         {
           "platform": "any",
-          "url": "https://github.com/karsa-app/karsa/releases/download/doc-v0.1.0/karsa-doc.tar.gz",
-          "sha256": "bfd92569073cc95e04d332e9e78254065474714d8e587a0a4eaf326be23a522f",
-          "size": 16754
+          "url": "https://github.com/karsa-app/packages/releases/download/cli-v0.1.0/karsa-doc.tar.gz",
+          "sha256": "59ec44cb7384314e8cad5ef23994924abcbf2d96306d7b5ae91f8aa1b86f1c88",
+          "size": 16989
         }
       ],
       "requires": {
@@ -80,9 +116,9 @@
       "artifacts": [
         {
           "platform": "any",
-          "url": "https://github.com/karsa-app/karsa/releases/download/landing-v0.1.0/karsa-landing-web.tar.gz",
-          "sha256": "935929a8ba0237fcbd55ef75e9aefeb35c8c61152ae5a59c37cbcd63859045b3",
-          "size": 125592
+          "url": "https://github.com/karsa-app/packages/releases/download/cli-v0.1.0/karsa-landing-web.tar.gz",
+          "sha256": "8904208107f9e47bef19210bfa0a5e9383a52ed933eb8fa2ecf686d165a1befe",
+          "size": 126185
         }
       ]
     },
@@ -94,9 +130,9 @@
       "artifacts": [
         {
           "platform": "any",
-          "url": "https://github.com/karsa-app/karsa/releases/download/template-v0.1.0/karsa-project-template-productive-0.1.0.tar.gz",
-          "sha256": "ea1e38bc426f56583b2dcbeff79a7a8477bf72ff13c1a8c36b0215d00527f95e",
-          "size": 36873
+          "url": "https://github.com/karsa-app/packages/releases/download/cli-v0.1.0/karsa-project-template-productive-0.1.0.tar.gz",
+          "sha256": "e393ed662d4a2be034330332642458968a251122452b2553759e68adcaadf426",
+          "size": 36886
         }
       ],
       "requires": {
