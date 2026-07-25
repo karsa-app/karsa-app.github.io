@@ -23,8 +23,7 @@
     <nav class="nav">
       <a href="/doc/">Manual</a>
       <a href="/packages.html">Packages</a>
-      <a class="nav-hide-sm" href="https://github.com/karsa-app">GitHub</a>
-    </nav>
+      </nav>
   </header>
   <main>
     <article class="wrap" style="max-width:48rem;padding:2rem 1.25rem 4rem">
@@ -42,7 +41,9 @@
 <p><strong>The rule of thumb:</strong> if you're about to add an external dependency for persistence, files, jobs, or scheduling, <strong>stop</strong> — there is almost certainly an SDK package for it. Reach for <code>@karsa/*</code> first. If you genuinely believe no SDK door exists, that's a signal to re-check, not a license to go outside.</p>
 <h2>Anti-pattern 3 — Trying to break out of the cage</h2>
 <p>The cage isn't an obstacle to route around — it's the property that makes a Karsa app trustworthy and portable. Shelling out to escape the project, hardcoding absolute paths to the host, or stashing state outside the project tree all quietly forfeit those guarantees. Keep work inside the project.</p>
-<h2>Anti-pattern 4 — Editing package-owned files in place</h2>
+<h2>Anti-pattern 4 — Handling credential values yourself</h2>
+<p>When work needs an API key or token, the reflex from outside Karsa is to ask the user to paste it in chat, or to stash it in a <code>.env</code> file the agent reads. Both leak: chat transcripts and project files are readable surfaces, and a pasted key has no policy pinning where it may be sent. Karsa's answer is the <strong>secret store</strong> (see <strong>The API</strong> → Secrets): <em>declare</em> the secret with a usage policy, <em>ask</em> the user to fill it through the masked intake link, and <em>use</em> it by reference — the daemon injects the value into the egress call or tool run and refuses any destination the policy doesn't allow. You never see, store, or forward the value.</p>
+<h2>Anti-pattern 5 — Editing package-owned files in place</h2>
 <p>Files Karsa owns — this manual, template-seeded scaffolding marked <code>replace</code> — are refreshed on upgrade. Editing them in place means your changes vanish on the next reconcile. Put your own content in <em>your</em> collections and files; leave package-owned files to the package. (See <strong>Upgrading</strong>.)</p>
 <h2>Where to go next</h2>
 <p>The positive version of all of this is <strong>Building a Karsa app</strong>. Read it, build inside, build on the SDK, and none of these anti-patterns will tempt you.</p>
