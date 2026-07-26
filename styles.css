@@ -492,3 +492,24 @@ pre {
 .pkg-row > * {
   min-width: 0;
 }
+
+/* ── Page gutter ────────────────────────────────────────────────────────
+   Horizontal padding on the shells (not the inner .wrap) — a single layer
+   that holds on every viewport. */
+main,
+.site-header,
+.site-footer {
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+main .wrap,
+.site-footer .wrap {
+  padding-left: 0;
+  padding-right: 0;
+}
+/* Eyebrow: tracking-heavy mono runs long on small screens. */
+@media (max-width: 640px) {
+  .eyebrow { letter-spacing: 0.12em; font-size: 0.625rem; }
+}
+/* Footer nav groups right, mirroring the header. */
+.site-footer .nav { display: flex; gap: 1.25rem; margin-left: auto; }
