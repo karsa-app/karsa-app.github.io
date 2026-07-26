@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-26T05:19:20.850Z",
+  "generated_at": "2026-07-26T15:13:27.216Z",
   "packages": [
     {
       "name": "karsa",
@@ -11,26 +11,26 @@
         {
           "platform": "darwin-arm64",
           "url": "https://github.com/karsa-app/packages/releases/download/cli-v0.1.0/karsa-darwin-arm64",
-          "sha256": "63e3665507d820289ebe9b3670b84d8f6d968c42d79402c72bb39f66093abac0",
+          "sha256": "7a6bbaf310d26ff23990bf321d958d55e715c46b4d9b90f35bfecf95032a73ae",
           "size": 76057810
         },
         {
           "platform": "darwin-x86_64",
           "url": "https://github.com/karsa-app/packages/releases/download/cli-v0.1.0/karsa-darwin-x86_64",
-          "sha256": "67943362b98cfc1b205e02a086fbecd4812f4e6491d292f2538a4827e82ee461",
-          "size": 84257552
+          "sha256": "0f6e2dd5d0bf36bb083077d52b23c3926fcb1c436d876fbe6ba6c500011891a5",
+          "size": 84267840
         },
         {
           "platform": "linux-x86_64",
           "url": "https://github.com/karsa-app/packages/releases/download/cli-v0.1.0/karsa-linux-x86_64",
-          "sha256": "e7ca8d9245c675f784b1f4ea8f26aa4e169e8e669eb29b9cb7a05da58806f656",
-          "size": 94272817
+          "sha256": "dea889e956799ed7e3a521b59ad82c383b2659627375d135d59e65717ef2e8da",
+          "size": 94283023
         },
         {
           "platform": "linux-arm64",
           "url": "https://github.com/karsa-app/packages/releases/download/cli-v0.1.0/karsa-linux-arm64",
-          "sha256": "305a2d594f8b352797e1be4e6524ef35a532e72663a3e5b9bdb7d60706cc8500",
-          "size": 87653625
+          "sha256": "e02cb82663a1c6f8464aaf661be1aa2e8b08470a6cd7aa6b136dcdf8299305a9",
+          "size": 87663831
         }
       ],
       "readme_url": "https://karsa.app/packages/karsa/README.md",
@@ -45,30 +45,62 @@
         {
           "platform": "darwin-arm64",
           "url": "https://github.com/karsa-app/packages/releases/download/cli-v0.1.0/karsa-server-darwin-arm64",
-          "sha256": "7a151d952efead81fe1ad421d8a984f67e6930015b6a668071cc889ca097427b",
-          "size": 78699730
+          "sha256": "4452e65453d515d66b69d82eb61a657bf2e22f3cf6aa7fccc5c503608603b1f3",
+          "size": 78897874
         },
         {
           "platform": "darwin-x86_64",
           "url": "https://github.com/karsa-app/packages/releases/download/cli-v0.1.0/karsa-server-darwin-x86_64",
-          "sha256": "7a299339c6653e154774dafc78ef2fc1550fdded89dabc8ecf7055cfbb92c1df",
-          "size": 86942912
+          "sha256": "0c15b25ec55dbfb3f4d867e366c7ffc8e0730f92aa34f77c739622675c23ba18",
+          "size": 87119696
         },
         {
           "platform": "linux-x86_64",
           "url": "https://github.com/karsa-app/packages/releases/download/cli-v0.1.0/karsa-server-linux-x86_64",
-          "sha256": "7f7c6f74d2dfeb2cc9ef178d2dc8ec84d9ce47f9a3d054dec5c0b016a73778f9",
-          "size": 96937352
+          "sha256": "4bf524f266124e53841b84b94e1ca6ba410e27fe129b7002e8c59dee78173c19",
+          "size": 97112760
         },
         {
           "platform": "linux-arm64",
           "url": "https://github.com/karsa-app/packages/releases/download/cli-v0.1.0/karsa-server-linux-arm64",
-          "sha256": "25185a324da154e215998ec6be7913962179a34166ca55ab4a103a331af7a718",
-          "size": 90318160
+          "sha256": "6ae66ee5c7df7936a24133c539e2fc2b06db3d1a1d3c6ca0d4ef3022e27bf00c",
+          "size": 90493568
         }
       ],
       "readme_url": "https://karsa.app/packages/karsa-server/README.md",
       "manifest_url": "https://karsa.app/packages/karsa-server/karsa.package.json"
+    },
+    {
+      "name": "karsa-tunnel-client",
+      "kind": "tunnel-client",
+      "version": "0.1.0",
+      "description": "Karsa tunnel client (reverse-tunnel sidecar, supervised by karsa-server)",
+      "artifacts": [
+        {
+          "platform": "darwin-arm64",
+          "url": "https://github.com/karsa-app/packages/releases/download/cli-v0.1.0/karsa-tunnel-client-darwin-arm64",
+          "sha256": "78616e9fab0cf80afda7d1e295d93df2e605c3a18501654ff91358d459e604b9",
+          "size": 75199186
+        },
+        {
+          "platform": "darwin-x86_64",
+          "url": "https://github.com/karsa-app/packages/releases/download/cli-v0.1.0/karsa-tunnel-client-darwin-x86_64",
+          "sha256": "9bcffc9bed6af1b8f03c2c562383097427b88da7e9ef01b293ebdb9742255a75",
+          "size": 83433040
+        },
+        {
+          "platform": "linux-x86_64",
+          "url": "https://github.com/karsa-app/packages/releases/download/cli-v0.1.0/karsa-tunnel-client-linux-x86_64",
+          "sha256": "0baa8ca1ab8a847e78161452c1ca6ef0dde77c2a891bb43552774dc004a058c0",
+          "size": 93454673
+        },
+        {
+          "platform": "linux-arm64",
+          "url": "https://github.com/karsa-app/packages/releases/download/cli-v0.1.0/karsa-tunnel-client-linux-arm64",
+          "sha256": "bd99bc3258abc6ad8c852b667a39a56ed40441a5e454748898ee6924491f9f11",
+          "size": 86835481
+        }
+      ]
     },
     {
       "name": "@karsa/web",
@@ -79,8 +111,8 @@
         {
           "platform": "any",
           "url": "https://github.com/karsa-app/packages/releases/download/cli-v0.1.0/karsa-web.tar.gz",
-          "sha256": "ebfbe6b18e7003ad784a2355322b31610cd110c731fb285c0b0375f592129c84",
-          "size": 396437
+          "sha256": "6d19653f5724c385d0f2d8caabe6c2b82cdf35ab6a45a796d01ad070fdff6e42",
+          "size": 396822
         }
       ],
       "requires": {
@@ -98,8 +130,8 @@
         {
           "platform": "any",
           "url": "https://github.com/karsa-app/packages/releases/download/cli-v0.1.0/karsa-doc.tar.gz",
-          "sha256": "95af568737e04cbf1daa77d72e514d1dcc8ece4809d4585d3aafbe795e61a853",
-          "size": 17024
+          "sha256": "bf3c642d682f0e0349bb1916279a4169208ec88d9dd164058feae8c509032e30",
+          "size": 19563
         }
       ],
       "requires": {
@@ -117,8 +149,8 @@
         {
           "platform": "any",
           "url": "https://github.com/karsa-app/packages/releases/download/cli-v0.1.0/karsa-project-template-productive-0.1.0.tar.gz",
-          "sha256": "565ef112c41c54701a26889f843fbd5519c1c6a4360a19e18667b5fb12319a36",
-          "size": 37206
+          "sha256": "f36aad434686e991b16ae8d40a21a21648e8e617c6b0f33ded8abe4b512ab107",
+          "size": 36332
         }
       ],
       "requires": {
