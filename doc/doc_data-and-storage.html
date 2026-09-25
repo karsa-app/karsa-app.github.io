@@ -33,14 +33,15 @@
 <p>Every artifact a task produces has a shape, and each shape has a home that makes it a first-class, browsable record instead of loose bytes on disk:</p>
 <ul><li><strong>A file</strong> — a CSV, PDF, image, dataset, export, anything you'd hand someone as a file → <strong>upload it as an asset.</strong> It lands under <code>karsa/&lt;project&gt;/artifact/file/</code> as a record the UI can list and preview, not stray bytes the daemon can't see.</li><li><strong>Tabular data</strong> you'd filter, sort, join, or aggregate → the project's <strong>Karsa SQL DB</strong> (<code>karsa/&lt;project&gt;/sqldb/default.db</code>), not a stray spreadsheet on disk. To make a table browsable in the UI, put a <strong>collection</strong> over it.</li><li><strong>Prose</strong> — a memo, notes, a writeup, a report → a <strong>markdown document</strong> in a docdb collection under <code>artifact/</code>, not a loose <code>.md</code> at the project root.</li></ul>
 <p>If you are unsure where something belongs, ask. But the project root is never the answer — a file written there is invisible to Karsa, unversioned as a record, and lost to every view the user has.</p>
-<h2>The Karsa HTTP API: conventions first</h2>
-<p>The daemon exposes a local HTTP API, and the active project is already baked into one environment variable.</p>
-<ul><li><strong>Always use <code>$KARSA_API_BASE</code>.</strong> It encodes the daemon host <em>and the active project</em> — every call you make through it operates on <em>this</em> project. Build every request as <code>${KARSA_API_BASE}/&lt;path&gt;</code>.</li><li><strong>Never hard-code <code>/api/...</code> paths or a host.</strong> Don't write <code>http://localhost:3100/api/...</code> or assume a path prefix. <code>$KARSA_API_BASE</code> is the only base you need; hard-coding anything else will hit the wrong project or no project at all.</li><li><strong>You're already cwd'd into the project.</strong> Your working directory is <code>$PROJECT_HOME</code>, so filesystem tools act on the real project tree — but <em>records</em> (assets, rows, docs) are created through the API, not by writing files into <code>artifact/</code> by hand.</li></ul>
-<p>Everything below is a specific application of these two ideas: use <code>$KARSA_API_BASE</code>, and let the API create the record.</p>
+<h2>The Karsa API: one transport</h2>
+<p>The daemon exposes a local API with <strong>one transport</strong> — a JSON-RPC endpoint — and the active project is already baked into one environment variable.</p>
+<ul><li><strong>Always use <code>$KARSA_API_BASE</code>.</strong> It encodes the daemon host <em>and the active project</em> — every call you make through it operates on <em>this</em> project. Every write is a <code>POST ${KARSA_API_BASE}/rpc</code> with body <code>{ &quot;method&quot;: &quot;karsa/{resource}/{verb}&quot;, &quot;params&quot;: { … } }</code> (e.g. <code>karsa/deal/create</code>, <code>karsa/chat/update</code>). See <a href="/doc/doc_api">The API</a> for the full shape and the CRUD verbs.</li><li><strong>Never hard-code <code>/api/...</code> paths or a host.</strong> Don't write <code>http://localhost:1688/api/...</code> or assume a path prefix. <code>$KARSA_API_BASE</code> is the only base you need; hard-coding anything else will hit the wrong project or no project at all.</li><li><strong>You're already cwd'd into the project.</strong> Your working directory is <code>$PROJECT_HOME</code>, so filesystem tools act on the real project tree — but <em>records</em> (assets, rows, docs) are created through the API, not by writing files into <code>artifact/</code> by hand.</li></ul>
+<p>Everything below is a specific application: <code>POST ${KARSA_API_BASE}/rpc</code> with the right <code>method</code>, and let the API create the record. (The one non-rpc exception is the multipart file upload below — binary bytes don't fit a JSON body.)</p>
 <h2>Titling the chat</h2>
 <p>Once the user's intent is clear, give the conversation a short title — a undefined-undefined word noun phrase:</p>
-<pre><code>PATCH ${KARSA_API_BASE}/chat/&lt;chat_id&gt;
-{ &quot;title&quot;: &quot;Quarterly revenue cleanup&quot; }</code></pre>
+<pre><code>POST ${KARSA_API_BASE}/rpc
+{ &quot;method&quot;: &quot;karsa/chat/update&quot;,
+  &quot;params&quot;: { &quot;id&quot;: &quot;&lt;chat_id&gt;&quot;, &quot;patch&quot;: { &quot;title&quot;: &quot;Quarterly revenue cleanup&quot; } } }</code></pre>
 <p>Do this once, early, when intent is clear. It's how the conversation becomes findable later.</p>
 <h2>Uploading a file (assets)</h2>
 <p>A file becomes a browsable asset record with a single multipart upload — field name <code>file</code>:</p>
@@ -49,15 +50,16 @@
 <h2>Tabular data (sqldb + collections)</h2>
 <p>Tabular data goes into the project's Karsa SQL DB, and you make it browsable by laying a <strong>collection</strong> over the table.</p>
 <p>undefined. Write your rows into a table in the project's SQL DB (<code>karsa/&lt;project&gt;/sqldb/default.db</code>). undefined. Create a collection that exposes the table in the UI:</p>
-<pre><code>POST ${KARSA_API_BASE}/collection
-{
-  &quot;slug&quot;: &quot;invoices&quot;,
-  &quot;source&quot;: &quot;sqlite.row&quot;,
-  &quot;sqlite&quot;: { &quot;table&quot;: &quot;invoices&quot; },
-  &quot;name&quot;: &quot;Invoice&quot;,
-  &quot;plural&quot;: &quot;Invoices&quot;
-}</code></pre>
-<p>Now the table's rows are a typed, sortable, filterable collection in the project — not a spreadsheet nobody can find. It appears in the sidebar under <strong>Artifacts</strong> by default; pass <code>&quot;ui&quot;: { &quot;group&quot;: &quot;operate&quot; }</code> to place it elsewhere. This is also the path to &quot;expand to the cloud later&quot;: data in the Karsa SQL DB is data on the seam Karsa controls (see <strong>Building a Karsa app</strong>).</p>
+<pre><code>POST ${KARSA_API_BASE}/rpc
+{ &quot;method&quot;: &quot;karsa/collection/create&quot;,
+  &quot;params&quot;: { &quot;frontmatter&quot;: {
+    &quot;slug&quot;: &quot;invoices&quot;,
+    &quot;source&quot;: &quot;sqlite.row&quot;,
+    &quot;sqlite&quot;: { &quot;table&quot;: &quot;invoices&quot; },
+    &quot;name&quot;: &quot;Invoice&quot;,
+    &quot;plural&quot;: &quot;Invoices&quot;
+  } } }</code></pre>
+<p>Now the table's rows are a typed, sortable, filterable collection in the project — not a spreadsheet nobody can find. It is reachable under <strong>Browse</strong> and through the API immediately; to put it in the <strong>sidebar</strong>, add a group to the <code>frontmatter</code> — <code>&quot;ui&quot;: { &quot;group&quot;: &quot;operate&quot; }</code> (or <code>&quot;artifacts&quot;</code>). Collections are sidebar-<strong>opt-in</strong>: no <code>ui.group</code>, no sidebar row. See <em>How Karsa works → What shows up in the sidebar</em>. This is also the path to &quot;expand to the cloud later&quot;: data in the Karsa SQL DB is data on the seam Karsa controls (see <strong>Building a Karsa app</strong>).</p>
 <h2>Prose (docdb docs)</h2>
 <p>A memo, notes, a writeup, a report — anything document-shaped — goes into a docdb collection as a markdown document (YAML frontmatter for typed fields, a markdown body), under <code>artifact/</code>. Create the document through the API against <code>${KARSA_API_BASE}</code> so it becomes a real resource in a collection, cross-linkable by id and rendered in the UI — not a loose <code>.md</code> at the project root that no view will ever surface.</p>
 <h2>Where to go next</h2>

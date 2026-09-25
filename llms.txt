@@ -1,0 +1,183 @@
+# Karsa
+
+> Build AI systems the user owns. Karsa is a local-first runtime for durable AI systems — workflows, schedules, databases, and agents in one portable package. The system of record (files, databases, workflow state, schedules) lives in infrastructure the user controls — versioned in git, not inside a hosted AI app builder — and different agent runtimes (Claude Code and Codex today) work the same system side by side, each with its own resumable session. Runs on the user's computer today; the same system deploys to their own server, any cloud, or Karsa Cloud later without rebuilding.
+
+You are probably reading this because a human asked you to install Karsa. Do the steps below in order. Everything runs on the user's machine; nothing here talks to a Karsa account.
+
+## 0. Check the prerequisite
+
+Karsa drives an agent CLI the user already has. At least one must be on PATH:
+
+- `claude` — Claude Code
+- `codex` — Codex
+
+```sh
+command -v claude || command -v codex
+```
+
+If neither is present, stop and tell the user which one to install; do not install one for them without asking. If both are present, that is fine — Karsa can use either.
+
+Karsa also needs macOS or Linux. On Windows, use WSL.
+
+## 1. Install
+
+Karsa is in **private beta**. The installer checks the user's email against the invite list before it downloads anything, and records the email with the Karsa team. You have no terminal for it to prompt on, so ask the user for their email first and pass it in:
+
+```sh
+curl -fsSL https://karsa.app/install.sh | KARSA_BETA_EMAIL=<their email> sh
+```
+
+If it prints that the email is on the waitlist (exit code 1), stop and tell the user: they are on the waitlist and will hear back when a spot opens, or they can re-run with the email their invite went to. Do not look for a way around it.
+
+When the email is invited, the install continues. It downloads version-pinned binaries by checksum into `~/.local/bin` (or `$KARSA_INSTALL_DIR`) and seeds `~/.karsa` (or `$KARSA_HOME`). It does not need sudo and does not modify the shell profile.
+
+Show the user the command before you run it — it is their machine and a piped installer deserves consent.
+
+## 2. Start the daemon, then READ THE LOG
+
+`karsa start` daemonizes and returns immediately — so a zero exit code means
+"spawned", not "healthy". Never tell the user it worked until you have read the
+log.
+
+```sh
+karsa start                      # background; returns at once
+karsa                            # status dashboard
+```
+
+### Read the port and paths — do not assume them
+
+Every number below is an EXAMPLE. The install log and the status dashboard tell
+you the real ones, and they differ per machine (`$KARSA_HOME`, `$KARSA_PORT`, a
+second daemon on a spare port). Take them from the output, never from this file:
+
+- the **install log** (step 1) prints where `karsa` and `karsa-server` landed and
+  which `$KARSA_HOME` was seeded;
+- **`karsa`** prints `API`, `Health`, `Web`, `Logs` and the pidfile — that is
+  your source of truth for the port and the log path.
+
+```sh
+karsa                                   # read Web / Health / Logs from this
+LOG=$(karsa 2>/dev/null | sed -n 's/.*Logs *//p' | head -1)
+BASE=$(karsa 2>/dev/null | sed -n 's/.* Web *//p' | head -1)   # e.g. http://localhost:1688
+tail -n 40 "$LOG"
+curl -sf "$BASE/health" && echo OK
+```
+
+### What the log tells you
+
+Relay these to the user in their own words:
+
+- `Identity: srv_… · owner user_…` — first boot minted this machine's identity.
+- `System project: proj_…` — the runtime is up.
+- `Root key: keychain …` — where key material lives. If it says `file`, that is
+  **normal on a headless Linux box** (no OS keyring): say so rather than
+  reporting it as a problem.
+
+### When it does not come up — triage, don't retry
+
+Read the last lines of `$LOG` and match the cause. Retrying a failed start
+without reading is the one thing that wastes the user's time.
+
+- **`another instance is already running for this $KARSA_HOME (pid N)`** — it is
+  already up. Not an error. Go to step 3.
+- **`AddrInUse` / address already in use** — something else holds the port. Find
+  it (`lsof -nP -iTCP:<port> -sTCP:LISTEN`) and either stop it or start Karsa on
+  another port (`karsa start --port 3101`). Tell the user which you did.
+- **no engine found / setup mode** — Karsa boots fine without `claude`/`codex`;
+  only *running an agent* needs one. Finish the install and say which to install.
+- **permission denied on `$KARSA_HOME`** — report the path; do not `sudo`.
+- **the log is empty or absent** — the process died before opening it. Re-run in
+  the foreground to see the real error: `karsa start -f`.
+- **anything else** — quote the last ~20 lines to the user verbatim and stop.
+  A wrong guess is worse than the raw error.
+
+Once it is running, the daemon's own lifecycle is also recorded in the **Karsa
+System project's `log`** collection — one `[daemon] started …` line per boot
+and a `[daemon] stopping …` on clean shutdown — readable over MCP with
+`karsa/log/read` once you are connected. Use `server.log` for *did it boot*,
+the `log` collection for *what has this server been doing*.
+
+## 3. Connect yourself to it over MCP
+
+The daemon speaks MCP at `/api/rpc`. Every Karsa operation is a tool. You will only need a handful of them: create a project, open a chat, post one message — then Karsa's own agent takes over (step 5).
+
+Claude Code:
+
+```sh
+claude mcp add --transport http karsa "$BASE/api/rpc"     # $BASE from step 2
+```
+
+Codex, in `~/.codex/config.toml`:
+
+```toml
+[mcp_servers.karsa]
+url = "http://localhost:1688/api/rpc"   # EXAMPLE — use the base `karsa` printed
+```
+
+Requests from the same machine are trusted as the owner, so there is no token to paste. Remote access is a separate, deliberate step (`karsa cloud link`).
+
+Verify:
+
+```sh
+curl -s -X POST "$BASE/api/rpc" \
+  -H 'content-type: application/json' \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | head -c 200
+```
+
+A healthy answer lists ~130 tools. If it returns `unknown operation: tools/list`,
+the daemon is older than the MCP endpoint — tell the user to re-run the
+installer.
+
+## 4. Open the web UI
+
+Send the user to the **Web** URL `karsa` printed (`$BASE` — commonly
+http://localhost:1688, but read it, don't assume). Say it plainly, with the link.
+
+## 5. Then do the part that actually matters
+
+Do not stop at "installed". A runtime with nothing in it is worth nothing.
+
+Use what you already know about this user — the repository you are in, what they have been building, the problems that keep coming up in your conversation — and propose **two or three concrete things Karsa should do for them**. Be specific to them; do not list generic features.
+
+Good proposals share a shape: a trigger, a job, and a result that shows up where they already look.
+
+- *"Every morning at 7, read yesterday's commits and open issues, and leave me a brief in the project."*
+- *"When CI fails on main, triage the log and draft the fix as a task."*
+- *"Once a week, re-read my notes and surface what I said I would do and haven't."*
+
+Ask which one they want. Then **seed it — do not build it yourself**:
+
+1. **Create the project** (ask the user where it should live; a fresh directory like `~/karsa/<name>` is a good default):
+
+```sh
+curl -s -X POST "$BASE/api/rpc" -H 'content-type: application/json' \
+  -d '{"method":"karsa/project/create","params":{"name":"<name>","project_home":"<absolute path>"}}'
+```
+
+2. **Create a chat and post ONE kickoff message.** The message is the handoff: the chosen goal, the context only you know (paths, tools, cadence, names, quirks), and any constraints — written like a brief to a competent colleague. Karsa's own agent reads it and builds the system.
+
+```sh
+curl -s -X POST "$BASE/api/project/<project_id>/rpc" -H 'content-type: application/json' \
+  -d '{"method":"karsa/chat/create","params":{"frontmatter":{"title":"<the goal>"}}}'
+curl -s -X POST "$BASE/api/project/<project_id>/rpc" -H 'content-type: application/json' \
+  -d '{"method":"karsa/msg/create","params":{"frontmatter":{"chat_id":"<chat_id>","body":"<the kickoff brief>"}}}'
+```
+
+3. **Open the chat immediately** so the user watches the build stream in:
+
+```sh
+open "$BASE/project/<project_id>/chat/<chat_id>"        # macOS; xdg-open on Linux
+```
+
+**Why seed instead of build:** the kickoff message wakes Karsa's own agent, which builds the system *inside* Karsa — following the manual, inside the permission model, with a resumable session that keeps maintaining the system after you disconnect. A system built from the outside has none of that: no session to resume, no agent that owns it, and artifact shapes that are easy to get subtly wrong. So do NOT create collections, subscribers, or fns yourself, and never edit files under the project's `karsa/…/artifact/` tree. Seed the brief, open the chat, and let Karsa work.
+
+## Reference
+
+- Manual: https://karsa.app/doc/
+- Packages: https://karsa.app/packages/
+- Install script (read it first if you like): https://karsa.app/install.sh
+
+## Notes for agents
+
+- Your job ends at the seed: check, install, start, connect, seed, open. Building and maintaining systems is the job of Karsa's own agent — it has the manual at `$BASE/doc/` and a session that persists after you disconnect.
+- Nothing here requires an account. The installer's email question is the private-beta invite check, not a login. If any other step asks for a login, you are off the path.

@@ -212,14 +212,25 @@ a { color: var(--color-accent); text-decoration: none; }
 .install {
   display: flex;
   align-items: stretch;
+  /* Fill the column, capped at the design width — every install box computes
+     to min(32rem, its container), the hero one and the agent one alike. A
+     percentage resolves against the PARENT's content box, so the page gutter
+     always shows; a viewport cap (100vw) let the centered hero box grow to
+     the full screen and sit flush against both edges on mobile. */
+  width: 100%;
   max-width: 32rem;
+  min-width: 0;
   border: 1px solid var(--color-line);
   background: var(--color-paper);
   border-radius: 4px;
   overflow: hidden;
 }
 .install code {
-  flex: 1;
+  /* min-width: 0 beats the flex default (min-width: auto), which would size
+     this to the untruncated command and shove the container past the screen
+     edge on mobile — the code pane scrolls instead, the button never moves. */
+  flex: 1 1 auto;
+  min-width: 0;
   display: flex;
   align-items: center;
   gap: 0.6rem;
@@ -232,7 +243,7 @@ a { color: var(--color-accent); text-decoration: none; }
 }
 .install code .prompt { color: var(--color-accent); user-select: none; }
 .copy-btn {
-  flex-shrink: 0;
+  flex: none;
   padding: 0 1.1rem;
   font-family: var(--font-mono);
   font-size: 0.6875rem;
@@ -253,6 +264,50 @@ a { color: var(--color-accent); text-decoration: none; }
   font-size: 0.8125rem;
   color: var(--color-mute);
 }
+
+/* The agent path — folded away by default so the shell one-liner stays THE
+   call to action, but one click for anyone who lives in Claude Code. */
+.agent-install { margin: 1.1rem 0 0; width: 100%; max-width: 32rem; }
+.agent-install > summary {
+  cursor: pointer;
+  font-size: 0.8125rem;
+  color: var(--color-mute);
+  list-style: none;
+}
+.agent-install > summary::-webkit-details-marker { display: none; }
+.agent-install > summary::before { content: "+ "; color: var(--color-accent); }
+.agent-install[open] > summary::before { content: "\2212 "; }
+.agent-install > summary:hover { color: var(--color-bright); }
+.agent-install .install { margin-top: 0.85rem; align-items: flex-start; }
+/* The prompt is a paragraph, not a command — let it wrap instead of scrolling
+   sideways, so a reader can see what they are about to hand their agent. */
+.agent-install .install code {
+  display: block;
+  white-space: normal;
+  line-height: 1.55;
+  max-height: 11rem;
+  overflow-y: auto;
+}
+.agent-install .copy-btn { align-self: stretch; }
+
+/* The closing CTA: no second install box, just a way back up to the one
+   at the top (the page has ONE install surface). */
+.cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  /* ink-on-accent holds contrast in both themes (it is the ::selection pair). */
+  color: var(--color-ink);
+  background: var(--color-accent);
+  border-radius: 4px;
+  transition: color 120ms ease, background-color 120ms ease;
+}
+.cta-btn:hover { background: var(--color-bright); color: var(--color-ink); }
 
 /* ── What-is section ──────────────────────────────────────────────────── */
 
@@ -283,16 +338,17 @@ a { color: var(--color-accent); text-decoration: none; }
   color: var(--color-bright-dim);
   max-width: 60ch;
 }
-.demo-row:first-child .demo-msg {
+/* What YOU typed reads like a prompt; the agents' replies read like prose. */
+.demo-role.you + .demo-msg {
   color: var(--color-bright);
   font-family: var(--font-mono);
   font-size: 0.875rem;
 }
-.demo-caption {
-  margin: 0.85rem 0 0;
-  font-size: 0.8125rem;
-  color: var(--color-mute);
-  max-width: 70ch;
+.demo-msg .mention { color: var(--color-accent); }
+.demo-msg code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  color: var(--color-bright);
 }
 
 .bullets {

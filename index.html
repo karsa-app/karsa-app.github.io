@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Karsa — the AI you already use, working even when you aren't</title>
-  <meta name="description" content="Karsa turns your Claude Code or Codex subscription into systems that keep running on your own machine — morning briefs, standing reactions, a backlog worked overnight. Local-first, plain files, no account. Install with one command." />
+  <title>Karsa — build AI systems you own</title>
+  <meta name="description" content="Karsa runs AI systems on your own computer — data, schedules, workflows, and agents in one package you own. Pick the best AI for each job. Start on your laptop; move the same system anywhere when it grows. Free for personal use." />
   <link rel="icon" type="image/png" href="/karsa-logo.png" />
   <meta property="og:title" content="Karsa" />
-  <meta property="og:description" content="The AI you already use, working even when you aren't. A local-first runtime where AI-powered systems live — on your machine, in plain files." />
+  <meta property="og:description" content="Build AI systems you own. Local-first, multi-agent, deploy anywhere. Your AI system should outlive your AI provider." />
   <meta property="og:image" content="./karsa-logo.png" />
   <link rel="stylesheet" href="/styles.css" />
 </head>
@@ -26,76 +26,163 @@
   <main>
     <!-- Hero -->
     <section class="wrap hero">
-      <p class="eyebrow">Runs on the AI you already pay for</p>
+      <p class="eyebrow">Local-first · Multi-agent · Deploy anywhere</p>
       <h1 class="display">
-        The AI you already use, <span class="accent">working even when you aren't</span>.
+        Build AI systems <span class="accent">you own</span>.
       </h1>
       <p class="lead">
-        Tell Karsa what you want — once. It becomes a system on your machine:
-        morning briefs, standing reactions, a backlog worked overnight.
+        Karsa runs AI systems on your own computer — data, schedules, workflows,
+        and agents in one package you own. Pick the best AI for each job. Start on
+        your laptop; move the same system anywhere when it grows.
       </p>
 
       <div class="install">
         <code id="install-cmd"><span class="prompt">$</span>curl -fsSL https://karsa.app/install.sh | sh</code>
         <button class="copy-btn" id="copy-btn" type="button" aria-label="Copy install command">Copy</button>
       </div>
-      <p class="install-note">Requires <a href="https://docs.anthropic.com/en/docs/claude-code">Claude Code</a> or <a href="https://github.com/openai/codex">Codex</a> — you probably already have one. No account, no new AI bill. macOS &amp; Linux.</p>
+      <p class="install-note">Private beta — the installer checks your invite by email. Free for personal use. Works with the <a href="https://docs.anthropic.com/en/docs/claude-code">Claude Code</a> or <a href="https://github.com/openai/codex">Codex</a> you already have — more coming. No account. No new AI bill. macOS &amp; Linux.</p>
+
+      <details class="agent-install">
+        <summary>Or let your agent do it — paste this into Claude Code or Codex</summary>
+        <div class="install">
+          <code id="agent-prompt">Read https://karsa.app/llms.txt and set up Karsa for me.</code>
+          <button class="copy-btn" id="copy-agent-btn" type="button" aria-label="Copy the agent prompt">Copy</button>
+        </div>
+        <p class="install-note">The <a href="/llms.txt">instructions</a> do the rest: check your setup, ask before installing, propose systems built around your actual work — then hand the build to Karsa and open the chat so you watch it happen.</p>
+      </details>
       <p class="install-note">New here? Read the <a href="/doc/">manual</a> or browse the <a href="/packages/">packages</a>.</p>
     </section>
 
-    <!-- What it looks like -->
+    <!-- What it looks like: two vendors, one system — a data-room due
+         diligence (illustrative), each agent on the job it's strongest at:
+         Claude Code reads the contracts, Codex runs the numbers. -->
     <section class="wrap section" id="demo">
-      <p class="section-rule">One sentence, then it runs itself</p>
-      <div class="demo" aria-label="Illustrative chat transcript">
+      <p class="section-rule">Example: one data room, two agents</p>
+      <div class="demo" aria-label="Illustrative chat transcript: due diligence on a data room">
         <div class="demo-row">
-          <span class="demo-role you">you · 4:42 PM</span>
-          <p class="demo-msg">brief me on this repo every morning at 7</p>
+          <span class="demo-role you">you</span>
+          <p class="demo-msg">We're buying Harbor Supply. The data room is in ./dataroom. Read the customer contracts: what bites us after closing?</p>
         </div>
         <div class="demo-row">
-          <span class="demo-role">karsa · 4:42 PM</span>
-          <p class="demo-msg">Done — every day at 07:00 I'll post a brief in this chat. Pause or delete it anytime.</p>
+          <span class="demo-role">claude code</span>
+          <p class="demo-msg">Three of the 41 contracts matter. Northwind's MSA (§14.2) lets them terminate on a change of control, with 30 days' notice. Two others auto-renew at flat pricing through 2028. All three are in the risk log, with page cites.</p>
         </div>
         <div class="demo-row">
-          <span class="demo-role">karsa · next day, 7:00 AM</span>
-          <p class="demo-msg">Morning brief: 3 commits since yesterday — the payment-retry fix landed and tests are green. One PR is waiting on your review. CI is clean; nothing overdue.</p>
+          <span class="demo-role you">you</span>
+          <p class="demo-msg"><span class="mention">@codex</span> how much revenue rides on Northwind? Check the bank statements, not the seller's numbers.</p>
+        </div>
+        <div class="demo-row">
+          <span class="demo-role">codex</span>
+          <p class="demo-msg">Northwind is 31% of trailing revenue ($2.48M of $8.0M), and the deposits match the ledger. Added that to its risk-log entry. Bigger issue: the $310K "one-time" consulting add-back recurs in all four quarters. Rebuilt EBITDA in <code>analysis/ebitda.py</code>: $1.42M, not the $1.73M claimed.</p>
         </div>
       </div>
-      <p class="demo-caption">Illustrative transcript — the chat UI streams real runs live. Behind it: a planner turned your sentence into a standing job; a timer woke your own machine at 07:00; your Claude/Codex subscription did the reading.</p>
     </section>
 
-    <!-- What is Karsa -->
-    <section class="wrap section" id="what">
-      <p class="section-rule">Why Karsa</p>
+    <!-- Why Karsa -->
+    <section class="wrap section" id="why">
+      <p class="section-rule">What hosted AI builders can't give you</p>
       <ol class="bullets">
         <li>
           <span class="num">01</span>
           <div>
-            <p class="b-title">Persistent — not another chat window</p>
-            <p class="b-body">Most AI tools answer a prompt and forget. Karsa keeps state: standing schedules, reactions to your data, and a task backlog a worker agent executes — with retries, ordering, and progress reported back to your chat. It runs whether or not you're at the keyboard.</p>
+            <p class="b-title">It's yours</p>
+            <p class="b-body">Everything lives on your machine as plain files — data, schedules, workflows, history — versioned in git. You can read it, change it, back it up. Your agents may think in the cloud; your system lives with you. Cancel any subscription — the system is still yours.</p>
           </div>
         </li>
         <li>
           <span class="num">02</span>
           <div>
-            <p class="b-title">Runs on the subscription you already have</p>
-            <p class="b-body">Karsa is engine-agnostic: it drives Claude Code today and Codex tomorrow, and your systems don't care which. That $20–200/month you already pay sits idle most of the day — Karsa is how it works the other 22 hours. No new AI bill, no per-token markup.</p>
+            <p class="b-title">The right agent for each job</p>
+            <p class="b-body">Hosted assistants coordinate their own helpers. Karsa mixes vendors: Claude Code and Codex work the same system, side by side — chat replies, standing workers, scheduled jobs. Give each job to the agent that does it best. Each keeps its own memory of the work.</p>
           </div>
         </li>
         <li>
           <span class="num">03</span>
           <div>
-            <p class="b-title">Yours — on your machine, in plain files</p>
-            <p class="b-body">Everything runs locally. Your systems, schedules, and data are readable files under your home, versioned in git — inspectable, editable, and yours to back up. No account required to start.</p>
+            <p class="b-title">Batteries included</p>
+            <p class="b-body">Databases, file storage, tasks, workflows, a scheduler, events — built in. Nothing to rent, nothing to wire up. A system is a package: files, a manifest, an installer. So it can move. So you can share it — and sell it, when the Karsa Store opens.</p>
           </div>
         </li>
         <li>
           <span class="num">04</span>
           <div>
-            <p class="b-title">A real runtime underneath</p>
-            <p class="b-body">Karsa is a local-first runtime where AI-powered systems live — think an application server whose primitives are agents, events, schedules, tasks, and storage instead of HTTP and SQL. Engines are interchangeable muscle; the runtime — and everything it holds — is yours. Designed so the same project can lift to the cloud when you scale.</p>
+            <p class="b-title">Start small. Go anywhere.</p>
+            <p class="b-body">Begin on your laptop with zero setup. When others need in, run the same system on your own server, any cloud, or Karsa Cloud (coming soon). Nothing gets rebuilt. Prototype → personal system → team system → product. Same project.</p>
           </div>
         </li>
       </ol>
+    </section>
+
+    <!-- Flagship example -->
+    <section class="wrap section" id="example">
+      <p class="section-rule">Example: due diligence you keep private</p>
+      <ol class="bullets">
+        <li>
+          <span class="num">01</span>
+          <div>
+            <p class="b-title">The situation</p>
+            <p class="b-body">You're buying a small business. The data room holds financials, contracts, emails, and your private notes — things that don't belong in someone else's cloud.</p>
+          </div>
+        </li>
+        <li>
+          <span class="num">02</span>
+          <div>
+            <p class="b-title">Four agents, one working system</p>
+            <p class="b-body">A finance agent models the numbers. A contracts agent pulls out obligations and deadlines. A research agent checks the market claims. A review agent hunts contradictions and challenges the thesis. They share the same records and the same task queue — a living diligence workspace, not an answer buried in a chat.</p>
+          </div>
+        </li>
+        <li>
+          <span class="num">03</span>
+          <div>
+            <p class="b-title">Then people join</p>
+            <p class="b-body">The files and the work stay with you. When your lawyer or your partners need in, deploy the same system to your own server. Start alone. Add agents. Add people. Keep the system.</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- More examples -->
+    <section class="wrap section" id="examples">
+      <p class="section-rule">What else could you build?</p>
+      <ol class="bullets">
+        <li>
+          <span class="num">01</span>
+          <div>
+            <p class="b-title">Deal-flow system</p>
+            <p class="b-body">New deals get analyzed on arrival. Assessments stay on the record. A morning review lists everything open — with next steps.</p>
+          </div>
+        </li>
+        <li>
+          <span class="num">02</span>
+          <div>
+            <p class="b-title">Real-estate portfolio system</p>
+            <p class="b-body">Track properties. Watch listings and rents. Keep underwriting current. Surface follow-ups automatically.</p>
+          </div>
+        </li>
+        <li>
+          <span class="num">03</span>
+          <div>
+            <p class="b-title">Engineering operations system</p>
+            <p class="b-body">Dependency health, release chores, incident follow-ups, recurring reviews — owned, scheduled, and off your plate.</p>
+          </div>
+        </li>
+        <li>
+          <span class="num">04</span>
+          <div>
+            <p class="b-title">Anything you keep doing with AI</p>
+            <p class="b-body">If a process worked once, Karsa can keep it running — with data, schedules, and workers of its own.</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="wrap section" id="get-started">
+      <p class="section-rule">Your AI system should outlive your AI provider.</p>
+      <!-- `#top` scrolls to the top of the document (HTML spec: no element
+           needs that id); html{scroll-behavior:smooth} animates it. -->
+      <a class="cta-btn" href="#top">Get started <span aria-hidden="true">↑</span></a>
+      <p class="install-note">Build locally. Choose your agents. Deploy anywhere.</p>
     </section>
   </main>
 
@@ -111,8 +198,14 @@
 
   <script>
     (function () {
-      var btn = document.getElementById("copy-btn");
-      var cmd = "curl -fsSL https://karsa.app/install.sh | sh";
+      // All copy buttons share one implementation — the only difference is
+      // which element holds the text.
+      var installCmd = "curl -fsSL https://karsa.app/install.sh | sh";
+      wire(document.getElementById("copy-btn"), installCmd);
+      var agent = document.getElementById("agent-prompt");
+      if (agent) wire(document.getElementById("copy-agent-btn"), agent.textContent.trim());
+
+      function wire(btn, cmd) {
       if (!btn) return;
       btn.addEventListener("click", function () {
         var done = function () {
@@ -139,6 +232,7 @@
           document.body.removeChild(ta);
         }
       });
+      }
     })();
   </script>
 </body>

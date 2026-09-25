@@ -36,14 +36,60 @@
 <p>Collections are defined <strong>per project</strong> — what collections a project has, and how each renders, lives in the project's own files, not baked into Karsa.</p>
 <h2>Every resource looks the same</h2>
 <p>Whatever the data source, every resource carries the same baseline fields:</p>
-<ul><li><strong><code>id</code></strong> — its identifier;</li><li><strong><code>_t</code></strong> — its type;</li><li><strong><code>created_at</code> / <code>created_by</code></strong> and <strong><code>updated_at</code> / <code>updated_by</code></strong> — when, and by whom.</li></ul>
+<ul><li><strong><code>id</code></strong> — its identifier;</li><li><strong><code>_t</code></strong> — its type;</li><li><strong><code>_created_at</code> / <code>_created_by</code></strong> and <strong><code>_updated_at</code> / <code>_updated_by</code></strong> — when, and by whom. (The <code>_</code> prefix marks a server-owned field: the server stamps these, a write never sets them.)</li></ul>
 <p>&quot;By whom&quot; is an actor: a worker (an agent) or <code>user</code>. That small fact is what lets an agent safely react to changes without reacting to <em>its own</em> changes — the basis of a stable agent loop.</p>
 <p>An id reads <code>{type}_{unique}</code> — e.g. <code>spec_01KVSRJ0RG2G</code>. Some resources also have a <strong>slug</strong> for readability, and you'll see the <code>{id}_{slug}</code> form in URLs and links — but Karsa resolves links by the id alone, so a slug going stale never breaks anything.</p>
+<h2>Three file names, one rule</h2>
+<p>On disk, three well-known filenames divide the world:</p>
+<ul><li><strong><code>index.md</code></strong> — the directory <strong>is</strong> a Karsa resource: the file carries machine-read YAML frontmatter (the record) with prose below. Machines and humans both read it; edits are data edits.</li><li><strong><code>README.md</code></strong> — plain-filesystem orientation for whoever is browsing (human or agent). Never machine-read; pure documentation.</li><li><strong><code>KARSA.md</code></strong> — exactly one, at the top of <code>$KARSA_HOME</code>: the home's own record (machine-wide config in frontmatter, your notes in the body).</li></ul>
+<p>So: resource → <code>index.md</code>; orientation → <code>README.md</code>; the home itself → <code>KARSA.md</code>.</p>
+<h2>Naming: collections are SINGULAR</h2>
+<p><strong>A collection directory is always the singular noun.</strong> <code>key/</code>, <code>tool/</code>, <code>task/</code>, <code>spec/</code>, <code>host/</code>, <code>user/</code> — never <code>keys/</code>, <code>tools/</code>, <code>tasks/</code>.</p>
+<p>Why: the directory names the <strong>type of one thing</strong> in it, the same way a type is singular. It also makes the id prefix, the type name, and the path agree — <code>task/</code> holds <code>task_01H…</code> resources of type <code>task</code>, and the API path is <code>karsa/task/create</code>. A plural directory breaks that chain for no gain.</p>
+<p>The plural exists only as a <strong>display label</strong>, in <code>{collection}/index.md</code>:</p>
+<pre><code>name: &quot;Task&quot;        # singular — what one is
+plural: &quot;Tasks&quot;     # collection label, for headings and nav</code></pre>
+<p>The same rule holds for anything you add: a new collection, a template, a package's seeded collections. Singular directory, plural label.</p>
+<h2>Directory structure</h2>
+<p>A project is a directory. Everything about it is a file in it.</p>
+<pre><code>{project_home}/karsa/{project_id}/
+  index.md              the project's own record (frontmatter + prose)
+  artifact/             every collection lives here
+    task/
+      index.md          the COLLECTION's record: type, schema, UI config
+      task_01H….md      one resource
+    spec/
+      index.md
+      spec_01H….md
+    chat/
+      index.md
+      chat_01H…/        a resource may be a DIRECTORY when it owns files
+        index.md
+  .tmp/                 purgeable — wiped on daemon restart, never durable</code></pre>
+<p>Collections are singular, so a webhook entrypoint lives in <code>ingress/</code> and a tunnel identity in <code>host/</code> — and the split is meaningful: an <strong>ingress is per project</strong> (deliveries become events <em>here</em>), while a <strong>host is per server</strong> (a public entrypoint the one tunnel connection serves). Each ingress owns its own host, so revoking a webhook revokes an entrypoint rather than a path on a shared one.</p>
+<p>There is no hidden state directory. Everything durable is an artifact you can read, and the only secret on the machine — the server's root key — lives in the <strong>OS keychain</strong> (macOS Keychain, Linux Secret Service, else a undefined file outside the project). Every other key is derived from it on demand, so no key file exists to back up, export, or accidentally commit.</p>
+<p>Two rules keep this predictable:</p>
+<ul><li><strong>A resource is either <code>{id}.md</code> or <code>{id}/index.md</code>.</strong> Use the directory form when the resource owns files of its own; both are the same resource to the API.</li><li><strong>Anything under <code>.tmp/</code> is disposable.</strong> It is wiped when the daemon restarts, so nothing that matters may live there. Scratch sits <em>inside</em> the directory it serves, so deleting an artifact takes its scratch with it.</li></ul>
+<h2>What shows up in the sidebar (opt-in)</h2>
+<p><strong>A collection appears in the sidebar only if it asks to.</strong> In <code>{collection}/index.md</code>:</p>
+<pre><code>ui:
+  group: &quot;artifacts&quot;   # WHICH sidebar group — no group means not in the sidebar
+  order: 20            # position within that group (optional)
+  renderer: document   # how records are displayed: document | code | log | table</code></pre>
+<ul><li><strong>No <code>ui.group</code> → not in the sidebar.</strong> That is not an error and nothing is lost: the collection is fully reachable under <strong>Browse</strong>, and its API works exactly the same.</li><li>This is deliberate. A project accumulates directories, and a sidebar that lists every one of them stops being navigable. Showing something is a decision someone makes.</li><li><strong>To surface one, set <code>ui.group</code></strong> — or just ask your agent to (&quot;put the invoices collection in the sidebar under Operate&quot;). It is a one-line frontmatter edit.</li><li>The <strong>groups themselves</strong> — their labels and order — come from the project record's <code>ui.nav</code> in <code>karsa/{project_id}/index.md</code>, which can also override or hide any collection's placement.</li></ul>
+<h2>Where the logs are</h2>
+<p>Three layers, each answering a different question:</p>
+<p>| layer | where | answers | |---|---|---| | <strong>daemon log</strong> | <code>$KARSA_HOME/log/server.log</code> | <em>Did the daemon boot?</em> Raw process output, machine-wide, a plain file — it exists before any project does. | | <strong>exec</strong> | <code>{project}/artifact/exec/</code>, one per run | <em>What did that run print?</em> Agent output, and every line a supervised app writes. | | <strong>chat</strong> | <code>{project}/artifact/chat/</code> | The conversation itself — nothing else. |</p>
+<p>Every attempt to run something produces an <strong>exec</strong>, including one that never started — a failed start records its reason in that exec's log, so there is always somewhere to look.</p>
+<p>There is no separate &quot;app log&quot; or &quot;fn log&quot;. A supervised app <strong>is</strong> a long-running exec — the tunnel-client's output is its exec log. The app record's <code>fn</code> names the <em>controller</em> that converges it between enabled and disabled; the supervised process itself is not a fn.</p>
+<p>The daemon's log is a plain file, so the <strong><code>log</code> collection</strong> in the Karsa System project makes it reachable: each record names a file on disk, and <code>karsa/log/read</code> pages through it with the same cursor reader an exec log uses. The seeded <code>server</code> entry is <code>$KARSA_HOME/log/server.log</code> — that is how you read it in the web UI or ask an agent for it, instead of tailing a terminal.</p>
 <h2>CRUD and events — the same for everything</h2>
 <p>Karsa gives every configured collection a <strong>uniform CRUD API</strong> — create / read / update / delete — that works out of the box for SQL- and document-backed collections (and takes a custom handler when a source needs one). Every write automatically emits an <strong>event</strong>: <code>{collection}.created</code>, <code>{collection}.updated</code>, <code>{collection}.deleted</code>.</p>
 <p>All events flow onto <strong>one queue</strong>. You can <strong>filter</strong> that queue and <strong>subscribe</strong> to it; when a matching event fires, Karsa notifies your subscriber.</p>
 <h2>Subscribers — where work happens</h2>
-<p>A <strong>subscriber</strong> binds a <strong>trigger</strong> to a <strong>fn</strong>: <em>when this trigger fires, run that fn.</em> The trigger is either an <strong>event match</strong> (e.g. <code>msg.created</code> where <code>role: user</code>) or a <strong>time</strong> (<code>at</code> / <code>every</code>) — an event-driven subscriber and a scheduled job are the same object, just a different trigger. There is no separate &quot;event handler&quot; or &quot;scheduler&quot; object to create. A fn is the unit of logic that runs — plain code, or an agent-CLI wrapper; a role fn reads its instructions from an <strong>agent profile</strong> passed in its params, so behavior is data you edit, not code. (See <strong>Automating with events, subscribers, and fns</strong>.)</p>
+<p>A <strong>subscriber</strong> binds a <strong>trigger</strong> to a <strong>fn</strong>: <em>when this trigger fires, run that fn.</em> The trigger is either an <strong>event match</strong> (e.g. <code>msg.created</code> where <code>author_kind: human</code>) or a <strong>time</strong> (<code>at</code> / <code>every</code>) — an event-driven subscriber and a scheduled job are the same object, just a different trigger. There is no separate &quot;event handler&quot; or &quot;scheduler&quot; object to create. A fn is the unit of logic that runs — plain code, or an agent-CLI wrapper; a role fn reads its instructions from an <strong>agent user record</strong> (<code>user</code> collection, <code>kind: agent</code> — its body is the instructions) passed in its params, so behavior is data you edit, not code. (See <strong>Automating with events, subscribers, and fns</strong>.)</p>
+<h2>Apps — many parts, one unit</h2>
+<p>A capability that installs several parts at once — fns, subscribers, a collection, an agent user — is packaged as an <strong>app</strong>. The parts stay ordinary artifacts in their native collections, each stamped <code>app:</code> back to one app record (the anchor, never a container). An app never introduces new kinds of things — it installs the same fns, collections, and subscribers you already know, stamped <code>app:</code> so Karsa can show, upgrade, and remove them as one unit. (See <strong>Building a Karsa app</strong>.)</p>
 <h2>Putting it together</h2>
 <p>Typed collections + a uniform CRUD surface + one event queue + subscribers that bind triggers to fns is enough to stand up a <strong>long-running agent doing real work</strong>: it reacts to data changes and to the clock, writes typed resources back, and those writes are themselves events that drive the next step. The chat loop you use day-to-day (see <strong>Using Karsa</strong>) is the first worked example of exactly this.</p>
 <p><em>(Coming: the per-project <strong>Karsa app</strong> — each project as a self-contained, caged app over the Karsa SDK, not just data + subscribers.)</em></p>
