@@ -4,14 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Karsa — build AI systems you own</title>
-  <meta name="description" content="Karsa runs AI systems on your own computer — data, schedules, workflows, and agents in one package you own. Pick the best AI for each job. Start on your laptop; move the same system anywhere when it grows. Free for personal use." />
+  <meta name="description" content="Karsa puts your data, workflows, and agents in one system on your machines. Claude Code and Codex do the thinking. Now in private beta for macOS and Linux." />
   <link rel="icon" type="image/png" href="/karsa-logo.png" />
   <meta property="og:title" content="Karsa" />
-  <meta property="og:description" content="Build AI systems you own. Local-first, multi-agent, deploy anywhere. Your AI system should outlive your AI provider." />
+  <meta property="og:description" content="Build AI systems you own. Your data, workflows, and agents in one system on your machines. Your AI system should outlive your AI provider." />
   <meta property="og:image" content="./karsa-logo.png" />
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
+  <!-- "Request access" and "Talk to us" share one inbox (mailto) until the
+       waitlist form from install/beta.json is wired (spec_01KVE4X4BM2A §3.2). -->
   <header class="site-header">
     <a class="brand" href="/" aria-label="Karsa home">
       <img src="/karsa-logo.png" alt="" />
@@ -19,45 +21,46 @@
     </a>
     <nav class="nav">
       <a href="/doc/">Manual</a>
-      <a href="/packages/">Packages</a>
-      </nav>
+      <a class="nav-btn" href="mailto:hello@karsa.app?subject=Karsa%20beta%20access">Request access</a>
+    </nav>
   </header>
 
   <main>
-    <!-- Hero -->
+    <!-- Hero: under 40 words. The curl command stays THE call to action;
+         "Request access" is the quieter second one. -->
     <section class="wrap hero">
-      <p class="eyebrow">Local-first · Multi-agent · Deploy anywhere</p>
+      <p class="eyebrow">Private beta</p>
       <h1 class="display">
         Build AI systems <span class="accent">you own</span>.
       </h1>
       <p class="lead">
-        Karsa runs AI systems on your own computer — data, schedules, workflows,
-        and agents in one package you own. Pick the best AI for each job. Start on
-        your laptop; move the same system anywhere when it grows.
+        Your data, workflows, and agents in one system on your machines.
+        Claude Code and Codex do the thinking.
       </p>
 
       <div class="install">
         <code id="install-cmd"><span class="prompt">$</span>curl -fsSL https://karsa.app/install.sh | sh</code>
         <button class="copy-btn" id="copy-btn" type="button" aria-label="Copy install command">Copy</button>
       </div>
-      <p class="install-note">Private beta — the installer checks your invite by email. Free for personal use. Works with the <a href="https://docs.anthropic.com/en/docs/claude-code">Claude Code</a> or <a href="https://github.com/openai/codex">Codex</a> you already have — more coming. No account. No new AI bill. macOS &amp; Linux.</p>
+      <div class="hero-actions">
+        <a class="ghost-btn" href="mailto:hello@karsa.app?subject=Karsa%20beta%20access">Request access</a>
+      </div>
 
       <details class="agent-install">
-        <summary>Or let your agent do it — paste this into Claude Code or Codex</summary>
+        <summary>Or let your agent install it</summary>
         <div class="install">
           <code id="agent-prompt">Read https://karsa.app/llms.txt and set up Karsa for me.</code>
           <button class="copy-btn" id="copy-agent-btn" type="button" aria-label="Copy the agent prompt">Copy</button>
         </div>
-        <p class="install-note">The <a href="/llms.txt">instructions</a> do the rest: check your setup, ask before installing, propose systems built around your actual work — then hand the build to Karsa and open the chat so you watch it happen.</p>
+        <p class="install-note">Paste it into Claude Code or Codex. The <a href="/llms.txt">instructions</a> check your setup and ask before installing.</p>
       </details>
-      <p class="install-note">New here? Read the <a href="/doc/">manual</a> or browse the <a href="/packages/">packages</a>.</p>
     </section>
 
-    <!-- What it looks like: two vendors, one system — a data-room due
-         diligence (illustrative), each agent on the job it's strongest at:
-         Claude Code reads the contracts, Codex runs the numbers. -->
-    <section class="wrap section" id="demo">
-      <p class="section-rule">Example: one data room, two agents</p>
+    <!-- Product visual: two vendors, one system — a data-room due diligence
+         (illustrative), each agent on the job it's strongest at: Claude Code
+         reads the contracts, Codex runs the numbers. -->
+    <section class="wrap demo-section" id="demo">
+      <h2 class="section-rule">Example: one data room, two agents</h2>
       <div class="demo" aria-label="Illustrative chat transcript: due diligence on a data room">
         <div class="demo-row">
           <span class="demo-role you">you</span>
@@ -78,111 +81,127 @@
       </div>
     </section>
 
-    <!-- Why Karsa -->
+    <!-- Stands in for customer logos until there are some. Names as text,
+         never vendor logos, so it can't read as an endorsement. -->
+    <section class="wrap strip" aria-label="Compatibility">
+      <p>Works with <b>Claude Code</b> and <b>Codex</b>. Runs on <b>macOS</b>, <b>Linux</b>, or your own server.</p>
+    </section>
+
+    <!-- The body-and-brain idea: Karsa is the body, the agent is the brain. -->
+    <section class="wrap section" id="how">
+      <h2 class="section-rule">How it works</h2>
+      <ol class="steps">
+        <li><span class="num">01</span><p>Karsa holds the system: data, files, schedules, events.</p></li>
+        <li><span class="num">02</span><p>It wakes an agent when something needs thinking.</p></li>
+        <li><span class="num">03</span><p>Everything the agent does lands back in your system.</p></li>
+      </ol>
+    </section>
+
     <section class="wrap section" id="why">
-      <p class="section-rule">What hosted AI builders can't give you</p>
-      <ol class="bullets">
-        <li>
-          <span class="num">01</span>
-          <div>
-            <p class="b-title">It's yours</p>
-            <p class="b-body">Everything lives on your machine as plain files — data, schedules, workflows, history — versioned in git. You can read it, change it, back it up. Your agents may think in the cloud; your system lives with you. Cancel any subscription — the system is still yours.</p>
-          </div>
+      <h2 class="section-rule">Why Karsa</h2>
+      <ul class="cards cards-3">
+        <li class="card">
+          <h3>You own the system of record.</h3>
+          <p>Plain files in git on your machine. Cancel any AI plan and keep everything.</p>
         </li>
-        <li>
-          <span class="num">02</span>
-          <div>
-            <p class="b-title">The right agent for each job</p>
-            <p class="b-body">Hosted assistants coordinate their own helpers. Karsa mixes vendors: Claude Code and Codex work the same system, side by side — chat replies, standing workers, scheduled jobs. Give each job to the agent that does it best. Each keeps its own memory of the work.</p>
-          </div>
+        <li class="card">
+          <h3>The right agent for each job.</h3>
+          <p>Claude Code reads contracts, Codex runs numbers, in one system.</p>
         </li>
-        <li>
-          <span class="num">03</span>
-          <div>
-            <p class="b-title">Batteries included</p>
-            <p class="b-body">Databases, file storage, tasks, workflows, a scheduler, events — built in. Nothing to rent, nothing to wire up. A system is a package: files, a manifest, an installer. So it can move. So you can share it — and sell it, when the Karsa Store opens.</p>
-          </div>
+        <li class="card">
+          <h3>Start on a laptop, move to a server.</h3>
+          <p>The same system, when others need in. Nothing rebuilt.</p>
         </li>
-        <li>
-          <span class="num">04</span>
-          <div>
-            <p class="b-title">Start small. Go anywhere.</p>
-            <p class="b-body">Begin on your laptop with zero setup. When others need in, run the same system on your own server, any cloud, or Karsa Cloud (coming soon). Nothing gets rebuilt. Prototype → personal system → team system → product. Same project.</p>
-          </div>
-        </li>
-      </ol>
+      </ul>
     </section>
 
-    <!-- Flagship example -->
-    <section class="wrap section" id="example">
-      <p class="section-rule">Example: due diligence you keep private</p>
-      <ol class="bullets">
-        <li>
-          <span class="num">01</span>
-          <div>
-            <p class="b-title">The situation</p>
-            <p class="b-body">You're buying a small business. The data room holds financials, contracts, emails, and your private notes — things that don't belong in someone else's cloud.</p>
-          </div>
+    <section class="wrap section" id="use-cases">
+      <h2 class="section-rule">Built for</h2>
+      <ul class="cards cards-4">
+        <li class="card">
+          <h3>Deals and diligence</h3>
+          <p>Deals analyzed on arrival, assessments kept on record.</p>
         </li>
-        <li>
-          <span class="num">02</span>
-          <div>
-            <p class="b-title">Four agents, one working system</p>
-            <p class="b-body">A finance agent models the numbers. A contracts agent pulls out obligations and deadlines. A research agent checks the market claims. A review agent hunts contradictions and challenges the thesis. They share the same records and the same task queue — a living diligence workspace, not an answer buried in a chat.</p>
-          </div>
+        <li class="card">
+          <h3>Real estate</h3>
+          <p>Track properties, watch rents, keep underwriting current.</p>
         </li>
-        <li>
-          <span class="num">03</span>
-          <div>
-            <p class="b-title">Then people join</p>
-            <p class="b-body">The files and the work stay with you. When your lawyer or your partners need in, deploy the same system to your own server. Start alone. Add agents. Add people. Keep the system.</p>
-          </div>
+        <li class="card">
+          <h3>Operations</h3>
+          <p>Reviews and follow-ups that run on schedule.</p>
         </li>
-      </ol>
+        <li class="card">
+          <h3>Engineering</h3>
+          <p>Dependency health, release chores, incident follow-ups.</p>
+        </li>
+      </ul>
     </section>
 
-    <!-- More examples -->
-    <section class="wrap section" id="examples">
-      <p class="section-rule">What else could you build?</p>
-      <ol class="bullets">
-        <li>
-          <span class="num">01</span>
-          <div>
-            <p class="b-title">Deal-flow system</p>
-            <p class="b-body">New deals get analyzed on arrival. Assessments stay on the record. A morning review lists everything open — with next steps.</p>
-          </div>
-        </li>
-        <li>
-          <span class="num">02</span>
-          <div>
-            <p class="b-title">Real-estate portfolio system</p>
-            <p class="b-body">Track properties. Watch listings and rents. Keep underwriting current. Surface follow-ups automatically.</p>
-          </div>
-        </li>
-        <li>
-          <span class="num">03</span>
-          <div>
-            <p class="b-title">Engineering operations system</p>
-            <p class="b-body">Dependency health, release chores, incident follow-ups, recurring reviews — owned, scheduled, and off your plate.</p>
-          </div>
-        </li>
-        <li>
-          <span class="num">04</span>
-          <div>
-            <p class="b-title">Anything you keep doing with AI</p>
-            <p class="b-body">If a process worked once, Karsa can keep it running — with data, schedules, and workers of its own.</p>
-          </div>
-        </li>
-      </ol>
+    <!-- Claim only what ships today: no SOC 2 or SSO badges until they exist. -->
+    <section class="wrap section" id="teams">
+      <div class="teams">
+        <p class="eyebrow">For teams</p>
+        <h2 class="display teams-title">Runs inside your walls.</h2>
+        <ul class="teams-grid">
+          <li>
+            <h3>Your infrastructure</h3>
+            <p>Your laptop or your own server. Data stays on machines you control.</p>
+          </li>
+          <li>
+            <h3>Full history in git</h3>
+            <p>Every change is versioned: diff it, revert it.</p>
+          </li>
+          <li>
+            <h3>Scoped permissions</h3>
+            <p>Agents and apps get only the access you grant.</p>
+          </li>
+          <li>
+            <h3>No vendor lock-in</h3>
+            <p>Mix AI vendors and switch any time.</p>
+          </li>
+        </ul>
+        <a class="ghost-btn" href="mailto:hello@karsa.app?subject=Karsa%20for%20teams">Talk to us</a>
+      </div>
     </section>
 
-    <!-- Final CTA -->
+    <section class="wrap section" id="faq">
+      <h2 class="section-rule">FAQ</h2>
+      <div class="faq">
+        <details>
+          <summary>What does it cost?</summary>
+          <p>Free for personal use. No account, and no new AI bill.</p>
+        </details>
+        <details>
+          <summary>Which AI subscription do I need?</summary>
+          <p>The Claude Code or Codex you already have. More agents are coming.</p>
+        </details>
+        <details>
+          <summary>Where does my data live?</summary>
+          <p>On your machine, as plain files. Agents send what they work on to their own AI provider, as they do today.</p>
+        </details>
+        <details>
+          <summary>Which platforms does it run on?</summary>
+          <p>macOS and Linux, on a laptop or a server.</p>
+        </details>
+        <details>
+          <summary>How do I get in?</summary>
+          <p>Karsa is invite-only during the beta. The installer asks for your email, and invited addresses install right away. No invite yet? <a href="mailto:hello@karsa.app?subject=Karsa%20beta%20access">Request access</a>.</p>
+        </details>
+      </div>
+    </section>
+
+    <!-- Closing band: the page keeps ONE install surface, so the button
+         scrolls back up to it. `#top` scrolls to the top of the document
+         (HTML spec: no element needs that id); html{scroll-behavior:smooth}
+         animates it. -->
     <section class="wrap section" id="get-started">
-      <p class="section-rule">Your AI system should outlive your AI provider.</p>
-      <!-- `#top` scrolls to the top of the document (HTML spec: no element
-           needs that id); html{scroll-behavior:smooth} animates it. -->
-      <a class="cta-btn" href="#top">Get started <span aria-hidden="true">↑</span></a>
-      <p class="install-note">Build locally. Choose your agents. Deploy anywhere.</p>
+      <div class="band">
+        <h2 class="display band-title">Your AI system should outlive your AI provider.</h2>
+        <div class="band-actions">
+          <a class="cta-btn" href="#top">Get started <span aria-hidden="true">↑</span></a>
+          <a class="band-link" href="mailto:hello@karsa.app?subject=Karsa%20beta%20access">Request access</a>
+        </div>
+      </div>
     </section>
   </main>
 
@@ -192,6 +211,7 @@
       <nav class="nav">
         <a href="/doc/">Manual</a>
         <a href="/packages/">Packages</a>
+        <a href="mailto:hello@karsa.app">Contact</a>
       </nav>
       </div>
   </footer>

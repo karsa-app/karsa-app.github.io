@@ -137,6 +137,16 @@ a { color: var(--color-accent); text-decoration: none; }
   transition: color 120ms ease;
 }
 .nav a:hover { color: var(--color-accent); }
+/* The header's one button: outlined, so it never outshouts the hero's
+   install box (the primary call to action). */
+.nav a.nav-btn {
+  padding: 0.5rem 0.85rem;
+  color: var(--color-bright);
+  border: 1px solid var(--color-line);
+  border-radius: 4px;
+  transition: color 120ms ease, border-color 120ms ease;
+}
+.nav a.nav-btn:hover { color: var(--color-accent); border-color: var(--color-accent); }
 
 /* ── Editorial primitives ─────────────────────────────────────────────── */
 
@@ -157,6 +167,7 @@ a { color: var(--color-accent); text-decoration: none; }
   font-size: 0.6875rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
+  font-weight: 400;
   color: var(--color-mute);
   margin: 0 0 1.75rem;
 }
@@ -290,6 +301,29 @@ a { color: var(--color-accent); text-decoration: none; }
 }
 .agent-install .copy-btn { align-self: stretch; }
 
+/* The secondary action ("Request access", "Talk to us"): outlined, quieter
+   than the install box and the accent-filled .cta-btn. */
+.hero-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+.ghost-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-bright);
+  border: 1px solid var(--color-line);
+  border-radius: 4px;
+  transition: color 120ms ease, border-color 120ms ease;
+}
+.ghost-btn:hover { color: var(--color-accent); border-color: var(--color-accent); }
+
 /* The closing CTA: no second install box, just a way back up to the one
    at the top (the page has ONE install surface). */
 .cta-btn {
@@ -309,7 +343,7 @@ a { color: var(--color-accent); text-decoration: none; }
 }
 .cta-btn:hover { background: var(--color-bright); color: var(--color-ink); }
 
-/* ── What-is section ──────────────────────────────────────────────────── */
+/* ── Sections ─────────────────────────────────────────────────────────── */
 
 .section { padding: 3.5rem 0; }
 
@@ -351,39 +385,184 @@ a { color: var(--color-accent); text-decoration: none; }
   color: var(--color-bright);
 }
 
-.bullets {
+/* The demo is the hero's product visual: it sits close under the hero. */
+.demo-section { padding: 0 0 2.5rem; }
+
+/* ── Works-with strip ─────────────────────────────────────────────────
+   Stands in for customer logos: vendor names as text, never logos. */
+.strip {
+  padding: 1.25rem 0;
+  border-top: 1px solid var(--color-line);
+  border-bottom: 1px solid var(--color-line);
+  text-align: center;
+}
+.strip p {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: var(--color-mute);
+}
+.strip b { font-weight: 500; color: var(--color-bright); }
+
+/* ── How it works: three numbered lines ───────────────────────────────── */
+
+.steps {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 0;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2rem;
+}
+.steps li {
   border-top: 1px solid var(--color-line);
+  padding-top: 1rem;
 }
-.bullets li {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 1.1rem;
-  align-items: baseline;
-  padding: 1.25rem 0.25rem;
-  border-bottom: 1px solid var(--color-line);
-}
-.bullets .num {
+.steps .num {
   font-family: var(--font-mono);
   font-size: 0.75rem;
   color: var(--color-accent);
   letter-spacing: 0.05em;
 }
-.bullets .b-title {
+.steps p {
+  margin: 0.5rem 0 0;
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  line-height: 1.45;
+  color: var(--color-bright);
+}
+
+/* ── Cards (why Karsa, use cases) ─────────────────────────────────────── */
+
+.cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+.cards-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.cards-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.card {
+  background: var(--color-paper);
+  border: 1px solid var(--color-line);
+  border-radius: 8px;
+  padding: 1.25rem;
+}
+.card h3,
+.teams-grid h3 {
+  margin: 0 0 0.4rem;
   font-family: var(--font-display);
   font-weight: 500;
   font-size: 1.0625rem;
+  line-height: 1.3;
   color: var(--color-bright);
-  margin: 0 0 0.25rem;
 }
-.bullets .b-body {
+.card p,
+.teams-grid p {
   margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-bright-dim);
+}
+
+/* ── For teams ────────────────────────────────────────────────────────── */
+
+.teams {
+  background: var(--color-paper);
+  border: 1px solid var(--color-line);
+  border-radius: 12px;
+  padding: 2.5rem 2rem;
+}
+.teams-title {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  margin: 0 0 2rem;
+}
+.teams-grid {
+  list-style: none;
+  margin: 0 0 2rem;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+.teams-grid li {
+  border-top: 1px solid var(--color-accent-dim);
+  padding-top: 0.9rem;
+}
+
+/* ── FAQ ──────────────────────────────────────────────────────────────── */
+
+.faq { border-top: 1px solid var(--color-line); }
+.faq details { border-bottom: 1px solid var(--color-line); }
+.faq summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.1rem 0.25rem;
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--font-display);
+  font-size: 1.0625rem;
+  color: var(--color-bright);
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after {
+  content: "+";
+  font-family: var(--font-mono);
+  color: var(--color-accent);
+}
+.faq details[open] summary::after { content: "\2212"; }
+.faq summary:hover { color: var(--color-accent); }
+.faq details p {
+  margin: 0;
+  padding: 0 0.25rem 1.1rem;
+  max-width: 60ch;
   font-size: 0.9375rem;
   color: var(--color-bright-dim);
+}
+
+/* ── Closing band: the one contrasting block ──────────────────────────── */
+
+.band {
+  background: var(--color-accent-bg);
+  border: 1px solid var(--color-accent-dim);
+  border-radius: 12px;
+  padding: 3.5rem 2rem;
+  text-align: center;
+}
+.band-title {
+  font-size: clamp(1.75rem, 4.5vw, 2.75rem);
+  max-width: 20ch;
+  margin: 0 auto 2rem;
+}
+.band-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+.band-link {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-bright-dim);
+  transition: color 120ms ease;
+}
+.band-link:hover { color: var(--color-accent); }
+
+@media (max-width: 800px) {
+  .cards-4,
+  .teams-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .steps,
+  .cards-3,
+  .cards-4,
+  .teams-grid { grid-template-columns: minmax(0, 1fr); }
+  .steps { gap: 1.25rem; }
+  .teams { padding: 2rem 1.25rem; }
+  .band { padding: 2.5rem 1.25rem; }
 }
 
 /* ── Footer ───────────────────────────────────────────────────────────── */
@@ -571,4 +750,3 @@ main .wrap,
   .eyebrow { letter-spacing: 0.12em; font-size: 0.625rem; }
 }
 /* Footer nav groups right, mirroring the header. */
-.site-footer .nav { display: flex; gap: 1.25rem; margin-left: auto; }
