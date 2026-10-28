@@ -1,0 +1,1 @@
+import{b as r,bM as m}from"./index-BOfNZwyY.js";import{b as t}from"./QueryBar-Ch0b33ew.js";function o(e,a){const s=r({queryKey:["type-schema",e,a],queryFn:()=>m(e,a),enabled:!!e&&!!a,staleTime:6e5,retry:!1});return s.data?t(s.data.schema):[]}export{o as u};

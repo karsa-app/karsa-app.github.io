@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <!-- interactive-widget=resizes-content: on Android (Chrome, Firefox) the
+         on-screen keyboard shrinks the viewport (and 100dvh) instead of
+         overlaying it, so the chat box sits right above the keyboard. iOS
+         (Safari, and Chrome there, which is WebKit) hasn't shipped it: the
+         shell follows the visible area there (lib/viewport.ts). viewport-fit=cover +
+         the safe-area insets keep it clear of the home indicator. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content" />
+    <link rel="icon" type="image/png" href="/live/karsa-logo.png" />
+    <!-- Karsa as a Home Screen app (spec_01M4NH5F6QM5 decision 8): its manifest (the
+         server names itself there), its own window, and its icon. -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="/live/icons/karsa-180.png" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!-- An opaque bar: the page starts below it (the shell doesn't pad the top inset). -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="theme-color" content="#0E0D0B" />
+    <title>Karsa</title>
+    <meta name="description" content="Project workspace for the Karsa multi-agent dev loop." />
+    <!-- Preload theme + sidebar mode before any styles paint, so the user
+         doesn't see a flash of the wrong theme. These read localStorage and
+         drop attributes on <html>; the React components later sync state
+         to the same keys. Keep these in sync with the STORAGE_KEY constants
+         in ThemeToggle.tsx + SidebarToggle.tsx. -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("karsa-theme");
+          if (t !== "light" && t !== "dark") {
+            t = (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
+          }
+          document.documentElement.setAttribute("data-theme", t);
+        } catch (e) {
+          document.documentElement.setAttribute("data-theme", "dark");
+        }
+      })();
+      (function () {
+        try {
+          // No choice saved yet: open on a desktop, closed on a phone (where
+          // "shown" is an overlay covering the page you just opened).
+          var wide = window.matchMedia("(min-width: 768px)").matches;
+          var v = localStorage.getItem("karsa-sidebar-mode");
+          if (v !== "hidden" && v !== "shown") v = wide ? "shown" : "hidden";
+          document.documentElement.setAttribute("data-sidebar-mode", v);
+        } catch (e) {
+          document.documentElement.setAttribute("data-sidebar-mode", "shown");
+        }
+      })();
+    </script>
+    <script type="module" crossorigin src="/live/assets/index-BOfNZwyY.js"></script>
+    <link rel="modulepreload" crossorigin href="/live/assets/repeat-DmH8f0d9.js">
+    <link rel="stylesheet" crossorigin href="/live/assets/index-DLZSLcnB.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

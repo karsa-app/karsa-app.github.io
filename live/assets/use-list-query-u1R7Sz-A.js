@@ -1,0 +1,1 @@
+import{bL as r,x as o}from"./index-BOfNZwyY.js";function u(){const t=r({strict:!1}),e=o();return[typeof t.q=="string"?t.q:"",a=>e({to:".",search:(s=>({...s,q:a||void 0})),replace:!0,hash:s=>s??""})]}export{u};

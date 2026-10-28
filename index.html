@@ -56,29 +56,40 @@
       </details>
     </section>
 
-    <!-- Product visual: two vendors, one system — a data-room due diligence
-         (illustrative), each agent on the job it's strongest at: Claude Code
-         reads the contracts, Codex runs the numbers. -->
-    <section class="wrap demo-section" id="demo">
-      <h2 class="section-rule">Example: one data room, two agents</h2>
-      <div class="demo" aria-label="Illustrative chat transcript: due diligence on a data room">
-        <div class="demo-row">
-          <span class="demo-role you">you</span>
-          <p class="demo-msg">We're buying Harbor Supply. The data room is in ./dataroom. Read the customer contracts: what bites us after closing?</p>
-        </div>
-        <div class="demo-row">
-          <span class="demo-role">claude code</span>
-          <p class="demo-msg">Three of the 41 contracts matter. Northwind's MSA (§14.2) lets them terminate on a change of control, with 30 days' notice. Two others auto-renew at flat pricing through 2028. All three are in the risk log, with page cites.</p>
-        </div>
-        <div class="demo-row">
-          <span class="demo-role you">you</span>
-          <p class="demo-msg"><span class="mention">@codex</span> how much revenue rides on Northwind? Check the bank statements, not the seller's numbers.</p>
-        </div>
-        <div class="demo-row">
-          <span class="demo-role">codex</span>
-          <p class="demo-msg">Northwind is 31% of trailing revenue ($2.48M of $8.0M), and the deposits match the ledger. Added that to its risk-log entry. Bigger issue: the $310K "one-time" consulting add-back recurs in all four quarters. Rebuilt EBITDA in <code>analysis/ebitda.py</code>: $1.42M, not the $1.73M claimed.</p>
-        </div>
+    <!-- Karsa, live (spec_01M61TT0VRA9): the web app itself on sample data, in a
+         laptop (Tasks this week, the chat beside it) and a phone (Home). Each frame
+         shows its still until it scrolls into view and the app has drawn; the tabs
+         swap the use case in place; the laptop plays a New task once. -->
+    <section class="live" id="live" aria-labelledby="live-title">
+      <div class="wrap">
+        <h2 class="section-rule" id="live-title">Karsa, live</h2>
       </div>
+      <div class="live-tabs" aria-label="Use cases">
+        <button type="button" data-case="deals" aria-pressed="true">Deals</button>
+        <button type="button" data-case="accounting" aria-pressed="false">Accounting</button>
+        <button type="button" data-case="operations" aria-pressed="false">Operations</button>
+        <button type="button" data-case="engineering" aria-pressed="false">Engineering</button>
+        <button type="button" data-case="real-estate" aria-pressed="false">Real estate</button>
+        <button type="button" data-case="sovereign-ai" data-note="Here the agents run on an open model on the hospital's own servers." aria-pressed="false">Sovereign AI</button>
+      </div>
+      <div class="live-stage">
+        <figure class="device laptop">
+          <div class="screen" data-frame="laptop" data-w="1280" data-h="800">
+            <picture class="still"><source media="(prefers-color-scheme: light)" srcset="/live-stills/deals-laptop-light.webp" /><img src="/live-stills/deals-laptop.webp" width="1280" height="800" alt="Karsa on a laptop: this week's tasks on a calendar, with a chat beside it where an agent reports a finished task." /></picture>
+            <iframe class="app" title="Karsa on a laptop, with sample data: tasks this week and a chat"></iframe>
+          </div>
+          <div class="laptop-base" aria-hidden="true"></div>
+        </figure>
+        <figure class="device phone">
+          <div class="screen" data-frame="phone" data-w="390" data-h="844">
+            <picture class="still"><source media="(prefers-color-scheme: light)" srcset="/live-stills/deals-phone-light.webp" /><img src="/live-stills/deals-phone.webp" width="390" height="844" alt="Karsa on a phone: Home, with what's new from the agents and today's tasks." /></picture>
+            <iframe class="app" title="Karsa on a phone, with sample data: Home"></iframe>
+          </div>
+        </figure>
+      </div>
+      <p class="live-note">Click around: it's the real app, with sample data.</p>
+      <!-- A tab's own line, where it has one (Sovereign AI: where its agents run). -->
+      <p class="live-case-note" hidden></p>
     </section>
 
     <!-- Stands in for customer logos until there are some. Names as text,
@@ -117,14 +128,14 @@
 
     <section class="wrap section" id="use-cases">
       <h2 class="section-rule">Built for</h2>
-      <ul class="cards cards-4">
+      <ul class="cards cards-6">
         <li class="card">
           <h3>Deals and diligence</h3>
           <p>Deals analyzed on arrival, assessments kept on record.</p>
         </li>
         <li class="card">
-          <h3>Real estate</h3>
-          <p>Track properties, watch rents, keep underwriting current.</p>
+          <h3>Small-business accounting</h3>
+          <p>Transactions categorized daily, months closed, invoices chased.</p>
         </li>
         <li class="card">
           <h3>Operations</h3>
@@ -133,6 +144,14 @@
         <li class="card">
           <h3>Engineering</h3>
           <p>Dependency health, release chores, incident follow-ups.</p>
+        </li>
+        <li class="card">
+          <h3>Real estate</h3>
+          <p>Track properties, watch rents, keep underwriting current.</p>
+        </li>
+        <li class="card">
+          <h3>Sovereign AI</h3>
+          <p>Agents on open models, on your own servers: for government, healthcare and enterprise.</p>
         </li>
       </ul>
     </section>
@@ -253,6 +272,88 @@
         }
       });
       }
+    })();
+
+    // Karsa, live (spec_01M61TT0VRA9): load the frames when they come into view,
+    // scale each app to its screen, swap the still for it once it has drawn, and
+    // pass the tabs' use case in. The laptop plays its New task once per tab,
+    // until a visitor takes over.
+    (function () {
+      var live = document.getElementById("live");
+      if (!live || !("IntersectionObserver" in window)) return;
+      var screens = [].slice.call(live.querySelectorAll(".screen"));
+      var tabs = [].slice.call(live.querySelectorAll(".live-tabs button"));
+      var caseNote = live.querySelector(".live-case-note");
+      var current = "deals";
+      var touched = false;
+      var started = false;
+      var peer = Math.random().toString(36).slice(2, 10);
+      var phoneOnly = window.matchMedia("(max-width: 899px)");
+
+      function fit(screen) {
+        var w = Number(screen.getAttribute("data-w"));
+        var s = screen.clientWidth / w;
+        screen.style.setProperty("--s", String(s));
+      }
+      if ("ResizeObserver" in window) {
+        var ro = new ResizeObserver(function (entries) { entries.forEach(function (e) { fit(e.target); }); });
+        screens.forEach(function (s) { ro.observe(s); });
+      } else {
+        screens.forEach(fit);
+        window.addEventListener("resize", function () { screens.forEach(fit); });
+      }
+
+      function frameOf(screen) { return screen.getAttribute("data-frame"); }
+      function shown(screen) { return frameOf(screen) === "phone" || !phoneOnly.matches; }
+
+      function start() {
+        if (started) return;
+        started = true;
+        screens.forEach(function (screen) {
+          if (!shown(screen)) return;
+          var frame = frameOf(screen);
+          var src = "/live/?frame=" + frame + "&case=" + current + "&peer=" + peer + (frame === "laptop" ? "&play=1" : "");
+          screen.querySelector("iframe").src = src;
+        });
+      }
+      new IntersectionObserver(function (entries, io) {
+        if (entries.some(function (e) { return e.isIntersecting; })) { io.disconnect(); start(); }
+      }, { rootMargin: "200px 0px" }).observe(live.querySelector(".live-stage"));
+
+      window.addEventListener("message", function (e) {
+        if (e.origin !== location.origin || !e.data || typeof e.data.type !== "string") return;
+        var screen = screens.filter(function (s) { return s.querySelector("iframe").contentWindow === e.source; })[0];
+        if (!screen) return;
+        if (e.data.type === "karsa-demo-ready") screen.classList.add("is-live");
+        if (e.data.type === "karsa-demo-done" || e.data.type === "karsa-demo-touched") live.classList.add("is-done");
+        if (e.data.type === "karsa-demo-touched") touched = true;
+      });
+
+      tabs.forEach(function (tab) {
+        tab.addEventListener("click", function () {
+          var key = tab.getAttribute("data-case");
+          if (key === current) return;
+          current = key;
+          tabs.forEach(function (t) { t.setAttribute("aria-pressed", String(t === tab)); });
+          caseNote.textContent = tab.getAttribute("data-note") || "";
+          caseNote.hidden = !caseNote.textContent;
+          screens.forEach(function (screen) {
+            var frame = frameOf(screen);
+            var still = screen.querySelector(".still");
+            still.querySelector("img").src = "/live-stills/" + key + "-" + frame + ".webp";
+            still.querySelector("source").srcset = "/live-stills/" + key + "-" + frame + "-light.webp";
+            var win = screen.querySelector("iframe").contentWindow;
+            if (started && win && screen.classList.contains("is-live")) win.postMessage({ type: "karsa-demo-case", case: key, play: !touched }, location.origin);
+          });
+          if (!started) return;
+          // A frame not drawn yet starts over on the new case.
+          screens.forEach(function (screen) {
+            if (!shown(screen) || screen.classList.contains("is-live")) return;
+            var frame = frameOf(screen);
+            screen.querySelector("iframe").src = "/live/?frame=" + frame + "&case=" + key + "&peer=" + peer + (frame === "laptop" && !touched ? "&play=1" : "");
+          });
+        });
+      });
     })();
   </script>
 </body>

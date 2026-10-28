@@ -388,6 +388,151 @@ a { color: var(--color-accent); text-decoration: none; }
 /* The demo is the hero's product visual: it sits close under the hero. */
 .demo-section { padding: 0 0 2.5rem; }
 
+/* ── Karsa, live (spec_01M61TT0VRA9) ──────────────────────────────────────
+   The web app itself, in a laptop and a phone. Each screen holds the app at
+   its own size (data-w × data-h), scaled to fit by `--s` (set from the
+   screen's width), with its still on top until the app has drawn. */
+
+.live { position: relative; z-index: 1; padding: 0 0 2.5rem; }
+
+.live-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+  margin: 0 auto 1.75rem;
+  padding: 0 1.5rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.live-tabs::-webkit-scrollbar { display: none; }
+.live-tabs button {
+  flex: none;
+  font: inherit;
+  font-size: 0.875rem;
+  padding: 0.45rem 0.95rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-line);
+  background: transparent;
+  color: var(--color-bright-dim);
+  cursor: pointer;
+  transition: background-color 120ms ease, color 120ms ease, border-color 120ms ease;
+}
+.live-tabs button:hover { color: var(--color-bright); border-color: var(--color-faint); }
+.live-tabs button[aria-pressed="true"] {
+  background: var(--color-accent-bg);
+  border-color: var(--color-accent-dim);
+  color: var(--color-bright);
+}
+
+.live-stage {
+  position: relative;
+  max-width: 76rem;
+  margin: 0 auto;
+  padding: 0 1.5rem 3rem;
+}
+
+.device { margin: 0; }
+
+.screen {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-ink);
+}
+.screen .app,
+.screen .still {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+/* The app at its own size, scaled to the screen. */
+.screen .app {
+  width: calc(var(--w) * 1px);
+  height: calc(var(--h) * 1px);
+  border: 0;
+  transform: scale(var(--s, 0.5));
+  transform-origin: 0 0;
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+.screen[data-frame="laptop"] { --w: 1280; --h: 800; aspect-ratio: 1280 / 800; }
+.screen[data-frame="phone"] { --w: 390; --h: 844; aspect-ratio: 390 / 844; }
+.screen .still {
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transition: opacity 300ms ease;
+}
+.screen .still img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.screen.is-live .app { opacity: 1; }
+.screen.is-live .still { opacity: 0; pointer-events: none; }
+
+/* A laptop: a dark bezel, and the base it sits on. On the right, so the phone over
+   its left corner covers the week's past days, never the chat the loop plays in. */
+.laptop { width: 82%; margin-left: auto; }
+.laptop .screen {
+  border: 10px solid #141210;
+  border-bottom-width: 14px;
+  border-radius: 14px 14px 4px 4px;
+  box-shadow: 0 0 0 1px var(--color-line), 0 30px 60px -20px rgba(0, 0, 0, 0.55);
+}
+.laptop-base {
+  height: 14px;
+  margin: 0 -4.5%;
+  border-radius: 0 0 14px 14px;
+  background: linear-gradient(to bottom, #3a3631, #24211d);
+  box-shadow: 0 0 0 1px var(--color-line), 0 18px 30px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* A phone over the laptop's left corner, hanging a little below it. */
+.phone {
+  position: absolute;
+  left: 1.5rem;
+  bottom: 1rem;
+  width: 20%;
+  max-width: 260px;
+}
+.phone .screen {
+  border: 8px solid #141210;
+  border-radius: 34px;
+  box-shadow: 0 0 0 1px var(--color-line), 0 24px 50px -16px rgba(0, 0, 0, 0.6);
+}
+
+.live-note {
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--color-mute);
+  transition: color 300ms ease;
+}
+.live.is-done .live-note { color: var(--color-bright-dim); }
+.live-case-note {
+  margin: 0.4rem auto 0;
+  padding: 0 1.5rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--color-accent);
+}
+
+/* A phone visitor: the phone alone, larger, centred. */
+@media (max-width: 899px) {
+  .laptop { display: none; }
+  .phone {
+    position: relative;
+    left: auto;
+    bottom: auto;
+    width: min(320px, 82vw);
+    max-width: none;
+    margin: 0 auto;
+  }
+  .live-tabs { justify-content: flex-start; }
+  .live-stage { padding-bottom: 1.75rem; }
+}
+@media (min-width: 900px) {
+  .live-tabs { justify-content: center; }
+}
+
 /* ── Works-with strip ─────────────────────────────────────────────────
    Stands in for customer logos: vendor names as text, never logos. */
 .strip {
@@ -442,6 +587,8 @@ a { color: var(--color-accent); text-decoration: none; }
 }
 .cards-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .cards-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+/* Six: three by two on a wide screen, two by three narrower, one column on a phone. */
+.cards-6 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .card {
   background: var(--color-paper);
   border: 1px solid var(--color-line);
@@ -515,7 +662,6 @@ a { color: var(--color-accent); text-decoration: none; }
 .faq details p {
   margin: 0;
   padding: 0 0.25rem 1.1rem;
-  max-width: 60ch;
   font-size: 0.9375rem;
   color: var(--color-bright-dim);
 }
@@ -553,12 +699,14 @@ a { color: var(--color-accent); text-decoration: none; }
 
 @media (max-width: 800px) {
   .cards-4,
+  .cards-6,
   .teams-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 640px) {
   .steps,
   .cards-3,
   .cards-4,
+  .cards-6,
   .teams-grid { grid-template-columns: minmax(0, 1fr); }
   .steps { gap: 1.25rem; }
   .teams { padding: 2rem 1.25rem; }
@@ -601,6 +749,11 @@ a { color: var(--color-accent); text-decoration: none; }
 /* ── Packages page ────────────────────────────────────────────────────── */
 
 .pkg-head { padding: 3.5rem 0 2rem; }
+.pkg-page { max-width: 48rem; padding: 2rem 0 4rem; }
+.pkg-page .display { font-size: clamp(1.75rem, 5vw, 2.75rem); margin: 1.5rem 0 0.75rem; overflow-wrap: anywhere; }
+.pkg-page .pkg-meta { margin-bottom: 1.25rem; }
+.pkg-page .lead { font-size: 1.0625rem; }
+.pkg-page pre { padding: 0.75rem 1rem; border: 1px solid var(--color-line); border-radius: 4px; background: var(--color-paper); }
 .pkg-head .display { font-size: clamp(2rem, 5vw, 3rem); }
 .pkg-head .lead { font-size: 1.0625rem; max-width: 50ch; margin-top: 1rem; }
 
@@ -612,8 +765,9 @@ a { color: var(--color-accent); text-decoration: none; }
 }
 .pkg-row {
   display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr) auto;
-  gap: 1.25rem;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "name links" "desc desc";
+  gap: 0.6rem 1.25rem;
   align-items: start;
   padding: 1.25rem 0.5rem;
   border-bottom: 1px solid var(--color-line);
@@ -622,6 +776,7 @@ a { color: var(--color-accent); text-decoration: none; }
 .pkg-row:hover { background: var(--color-paper-2); }
 
 .pkg-name {
+  grid-area: name;
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
@@ -651,11 +806,14 @@ a { color: var(--color-accent); text-decoration: none; }
   color: var(--color-accent);
 }
 .pkg-desc {
+  grid-area: desc;
+  margin: 0;
   font-size: 0.9375rem;
   color: var(--color-bright-dim);
   min-width: 0;
 }
 .pkg-links {
+  grid-area: links;
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -706,7 +864,7 @@ a { color: var(--color-accent); text-decoration: none; }
 .hidden { display: none !important; }
 
 @media (max-width: 640px) {
-  .pkg-row { grid-template-columns: 1fr; }
+  .pkg-row { grid-template-columns: minmax(0, 1fr); grid-template-areas: "name" "desc" "links"; }
   .pkg-links { justify-self: start; }
   .nav .nav-hide-sm { display: none; }
 }

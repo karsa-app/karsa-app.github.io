@@ -1,0 +1,1 @@
+function i(e){const r=typeof e.runtime=="string"?e.runtime:"code";return r==="cli"?e.ipc===!0?"cli (ipc)":"cli":r!=="code"?`runtime ${r}`:typeof e.embedded=="string"&&e.embedded?"embedded":Array.isArray(e.allow)&&e.allow.length?`allow: ${e.allow.join(", ")}`:null}export{i as f};
