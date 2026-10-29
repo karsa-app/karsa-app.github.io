@@ -285,16 +285,6 @@ a { color: var(--color-accent); text-decoration: none; }
   color: var(--color-bright-dim);
 }
 .lead + .install-label { margin-top: 0; }
-/* The prompt is a sentence, not a command: let it wrap instead of scrolling
-   sideways, so a reader sees what they hand their agent. */
-.install-agent { align-items: flex-start; }
-.install-agent code {
-  display: block;
-  text-align: left;
-  white-space: normal;
-  line-height: 1.55;
-}
-.install-agent .copy-btn { align-self: stretch; }
 
 /* The secondary action ("Request access", "Talk to us"): outlined, quieter
    than the install box and the accent-filled .cta-btn. */
