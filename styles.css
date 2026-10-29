@@ -514,6 +514,7 @@ a { color: var(--color-accent); text-decoration: none; }
   font-size: 0.875rem;
   color: var(--color-accent);
 }
+.live-case-note a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
 
 /* A phone visitor: the phone alone, larger, centred. */
 @media (max-width: 899px) {

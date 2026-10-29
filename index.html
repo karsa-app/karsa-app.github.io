@@ -70,7 +70,7 @@
         <button type="button" data-case="operations" aria-pressed="false">Operations</button>
         <button type="button" data-case="engineering" aria-pressed="false">Engineering</button>
         <button type="button" data-case="real-estate" aria-pressed="false">Real estate</button>
-        <button type="button" data-case="sovereign-ai" data-note="Here the agents run on an open model on the hospital's own servers." aria-pressed="false">Sovereign AI</button>
+        <button type="button" data-case="sovereign-ai" data-note="Here the agents run on an open model on the hospital's own servers: nothing leaves its network." data-note-link="Talk to us to set it up" data-note-href="mailto:hello@karsa.app?subject=Karsa%20Sovereign%20AI" aria-pressed="false">Sovereign AI</button>
       </div>
       <div class="live-stage">
         <figure class="device laptop">
@@ -151,7 +151,7 @@
         </li>
         <li class="card">
           <h3>Sovereign AI</h3>
-          <p>Agents on open models, on your own servers: for government, healthcare and enterprise.</p>
+          <p>Agents on open models, on your own servers: nothing leaves your network. For government, healthcare and enterprise. <a href="mailto:hello@karsa.app?subject=Karsa%20Sovereign%20AI">Talk to us</a> to set it up.</p>
         </li>
       </ul>
     </section>
@@ -335,7 +335,17 @@
           if (key === current) return;
           current = key;
           tabs.forEach(function (t) { t.setAttribute("aria-pressed", String(t === tab)); });
+          // The tab's line, and its link where it has one (Sovereign AI: talk to us).
           caseNote.textContent = tab.getAttribute("data-note") || "";
+          var href = tab.getAttribute("data-note-href");
+          if (href) {
+            var a = document.createElement("a");
+            a.href = href;
+            a.textContent = tab.getAttribute("data-note-link") || href;
+            caseNote.appendChild(document.createTextNode(" "));
+            caseNote.appendChild(a);
+            caseNote.appendChild(document.createTextNode("."));
+          }
           caseNote.hidden = !caseNote.textContent;
           screens.forEach(function (screen) {
             var frame = frameOf(screen);
