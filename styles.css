@@ -285,6 +285,17 @@ a { color: var(--color-accent); text-decoration: none; }
   color: var(--color-bright-dim);
 }
 .lead + .install-label { margin-top: 0; }
+/* The prompt is a sentence, not a command: the body's font, and it wraps (two lines
+   on a phone) instead of scrolling sideways. */
+.install-agent code {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  text-align: left;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
 
 /* The secondary action ("Request access", "Talk to us"): outlined, quieter
    than the install box and the accent-filled .cta-btn. */
