@@ -26,8 +26,7 @@
       <h1 class="display">Packages</h1>
       <p class="lead">
         Karsa and its apps: the karsa command, its server, the web app, the manual, project
-        templates and apps. Karsa's own parts share one version; each app has its own. The list
-        below is read live from the registry.
+        templates and apps. Karsa's own parts share one version; each app has its own.
       </p>
     </section>
 
@@ -51,8 +50,8 @@
 
       <!-- Empty state -->
       <div class="state hidden" id="state-empty">
-        <p class="state-title">No packages yet</p>
-        <p class="state-body">The registry is published but lists no packages. Nothing to show.</p>
+        <p class="state-title">No packages listed yet</p>
+        <p class="state-body">Karsa is in private beta; its packages will be listed here. <a href="mailto:hello@karsa.app?subject=Karsa%20beta%20access">Request access</a>.</p>
       </div>
 
       <!-- Results -->
@@ -141,6 +140,16 @@
         hide(els.empty);
         show(els.error);
         els.meta.textContent = "Registry unavailable";
+      }
+
+      // Not listed during the private beta (user, 2026-10-29): the page shows the empty
+      // state. The registry itself stays published, for the installer.
+      var LISTED = false;
+      if (!LISTED) {
+        hide(els.loading);
+        show(els.empty);
+        els.meta.textContent = "Private beta";
+        return;
       }
 
       fetch("/registry.json", { cache: "no-cache" })
