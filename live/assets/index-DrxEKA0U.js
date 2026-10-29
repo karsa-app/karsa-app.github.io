@@ -1,0 +1,1 @@
+import{ac as n,ao as s,j as c}from"./index-DLqQ7LrJ.js";import{I as i}from"./InboxView-DPk3oi38.js";import"./repeat-Bgvlv2Xi.js";import"./PageShell-DrX6KnUs.js";import"./HomeSections-DPAaPAEY.js";function u(){const o=n(),{projects:t}=s(),r=t.find(e=>e.id===o)?.name;return c.jsx(i,{project:{id:o,name:r}})}export{u as component};

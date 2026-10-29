@@ -276,30 +276,25 @@ a { color: var(--color-accent); text-decoration: none; }
   color: var(--color-mute);
 }
 
-/* The agent path — folded away by default so the shell one-liner stays THE
-   call to action, but one click for anyone who lives in Claude Code. */
-.agent-install { margin: 1.1rem 0 0; width: 100%; max-width: 32rem; }
-.agent-install > summary {
-  cursor: pointer;
-  font-size: 0.8125rem;
-  color: var(--color-mute);
-  list-style: none;
+/* The two ways in: a label over each box, the agent prompt first. */
+.install-label {
+  width: 100%;
+  max-width: 32rem;
+  margin: 1.1rem 0 0.5rem;
+  font-size: 0.875rem;
+  color: var(--color-bright-dim);
 }
-.agent-install > summary::-webkit-details-marker { display: none; }
-.agent-install > summary::before { content: "+ "; color: var(--color-accent); }
-.agent-install[open] > summary::before { content: "\2212 "; }
-.agent-install > summary:hover { color: var(--color-bright); }
-.agent-install .install { margin-top: 0.85rem; align-items: flex-start; }
-/* The prompt is a paragraph, not a command — let it wrap instead of scrolling
-   sideways, so a reader can see what they are about to hand their agent. */
-.agent-install .install code {
+.lead + .install-label { margin-top: 0; }
+/* The prompt is a sentence, not a command: let it wrap instead of scrolling
+   sideways, so a reader sees what they hand their agent. */
+.install-agent { align-items: flex-start; }
+.install-agent code {
   display: block;
+  text-align: left;
   white-space: normal;
   line-height: 1.55;
-  max-height: 11rem;
-  overflow-y: auto;
 }
-.agent-install .copy-btn { align-self: stretch; }
+.install-agent .copy-btn { align-self: stretch; }
 
 /* The secondary action ("Request access", "Talk to us"): outlined, quieter
    than the install box and the accent-filled .cta-btn. */

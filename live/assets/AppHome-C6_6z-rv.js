@@ -1,1 +1,0 @@
-import{j as e}from"./index-B6Pusl6-.js";import{A as m}from"./AppFrame-DlZO5itG.js";import"./repeat-Bgvlv2Xi.js";function u({projectId:o,id:r,frontmatter:p,fill:t}){return e.jsx(m,{projectId:o,id:r,frontmatter:p,fill:t,route:{page:"home"}})}export{u as default};

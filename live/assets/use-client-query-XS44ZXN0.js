@@ -1,1 +1,0 @@
-import{r as t}from"./index-B6Pusl6-.js";import{f as u,a as n,p as o}from"./QueryBar-c4B3X9cl.js";function p(r,e){const s=t.useMemo(()=>u(r),[r]);return{rows:t.useMemo(()=>{if(!e.trim())return r;try{return n(r,o(e))}catch{return r}},[r,e]),fields:s}}export{p as u};

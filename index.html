@@ -38,6 +38,14 @@
         Claude Code and Codex do the thinking.
       </p>
 
+      <!-- Agent first: the visitor's own Claude Code or Codex installs it from
+           llms.txt; the shell one-liner is the manual way. -->
+      <p class="install-label">Ask your Claude Code or Codex to install it:</p>
+      <div class="install install-agent">
+        <code id="agent-prompt">Read https://karsa.app/llms.txt and set up Karsa for me.</code>
+        <button class="copy-btn" id="copy-agent-btn" type="button" aria-label="Copy the prompt">Copy</button>
+      </div>
+      <p class="install-label">Or install it yourself:</p>
       <div class="install">
         <code id="install-cmd"><span class="prompt">$</span>curl -fsSL https://karsa.app/install.sh | sh</code>
         <button class="copy-btn" id="copy-btn" type="button" aria-label="Copy install command">Copy</button>
@@ -45,15 +53,6 @@
       <div class="hero-actions">
         <a class="ghost-btn" href="mailto:hello@karsa.app?subject=Karsa%20beta%20access">Request access</a>
       </div>
-
-      <details class="agent-install">
-        <summary>Or let your agent install it</summary>
-        <div class="install">
-          <code id="agent-prompt">Read https://karsa.app/llms.txt and set up Karsa for me.</code>
-          <button class="copy-btn" id="copy-agent-btn" type="button" aria-label="Copy the agent prompt">Copy</button>
-        </div>
-        <p class="install-note">Paste it into Claude Code or Codex. The <a href="/llms.txt">instructions</a> check your setup and ask before installing.</p>
-      </details>
     </section>
 
     <!-- Karsa, live (spec_01M61TT0VRA9): the web app itself on sample data, in a

@@ -1,0 +1,1 @@
+import{cy as o,j as i}from"./index-DLqQ7LrJ.js";import{S as p}from"./SubscriberList-B-Yosv1m.js";import"./repeat-Bgvlv2Xi.js";import"./subscriber-trigger-DZ2V7Ud5.js";function n({projectId:r,frontmatter:t}){const s=o();return i.jsx(p,{projectId:r,projectSeg:s,app:String(t.id??"")})}export{n as default};
