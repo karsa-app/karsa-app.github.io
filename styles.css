@@ -137,8 +137,8 @@ a { color: var(--color-accent); text-decoration: none; }
   transition: color 120ms ease;
 }
 .nav a:hover { color: var(--color-accent); }
-/* The header's one button: outlined, so it never outshouts the hero's
-   install box (the primary call to action). */
+/* The header's one button: outlined, so it never outshouts the hero's Install
+   (the primary call to action). */
 .nav a.nav-btn {
   padding: 0.5rem 0.85rem;
   color: var(--color-bright);
@@ -198,8 +198,10 @@ a { color: var(--color-accent); text-decoration: none; }
 
 /* ── Hero ─────────────────────────────────────────────────────────────── */
 
+/* The demo comes first, install after (spec_01M61TT0VRA9 decision 14): the headline, one
+   line, two small buttons, and Karsa, live right under it. */
 .hero {
-  padding: 5rem 0 3.5rem;
+  padding: 4.5rem 0 2rem;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -214,9 +216,33 @@ a { color: var(--color-accent); text-decoration: none; }
 .hero .lead {
   font-size: clamp(1.0625rem, 2.4vw, 1.375rem);
   max-width: 42ch;
-  margin: 1.5rem 0 2.5rem;
+  margin: 1.5rem 0 0.5rem;
 }
 .hero .accent { color: var(--color-accent); }
+/* Under the demo (spec_01M61TT0VRA9 decision 15): the line and the buttons. */
+.hero-after {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-top: 1.5rem;
+}
+.hero-after .lead {
+  font-size: clamp(1.0625rem, 2.4vw, 1.375rem);
+  max-width: 42ch;
+  margin: 0 0 0.5rem;
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
 
 /* ── Install CTA ──────────────────────────────────────────────────────── */
 
@@ -224,9 +250,9 @@ a { color: var(--color-accent); text-decoration: none; }
   display: flex;
   align-items: stretch;
   /* Fill the column, capped at the design width — every install box computes
-     to min(32rem, its container), the hero one and the agent one alike. A
+     to min(32rem, its container), the curl one and the agent one alike. A
      percentage resolves against the PARENT's content box, so the page gutter
-     always shows; a viewport cap (100vw) let the centered hero box grow to
+     always shows; a viewport cap (100vw) let the centered box grow to
      the full screen and sit flush against both edges on mobile. */
   width: 100%;
   max-width: 32rem;
@@ -269,6 +295,10 @@ a { color: var(--color-accent); text-decoration: none; }
 }
 .copy-btn:hover { color: var(--color-accent); background: var(--color-paper-2); }
 .copy-btn.copied { color: var(--color-accent); }
+/* The agent prompt's Copy: the page's one call to act, in the accent like .cta-btn
+   (ink on accent holds contrast in both themes). */
+.copy-btn-cta { background: var(--color-accent); color: var(--color-ink); border-left-color: var(--color-accent); }
+.copy-btn-cta:hover, .copy-btn-cta.copied { background: var(--color-bright); color: var(--color-ink); }
 
 .install-note {
   margin: 0.85rem 0 0;
@@ -284,7 +314,16 @@ a { color: var(--color-accent); text-decoration: none; }
   font-size: 0.875rem;
   color: var(--color-bright-dim);
 }
-.lead + .install-label { margin-top: 0; }
+.section-rule + .install-label { margin-top: 0; }
+
+/* Get Karsa (decision 14): after the demo, the page's one install surface, a centred column. */
+.get {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.get .section-rule { align-self: stretch; }
 /* The prompt is a sentence, not a command: the body's font, and it wraps (two lines
    on a phone) instead of scrolling sideways. */
 .install-agent code {
@@ -319,9 +358,12 @@ a { color: var(--color-accent); text-decoration: none; }
   transition: color 120ms ease, border-color 120ms ease;
 }
 .ghost-btn:hover { color: var(--color-accent); border-color: var(--color-accent); }
+/* The hero's two, small: sized to their words. */
+.cta-btn.btn-sm,
+.ghost-btn.btn-sm { padding: 0.6rem 1rem; font-size: 0.6875rem; }
 
-/* The closing CTA: no second install box, just a way back up to the one
-   at the top (the page has ONE install surface). */
+/* The hero's Install and the closing CTA: no second install box, just a way to
+   Get Karsa (the page has ONE install surface). */
 .cta-btn {
   display: inline-flex;
   align-items: center;
@@ -420,6 +462,87 @@ a { color: var(--color-accent); text-decoration: none; }
   color: var(--color-bright);
 }
 
+/* A tab's story (decisions 12, 13): each step's caption over the frames, then pause or
+   replay and the steps as dots (one plays from its step). */
+.live-story {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.7rem;
+  max-width: 76rem;
+  margin: -0.25rem auto 1.5rem;
+  padding: 0 1.5rem;
+  text-align: center;
+}
+.live-story[hidden] { display: none; }
+.story-caption {
+  margin: 0;
+  min-height: 1.25em;
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2.2vw, 1.7rem);
+  line-height: 1.25;
+  color: var(--color-bright);
+  text-wrap: balance;
+}
+/* On a phone the last caption takes two lines: they're kept for it, so the frame below doesn't jump. */
+@media (max-width: 599px) {
+  .story-caption { display: flex; align-items: flex-end; justify-content: center; min-height: 2.5em; }
+}
+.story-controls { display: flex; align-items: center; gap: 0.6rem; }
+.story-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-bright-dim);
+  cursor: pointer;
+  transition: border-color 120ms ease, color 120ms ease;
+}
+.story-toggle:hover { border-color: var(--color-faint); color: var(--color-bright); }
+.story-toggle svg { display: none; }
+.story-toggle[data-state="pause"] .i-pause,
+.story-toggle[data-state="play"] .i-play,
+.story-toggle[data-state="replay"] .i-replay { display: block; }
+.story-dots { display: flex; margin: 0; padding: 0; list-style: none; }
+/* A dot's target is bigger than the dot. */
+.story-dots button {
+  position: relative;
+  width: 22px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  transition: width 200ms ease;
+}
+.story-dots button::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  border: 1px solid var(--color-faint);
+  border-radius: 999px;
+  transform: translate(-50%, -50%);
+  transition: width 200ms ease, background-color 200ms ease, border-color 200ms ease;
+}
+.story-dots button:hover::before { border-color: var(--color-bright-dim); }
+.story-dots button[data-state="past"]::before { background: var(--color-accent-dim); border-color: var(--color-accent-dim); }
+.story-dots button[data-state="now"] { width: 34px; }
+.story-dots button[data-state="now"]::before { width: 22px; background: var(--color-accent); border-color: var(--color-accent); }
+.story-toggle:focus-visible,
+.story-dots button:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; border-radius: 999px; }
+@media (prefers-reduced-motion: reduce) {
+  .story-dots button,
+  .story-dots button::before { transition: none; }
+}
+
 .live-stage {
   position: relative;
   max-width: 76rem;
@@ -433,11 +556,16 @@ a { color: var(--color-accent); text-decoration: none; }
   position: relative;
   overflow: hidden;
   background: var(--color-ink);
+  /* Its aspect-ratio is the app's (1280 × 800, 390 × 844) inside the bezel: with the
+     border counted in, a thicker bottom bezel left the laptop's box shorter than the app
+     scaled to its width, and the app's bottom was cut. */
+  box-sizing: content-box;
 }
 .screen .app,
 .screen .still {
   position: absolute;
-  top: 0;
+  /* Under the device's own bar (its status or menu bar), so nothing covers the app. */
+  top: calc(var(--sb) * var(--s, 0.5) * 1px);
   left: 0;
 }
 /* The app at its own size, scaled to the screen. */
@@ -450,17 +578,80 @@ a { color: var(--color-accent); text-decoration: none; }
   opacity: 0;
   transition: opacity 300ms ease;
 }
-.screen[data-frame="laptop"] { --w: 1280; --h: 800; aspect-ratio: 1280 / 800; }
-.screen[data-frame="phone"] { --w: 390; --h: 844; aspect-ratio: 390 / 844; }
+.screen[data-frame="laptop"] { --w: 1280; --h: 800; --sb: 26; aspect-ratio: 1280 / 826; }
+.screen[data-frame="phone"] { --w: 390; --h: 844; --sb: 50; aspect-ratio: 390 / 894; }
 .screen .still {
   z-index: 1;
   display: block;
   width: 100%;
-  height: 100%;
+  height: calc(100% - var(--sb) * var(--s, 0.5) * 1px);
   transition: opacity 300ms ease;
 }
 .screen .still img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .screen.is-live .app { opacity: 1; }
+/* Each device's own bar over the app: a Mac's menu bar, a phone's status bar (spec_01M61TT0VRA9
+   decision 4). Drawn in the app's pixels, scaled with it. */
+.statusbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  height: calc(var(--sb) * var(--s, 0.5) * 1px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 calc(14px * var(--s, 0.5));
+  background: var(--color-ink);
+  color: var(--color-bright);
+  font: 600 calc(13px * var(--s, 0.5)) / 1 var(--font-sans);
+  white-space: nowrap;
+  overflow: hidden;
+}
+.sb-left, .sb-right { display: flex; align-items: center; gap: calc(14px * var(--s, 0.5)); }
+.sb-left span { font-weight: 400; color: var(--color-bright-dim); }
+.sb-i { height: calc(12px * var(--s, 0.5)); width: auto; display: block; }
+.sb-batt { height: calc(12px * var(--s, 0.5)); }
+.screen[data-frame="phone"] .statusbar { padding: 0 calc(30px * var(--s, 0.5)); font-size: calc(16px * var(--s, 0.5)); }
+.screen[data-frame="phone"] .sb-right { gap: calc(6px * var(--s, 0.5)); }
+.screen[data-frame="phone"] .sb-i { height: calc(13px * var(--s, 0.5)); }
+.sb-island {
+  width: calc(118px * var(--s, 0.5));
+  height: calc(34px * var(--s, 0.5));
+  border-radius: 999px;
+  background: #000;
+}
+/* The story waits (a tap took over, or its pause): the bar turns the accent, like a phone's call
+   bar, and says so; a tap on it plays on. It's the device's bar, so it never covers the app. */
+.screen .demo-paused {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45em;
+  border: 0;
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  /* Scaled with the device, on one line: on a desktop the phone's is small, an indicator
+     (user, 2026-10-30: "should not take 2 row. Smaller font is OK just as indicator"). */
+  font: 600 calc(14px * var(--s, 0.5)) / 1 var(--font-sans);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  cursor: pointer;
+}
+.screen[data-frame="phone"] .demo-paused { font-size: calc(16px * var(--s, 0.5)); }
+.screen .demo-paused[hidden] { display: none; }
+.demo-paused-dot {
+  width: 0.45em;
+  height: 0.45em;
+  border-radius: 50%;
+  background: currentColor;
+  animation: demo-paused-pulse 1.6s ease-in-out infinite;
+}
+@keyframes demo-paused-pulse { 50% { opacity: 0.35; } }
+@media (prefers-reduced-motion: reduce) { .demo-paused-dot { animation: none; } }
 .screen.is-live .still { opacity: 0; pointer-events: none; }
 
 /* A laptop: a dark bezel, and the base it sits on. On the right, so the phone over
@@ -487,6 +678,10 @@ a { color: var(--color-accent); text-decoration: none; }
   bottom: 1rem;
   width: 20%;
   max-width: 260px;
+}
+/* A story shows the laptop's menu, where its collections appear: the phone keeps clear of it. */
+@media (min-width: 900px) {
+  .live[data-story] .phone { left: 0; width: 17.5%; }
 }
 .phone .screen {
   border: 8px solid #141210;

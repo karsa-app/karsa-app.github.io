@@ -1,0 +1,1 @@
+import{j as e}from"./index-CMCnav1F.js";import{A as m}from"./AppFrame-BTLf9cD7.js";import"./repeat-C7jCyK9W.js";function u({projectId:o,id:r,frontmatter:p,fill:t}){return e.jsx(m,{projectId:o,id:r,frontmatter:p,fill:t,route:{page:"home"}})}export{u as default};

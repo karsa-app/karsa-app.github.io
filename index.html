@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Karsa — build AI systems you own</title>
+  <title>Karsa — own your AI system</title>
   <meta name="description" content="Karsa puts your data, workflows, and agents in one system on your machines. Claude Code and Codex do the thinking. Now in private beta for macOS and Linux." />
   <link rel="icon" type="image/png" href="/favicon-64.png" />
   <meta property="og:title" content="Karsa" />
-  <meta property="og:description" content="Build AI systems you own. Your data, workflows, and agents in one system on your machines. Your AI system should outlive your AI provider." />
+  <meta property="og:description" content="Own your AI system. Your data, workflows, and agents in one system on your machines. Your AI system should outlive your AI provider." />
   <meta property="og:image" content="./karsa-logo.png" />
-  <link rel="stylesheet" href="/styles.css?v=96bdbf3e" />
+  <link rel="stylesheet" href="/styles.css?v=d489e711" />
 </head>
 <body>
   <!-- "Request access" and "Talk to us" share one inbox (mailto) until the
@@ -26,24 +26,93 @@
   </header>
 
   <main>
-    <!-- Hero: under 40 words. The curl command stays THE call to action;
-         "Request access" is the quieter second one. -->
+    <!-- Hero: the headline, and the demo right under it (spec_01M61TT0VRA9 decision 15):
+         its use cases as pills, then the frames; the line and the buttons come after. -->
     <section class="wrap hero">
       <p class="eyebrow">Private beta</p>
-      <h1 class="display">
-        Build AI systems <span class="accent">you own</span>.
-      </h1>
-      <p class="lead">
-        Your data, workflows, and agents in one system on your machines.
-        Claude Code and Codex do the thinking.
-      </p>
+      <h1 class="display"><span class="accent">Own</span> your AI system.</h1>
+    </section>
 
-      <!-- Agent first: the visitor's own Claude Code or Codex installs it from
-           llms.txt; the shell one-liner is the manual way. -->
+    <!-- Karsa, live (spec_01M61TT0VRA9): the web app itself on sample data, in a
+         laptop and a phone, right under the hero (decision 14). Each frame shows its
+         still until it scrolls into view and the app has drawn; the tabs swap the use
+         case in place. A tab with a story (decision 13: its captions in `data-steps`)
+         plays it when the frames are in view: its caption over the frames, its steps as
+         dots, pause and replay. A tab without one yet has its laptop play a New task once. -->
+    <section class="live" id="live" aria-labelledby="live-title">
+      <div class="wrap">
+        <h2 class="visually-hidden" id="live-title">Karsa, live</h2>
+      </div>
+      <div class="live-tabs" aria-label="Use cases">
+        <button type="button" data-case="cafe" data-steps="Ask in plain words.|Karsa sets up your books.|Drop in your statements.|Snap a receipt.|Ask how you're doing.|Ask where the money goes.|Open the numbers behind it.|Ask the data." aria-pressed="true">Café Books</button>
+        <button type="button" data-case="deals" data-steps="Ask in plain words.|Karsa makes the table.|Drop in the decks.|Put two agents on it.|Ask the data.|Make it weekly." aria-pressed="false">Deal Flow</button>
+        <button type="button" data-case="store" data-steps="Ask in plain words.|Karsa makes the tables.|Drop in your exports.|Ask the data.|Approve it in a word.|Make it daily." aria-pressed="false">Online Store</button>
+        <button type="button" data-case="releases" data-steps="Say what's wrong.|Claude Code finds the cause.|Codex writes the fix.|Claude Code reviews it.|Close it, write it up.|Ask the data." aria-pressed="false">Releases</button>
+        <button type="button" data-case="rentals" data-steps="Ask in plain words.|Karsa makes the tables.|Drop in the leases.|Send a tenant's photo.|Find the plumber.|Ask the data.|Make it monthly." aria-pressed="false">Rentals</button>
+        <button type="button" data-case="clinic" data-steps="Ask in plain words.|On the clinic's own servers: nothing leaves its network.|Ask the data.|Reminders drafted, for you to send.|Make it every weekday." data-note="Here the agents run on an open model on the clinic's own servers: nothing leaves its network." data-note-link="Talk to us to set it up" data-note-href="mailto:hello@karsa.app?subject=Karsa%20Sovereign%20AI" aria-pressed="false">Clinic (Sovereign AI)</button>
+      </div>
+      <!-- The tab's story: each step's caption, its dots (one plays from its step, drawn from its tab), pause and replay. -->
+      <div class="live-story" hidden>
+        <p class="story-caption" aria-live="polite">Ask in plain words.</p>
+        <div class="story-controls">
+          <button type="button" class="story-toggle" aria-label="Play the story" data-state="replay">
+            <svg class="i-pause" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><rect x="2" y="1.5" width="2.6" height="9" rx="0.8" fill="currentColor"/><rect x="7.4" y="1.5" width="2.6" height="9" rx="0.8" fill="currentColor"/></svg>
+            <svg class="i-play" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1.6v8.8L10.4 6z" fill="currentColor"/></svg>
+            <svg class="i-replay" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v4.5h4.5"/></svg>
+          </button>
+          <ol class="story-dots"></ol>
+        </div>
+      </div>
+      <div class="live-stage">
+        <figure class="device laptop">
+          <div class="screen" data-frame="laptop" data-w="1280" data-h="800" data-sb="26">
+            <picture class="still"><source media="(prefers-color-scheme: light)" srcset="/live-stills/cafe-laptop-light.webp" /><img src="/live-stills/cafe-laptop.webp" width="1280" height="800" alt="Karsa on a laptop: a café's Transactions as a grid, filtered to its coffee bean orders and their total from the chat beside it, where the agent answered “Just coffee beans”." /></picture>
+            <iframe class="app" title="Karsa on a laptop, with sample data: a café's books and a chat"></iframe>
+            <!-- A Mac's menu bar over the app (spec_01M61TT0VRA9 decision 4): the pause says itself here, never over the app. -->
+            <div class="statusbar">
+              <span class="sb-left" aria-hidden="true"><b>Karsa</b><span>File</span><span>Edit</span><span>View</span><span>Window</span><span>Help</span></span>
+              <span class="sb-right" aria-hidden="true"><svg class="sb-i" viewBox="0 0 16 12" aria-hidden="true"><path d="M8 11.2 5.6 8.6a3.4 3.4 0 0 1 4.8 0z" fill="currentColor"/><path d="M3.4 6.4a6.5 6.5 0 0 1 9.2 0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M1.2 4.1a9.6 9.6 0 0 1 13.6 0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><svg class="sb-i sb-batt" viewBox="0 0 26 12" aria-hidden="true"><rect x="0.6" y="0.6" width="22" height="10.8" rx="3" fill="none" stroke="currentColor" stroke-width="1.1" opacity="0.5"/><rect x="2.2" y="2.2" width="16" height="7.6" rx="1.6" fill="currentColor"/><path d="M24 4.2v3.6c.8-.3 1.3-1 1.3-1.8s-.5-1.5-1.3-1.8z" fill="currentColor" opacity="0.5"/></svg><span class="sb-clock" data-clock="mac"></span></span>
+              <button type="button" class="demo-paused" hidden><span class="demo-paused-dot" aria-hidden="true"></span>Demo paused · Tap to resume</button>
+            </div>
+          </div>
+          <div class="laptop-base" aria-hidden="true"></div>
+        </figure>
+        <figure class="device phone">
+          <div class="screen" data-frame="phone" data-w="390" data-h="844" data-sb="50">
+            <picture class="still"><source media="(prefers-color-scheme: light)" srcset="/live-stills/cafe-phone-light.webp" /><img src="/live-stills/cafe-phone.webp" width="390" height="844" alt="Karsa on a phone: a café's Transactions filtered from the chat to its coffee bean orders, one card each, and their total." /></picture>
+            <iframe class="app" title="Karsa on a phone, with sample data: a café's books"></iframe>
+            <!-- A phone's status bar over the app (decision 4): the pause says itself here, like a call bar. -->
+            <div class="statusbar">
+              <span class="sb-clock" data-clock="phone" aria-hidden="true"></span>
+              <span class="sb-island" aria-hidden="true"></span>
+              <span class="sb-right" aria-hidden="true"><svg class="sb-i" viewBox="0 0 17 12" aria-hidden="true"><rect x="0" y="8" width="3" height="4" rx="0.8" fill="currentColor"/><rect x="4.6" y="5.6" width="3" height="6.4" rx="0.8" fill="currentColor"/><rect x="9.2" y="3" width="3" height="9" rx="0.8" fill="currentColor"/><rect x="13.8" y="0" width="3" height="12" rx="0.8" fill="currentColor"/></svg><svg class="sb-i" viewBox="0 0 16 12" aria-hidden="true"><path d="M8 11.2 5.6 8.6a3.4 3.4 0 0 1 4.8 0z" fill="currentColor"/><path d="M3.4 6.4a6.5 6.5 0 0 1 9.2 0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M1.2 4.1a9.6 9.6 0 0 1 13.6 0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><svg class="sb-i sb-batt" viewBox="0 0 26 12" aria-hidden="true"><rect x="0.6" y="0.6" width="22" height="10.8" rx="3" fill="none" stroke="currentColor" stroke-width="1.1" opacity="0.5"/><rect x="2.2" y="2.2" width="16" height="7.6" rx="1.6" fill="currentColor"/><path d="M24 4.2v3.6c.8-.3 1.3-1 1.3-1.8s-.5-1.5-1.3-1.8z" fill="currentColor" opacity="0.5"/></svg></span>
+              <button type="button" class="demo-paused" hidden><span class="demo-paused-dot" aria-hidden="true"></span>Demo paused · Tap to resume</button>
+            </div>
+          </div>
+        </figure>
+      </div>
+      <p class="live-note">Click around: it's the real app, with sample data.</p>
+      <!-- A tab's own line, where it has one (Clinic (Sovereign AI): where its agents run). -->
+      <p class="live-case-note" hidden></p>
+      <!-- Under the demo (decision 15): what it is in a line; Get Karsa follows. -->
+      <div class="wrap hero-after">
+        <p class="lead">
+          Your data, workflows, and agents in one system on your machines.
+          Claude Code and Codex do the thinking.
+        </p>
+      </div>
+    </section>
+
+    <!-- Get Karsa (spec_01M61TT0VRA9 decision 14): after the demo. Agent first: the
+         visitor's own Claude Code or Codex installs it from llms.txt; the shell one-liner
+         is the manual way. The page's one install surface: the hero's Install and the
+         closing band come here. -->
+    <section class="wrap section get" id="get-karsa" aria-labelledby="get-title">
+      <h2 class="section-rule" id="get-title">Get Karsa</h2>
       <p class="install-label">Ask your Claude Code or Codex to install it:</p>
       <div class="install install-agent">
         <code id="agent-prompt">Install Karsa from https://karsa.app/llms.txt</code>
-        <button class="copy-btn" id="copy-agent-btn" type="button" aria-label="Copy the prompt">Copy</button>
+        <button class="copy-btn copy-btn-cta" id="copy-agent-btn" type="button" aria-label="Copy the prompt">Copy</button>
       </div>
       <p class="install-label">Or install it yourself:</p>
       <div class="install">
@@ -53,42 +122,6 @@
       <div class="hero-actions">
         <a class="ghost-btn" href="mailto:hello@karsa.app?subject=Karsa%20beta%20access">Request access</a>
       </div>
-    </section>
-
-    <!-- Karsa, live (spec_01M61TT0VRA9): the web app itself on sample data, in a
-         laptop (Tasks this week, the chat beside it) and a phone (Home). Each frame
-         shows its still until it scrolls into view and the app has drawn; the tabs
-         swap the use case in place; the laptop plays a New task once. -->
-    <section class="live" id="live" aria-labelledby="live-title">
-      <div class="wrap">
-        <h2 class="section-rule" id="live-title">Karsa, live</h2>
-      </div>
-      <div class="live-tabs" aria-label="Use cases">
-        <button type="button" data-case="deals" aria-pressed="true">Deals</button>
-        <button type="button" data-case="accounting" aria-pressed="false">Accounting</button>
-        <button type="button" data-case="operations" aria-pressed="false">Operations</button>
-        <button type="button" data-case="engineering" aria-pressed="false">Engineering</button>
-        <button type="button" data-case="real-estate" aria-pressed="false">Real estate</button>
-        <button type="button" data-case="sovereign-ai" data-note="Here the agents run on an open model on the hospital's own servers: nothing leaves its network." data-note-link="Talk to us to set it up" data-note-href="mailto:hello@karsa.app?subject=Karsa%20Sovereign%20AI" aria-pressed="false">Sovereign AI</button>
-      </div>
-      <div class="live-stage">
-        <figure class="device laptop">
-          <div class="screen" data-frame="laptop" data-w="1280" data-h="800">
-            <picture class="still"><source media="(prefers-color-scheme: light)" srcset="/live-stills/deals-laptop-light.webp" /><img src="/live-stills/deals-laptop.webp" width="1280" height="800" alt="Karsa on a laptop: this week's tasks on a calendar, with a chat beside it where an agent reports a finished task." /></picture>
-            <iframe class="app" title="Karsa on a laptop, with sample data: tasks this week and a chat"></iframe>
-          </div>
-          <div class="laptop-base" aria-hidden="true"></div>
-        </figure>
-        <figure class="device phone">
-          <div class="screen" data-frame="phone" data-w="390" data-h="844">
-            <picture class="still"><source media="(prefers-color-scheme: light)" srcset="/live-stills/deals-phone-light.webp" /><img src="/live-stills/deals-phone.webp" width="390" height="844" alt="Karsa on a phone: Home, with what's new from the agents and today's tasks." /></picture>
-            <iframe class="app" title="Karsa on a phone, with sample data: Home"></iframe>
-          </div>
-        </figure>
-      </div>
-      <p class="live-note">Click around: it's the real app, with sample data.</p>
-      <!-- A tab's own line, where it has one (Sovereign AI: where its agents run). -->
-      <p class="live-case-note" hidden></p>
     </section>
 
     <!-- Stands in for customer logos until there are some. Names as text,
@@ -129,28 +162,28 @@
       <h2 class="section-rule">Built for</h2>
       <ul class="cards cards-6">
         <li class="card">
-          <h3>Deals and diligence</h3>
-          <p>Deals analyzed on arrival, assessments kept on record.</p>
+          <h3>Café Books</h3>
+          <p>Books set up in a chat, receipts snapped, profit answered with the numbers behind it.</p>
         </li>
         <li class="card">
-          <h3>Small-business accounting</h3>
-          <p>Transactions categorized daily, months closed, invoices chased.</p>
+          <h3>Deal Flow</h3>
+          <p>Decks read into your pipeline, diligence split between agents, a brief every Monday.</p>
         </li>
         <li class="card">
-          <h3>Operations</h3>
-          <p>Reviews and follow-ups that run on schedule.</p>
+          <h3>Online Store</h3>
+          <p>Orders and stock brought in, what runs out answered, a reorder waiting on your yes.</p>
         </li>
         <li class="card">
-          <h3>Engineering</h3>
-          <p>Dependency health, release chores, incident follow-ups.</p>
+          <h3>Releases</h3>
+          <p>The cause found in the logs, the fix written and reviewed by two agents, the release notes drafted.</p>
         </li>
         <li class="card">
-          <h3>Real estate</h3>
-          <p>Track properties, watch rents, keep underwriting current.</p>
+          <h3>Rentals</h3>
+          <p>Leases read into one table, a tenant's photo made a repair, late rent found, reminders every 5th.</p>
         </li>
         <li class="card">
-          <h3>Sovereign AI</h3>
-          <p>Agents on open models, on your own servers: nothing leaves your network. For government, healthcare and enterprise. <a href="mailto:hello@karsa.app?subject=Karsa%20Sovereign%20AI">Talk to us</a> to set it up.</p>
+          <h3>Clinic (Sovereign AI)</h3>
+          <p>A front desk's busy work, on your own servers: tomorrow's schedule ready, insurance cards read, reminders drafted. Nothing leaves your network. <a href="mailto:hello@karsa.app?subject=Karsa%20Sovereign%20AI">Talk to us</a> to set it up.</p>
         </li>
       </ul>
     </section>
@@ -208,15 +241,13 @@
       </div>
     </section>
 
-    <!-- Closing band: the page keeps ONE install surface, so the button
-         scrolls back up to it. `#top` scrolls to the top of the document
-         (HTML spec: no element needs that id); html{scroll-behavior:smooth}
-         animates it. -->
+    <!-- Closing band: the page keeps ONE install surface (Get Karsa), so the
+         button scrolls back up to it; html{scroll-behavior:smooth} animates it. -->
     <section class="wrap section" id="get-started">
       <div class="band">
         <h2 class="display band-title">Your AI system should outlive your AI provider.</h2>
         <div class="band-actions">
-          <a class="cta-btn" href="#top">Get started <span aria-hidden="true">↑</span></a>
+          <a class="cta-btn" href="#get-karsa">Get started <span aria-hidden="true">↑</span></a>
           <a class="band-link" href="mailto:hello@karsa.app?subject=Karsa%20beta%20access">Request access</a>
         </div>
       </div>
@@ -273,27 +304,64 @@
       }
     })();
 
-    // Karsa, live (spec_01M61TT0VRA9): load the frames when they come into view,
-    // scale each app to its screen, swap the still for it once it has drawn, and
-    // pass the tabs' use case in. The laptop plays its New task once per tab,
-    // until a visitor takes over.
+    // Karsa, live (spec_01M61TT0VRA9): load the frames as they near the view, scale each
+    // app to its screen, swap the still for it once it has drawn, and pass the tabs' use
+    // case in. What plays, plays once the frames are in view: a tab's story (decisions
+    // 12, 13) in the laptop, or in the phone alone on a phone, with the other frame
+    // following; a tab without one yet, its New task in the laptop. The story's caption
+    // and dots are drawn here, from its tab's steps and then what its frame says; it
+    // pauses while it's out of view. A tap or a key in a frame hands it to the visitor.
     (function () {
       var live = document.getElementById("live");
       if (!live || !("IntersectionObserver" in window)) return;
       var screens = [].slice.call(live.querySelectorAll(".screen"));
       var tabs = [].slice.call(live.querySelectorAll(".live-tabs button"));
       var caseNote = live.querySelector(".live-case-note");
-      var current = "deals";
+      var note = live.querySelector(".live-note");
+      var bar = live.querySelector(".live-story");
+      var caption = bar.querySelector(".story-caption");
+      var pausedBars = Array.prototype.slice.call(document.querySelectorAll(".demo-paused"));
+      var toggle = bar.querySelector(".story-toggle");
+      var dotsBox = bar.querySelector(".story-dots");
+      var dots = [];
+      var captions = [];
+      var current = "cafe";
       var touched = false;
       var started = false;
       var peer = Math.random().toString(36).slice(2, 10);
       var phoneOnly = window.matchMedia("(max-width: 899px)");
+      /** The frames are in view (a third of the stage, at least). */
+      var inView = false;
+      /** This tab's play was asked for (it plays once its frame has drawn). */
+      var kicked = false;
+      /** A step to play from, asked before the frame had drawn. */
+      var pending = null;
+      /** The story, as its frame last said; paused by the visitor, or by being out of view. */
+      var story = { step: 0, playing: false, done: false, began: false };
+      var userPaused = false;
+      var autoPaused = false;
+      var END = "Click around: it's the real app, with sample data.";
 
       function fit(screen) {
         var w = Number(screen.getAttribute("data-w"));
-        var s = screen.clientWidth / w;
+        var h = Number(screen.getAttribute("data-h"));
+        // The device's own bar over the app (its status or menu bar), in the app's pixels.
+        var sb = Number(screen.getAttribute("data-sb")) || 0;
+        // The whole app, never cut: the smaller of the two fits.
+        var s = Math.min(screen.clientWidth / w, h ? screen.clientHeight / (h + sb) : Infinity);
         screen.style.setProperty("--s", String(s));
       }
+      // The bars' clocks: this visitor's time, as each device writes it.
+      function tick() {
+        var now = new Date();
+        [].forEach.call(document.querySelectorAll(".sb-clock"), function (c) {
+          c.textContent = c.getAttribute("data-clock") === "mac"
+            ? now.toLocaleString("en-US", { weekday: "short", hour: "numeric", minute: "2-digit" }).replace(",", "")
+            : now.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }).replace(/\s?[AP]M$/, "");
+        });
+      }
+      tick();
+      setInterval(tick, 30000);
       if ("ResizeObserver" in window) {
         var ro = new ResizeObserver(function (entries) { entries.forEach(function (e) { fit(e.target); }); });
         screens.forEach(function (s) { ro.observe(s); });
@@ -304,28 +372,147 @@
 
       function frameOf(screen) { return screen.getAttribute("data-frame"); }
       function shown(screen) { return frameOf(screen) === "phone" || !phoneOnly.matches; }
+      /** The frame that plays: the laptop, or the phone alone on a phone. */
+      function driver() {
+        var want = phoneOnly.matches ? "phone" : "laptop";
+        return screens.filter(function (s) { return frameOf(s) === want; })[0];
+      }
+      /** A tab's story's captions (none: it plays the loop). */
+      function stepsOf(key) {
+        var tab = tabs.filter(function (t) { return t.getAttribute("data-case") === key; })[0];
+        var steps = tab && tab.getAttribute("data-steps");
+        return steps ? steps.split("|") : [];
+      }
+      function hasStory() { return stepsOf(current).length > 0; }
+      /** The story's steps as dots, each playing from its step. */
+      function setSteps(list) {
+        if (list.join("|") === captions.join("|")) return;
+        captions = list.slice();
+        dotsBox.textContent = "";
+        dots = captions.map(function (c, i) {
+          var li = document.createElement("li");
+          var b = document.createElement("button");
+          b.type = "button";
+          b.setAttribute("aria-label", "Step " + (i + 1) + ": " + c);
+          b.addEventListener("click", function () { playFrom(i); });
+          li.appendChild(b);
+          dotsBox.appendChild(li);
+          return b;
+        });
+      }
+      function tell(screen, msg) {
+        var win = screen && screen.classList.contains("is-live") && screen.querySelector("iframe").contentWindow;
+        if (win) win.postMessage(msg, location.origin);
+        return !!win;
+      }
+      function src(frame, key) { return "/live/?frame=" + frame + "&case=" + key + "&peer=" + peer; }
 
       function start() {
         if (started) return;
         started = true;
         screens.forEach(function (screen) {
-          if (!shown(screen)) return;
-          var frame = frameOf(screen);
-          var src = "/live/?frame=" + frame + "&case=" + current + "&peer=" + peer + (frame === "laptop" ? "&play=1" : "");
-          screen.querySelector("iframe").src = src;
+          if (shown(screen)) screen.querySelector("iframe").src = src(frameOf(screen), current);
         });
       }
       new IntersectionObserver(function (entries, io) {
         if (entries.some(function (e) { return e.isIntersecting; })) { io.disconnect(); start(); }
       }, { rootMargin: "200px 0px" }).observe(live.querySelector(".live-stage"));
 
+      /** Play once the frames are in view and the playing one has drawn: from a step, or the start. */
+      function kick() {
+        if (kicked || touched || !inView) return;
+        if (pending !== null) { if (tell(driver(), { type: "karsa-demo-story", action: "play", step: pending })) { pending = null; kicked = true; } return; }
+        if (tell(driver(), { type: "karsa-demo-play" })) kicked = true;
+      }
+      // In view: it plays (or carries on); out of view (or another browser tab), the story waits.
+      function seen(visible) {
+        inView = visible;
+        if (visible && !document.hidden) {
+          kick();
+          if (autoPaused && !userPaused) { autoPaused = false; tell(driver(), { type: "karsa-demo-story", action: "resume" }); }
+        } else if (story.playing && hasStory()) {
+          autoPaused = true;
+          tell(driver(), { type: "karsa-demo-story", action: "pause" });
+        }
+      }
+      new IntersectionObserver(function (entries) {
+        seen(entries[entries.length - 1].intersectionRatio >= 0.33);
+      }, { threshold: [0, 0.33, 0.66] }).observe(live.querySelector(".live-stage"));
+      document.addEventListener("visibilitychange", function () { seen(inView); });
+
+      function render() {
+        var on = hasStory();
+        bar.hidden = !on;
+        // The story's laptop shows its menu: the phone steps aside from it.
+        live.toggleAttribute("data-story", on);
+        // The story's last caption is the line under the frames, said once.
+        note.hidden = on;
+        if (!on) return;
+        // Taken over by a tap, or paused by its button: the story waits, said on each screen
+        // (user, 2026-10-30: "Need some feedback when tap causes demo to pause"). It's over only at its end.
+        var over = story.done;
+        var waiting = !over && story.began && (touched || userPaused);
+        pausedBars.forEach(function (b) { b.hidden = !waiting; });
+        caption.textContent = over ? END : captions[Math.min(Math.max(story.step, 0), captions.length - 1)];
+        dots.forEach(function (d, i) {
+          var state = story.done || i < story.step ? "past" : i === story.step && !over ? "now" : "next";
+          d.setAttribute("data-state", state);
+          if (state === "now") d.setAttribute("aria-current", "step");
+          else d.removeAttribute("aria-current");
+        });
+        var mode = over ? "replay" : story.playing && !touched ? "pause" : "play";
+        toggle.setAttribute("data-state", mode);
+        toggle.setAttribute("aria-label", mode === "pause" ? "Pause the story" : mode === "play" ? "Play the story" : "Play the story again");
+      }
+
+      /** Play the story from a step (a dot, replay): again after a visitor took over. */
+      function playFrom(step) {
+        touched = false;
+        userPaused = false;
+        autoPaused = false;
+        live.classList.remove("is-done");
+        story = { step: step, playing: true, done: false, began: true };
+        render();
+        screens.forEach(function (screen) { if (screen !== driver()) tell(screen, { type: "karsa-demo-untouched" }); });
+        if (!tell(driver(), { type: "karsa-demo-story", action: "play", step: step })) {
+          pending = step;
+          kicked = false;
+          inView = true;
+          start();
+        }
+      }
+      /** Play on where it waits: from its step after a tap took over, else where it was paused. */
+      function resume() {
+        if (touched) playFrom(story.step);
+        else if (story.began) { userPaused = false; tell(driver(), { type: "karsa-demo-story", action: "resume" }); render(); }
+      }
+      toggle.addEventListener("click", function () {
+        var mode = toggle.getAttribute("data-state");
+        if (mode === "pause") { userPaused = true; tell(driver(), { type: "karsa-demo-story", action: "pause" }); render(); }
+        else if (mode === "play") resume();
+        else playFrom(0);
+      });
+      pausedBars.forEach(function (b) { b.addEventListener("click", resume); });
+
       window.addEventListener("message", function (e) {
         if (e.origin !== location.origin || !e.data || typeof e.data.type !== "string") return;
         var screen = screens.filter(function (s) { return s.querySelector("iframe").contentWindow === e.source; })[0];
         if (!screen) return;
-        if (e.data.type === "karsa-demo-ready") screen.classList.add("is-live");
-        if (e.data.type === "karsa-demo-done" || e.data.type === "karsa-demo-touched") live.classList.add("is-done");
-        if (e.data.type === "karsa-demo-touched") touched = true;
+        var d = e.data;
+        if (d.type === "karsa-demo-ready") {
+          screen.classList.add("is-live");
+          if (screen === driver()) kick();
+        }
+        if (d.type === "karsa-demo-done") live.classList.add("is-done");
+        if (d.type === "karsa-demo-touched") { touched = true; render(); }
+        // A visitor took over, then left it be on the page it was on: the story carries on
+        // from its step (the frame waits; a scroll doesn't take over at all).
+        if (d.type === "karsa-demo-idle" && d.case === current && touched && inView && !document.hidden && !story.done && !userPaused) playFrom(story.step);
+        if (d.type === "karsa-demo-story" && d.case === current && screen === driver()) {
+          if (Array.isArray(d.steps) && d.steps.length) setSteps(d.steps);
+          story = { step: Number(d.step) || 0, playing: !!d.playing, done: !!d.done, began: true };
+          render();
+        }
       });
 
       tabs.forEach(function (tab) {
@@ -334,7 +521,7 @@
           if (key === current) return;
           current = key;
           tabs.forEach(function (t) { t.setAttribute("aria-pressed", String(t === tab)); });
-          // The tab's line, and its link where it has one (Sovereign AI: talk to us).
+          // The tab's line, and its link where it has one (Clinic (Sovereign AI): talk to us).
           caseNote.textContent = tab.getAttribute("data-note") || "";
           var href = tab.getAttribute("data-note-href");
           if (href) {
@@ -346,23 +533,60 @@
             caseNote.appendChild(document.createTextNode("."));
           }
           caseNote.hidden = !caseNote.textContent;
+          story = { step: 0, playing: false, done: false, began: false };
+          setSteps(stepsOf(key));
+          userPaused = autoPaused = false;
+          pending = null;
+          // A frame that has drawn switches in place, and plays the tab at once (it was chosen in view).
+          kicked = started && !touched && driver().classList.contains("is-live");
           screens.forEach(function (screen) {
             var frame = frameOf(screen);
             var still = screen.querySelector(".still");
             still.querySelector("img").src = "/live-stills/" + key + "-" + frame + ".webp";
             still.querySelector("source").srcset = "/live-stills/" + key + "-" + frame + "-light.webp";
-            var win = screen.querySelector("iframe").contentWindow;
-            if (started && win && screen.classList.contains("is-live")) win.postMessage({ type: "karsa-demo-case", case: key, play: !touched }, location.origin);
+            // After a visitor took over, the story's tab opens on its end: the books to click around.
+            if (started) tell(screen, { type: "karsa-demo-case", case: key, play: !touched && screen === driver(), end: touched && screen === driver() });
           });
+          render();
           if (!started) return;
           // A frame not drawn yet starts over on the new case.
           screens.forEach(function (screen) {
             if (!shown(screen) || screen.classList.contains("is-live")) return;
-            var frame = frameOf(screen);
-            screen.querySelector("iframe").src = "/live/?frame=" + frame + "&case=" + key + "&peer=" + peer + (frame === "laptop" && !touched ? "&play=1" : "");
+            screen.querySelector("iframe").src = src(frameOf(screen), key);
           });
         });
       });
+      // A tab by the page's address (decision 15): karsa.app/#deal-flow opens on Deal Flow, its
+      // pill scrolled to the middle of the row (no scrolling the page: the demo is up top), and
+      // a tab picked writes its name there, so the address can be shared.
+      var SLUGS = { cafe: "cafe-books", deals: "deal-flow", store: "online-store", releases: "releases", rentals: "rentals", clinic: "clinic" };
+      var tabsRow = live.querySelector(".live-tabs");
+      function center(tab) {
+        tabsRow.scrollTo({ left: tab.offsetLeft - (tabsRow.clientWidth - tab.offsetWidth) / 2, behavior: "smooth" });
+      }
+      function tabOfHash() {
+        var slug = location.hash.slice(1);
+        return tabs.filter(function (t) { return SLUGS[t.getAttribute("data-case")] === slug; })[0];
+      }
+      tabs.forEach(function (tab) {
+        tab.addEventListener("click", function () {
+          var slug = SLUGS[tab.getAttribute("data-case")];
+          if (slug && location.hash !== "#" + slug) history.replaceState(null, "", "#" + slug);
+          center(tab);
+        });
+      });
+      window.addEventListener("hashchange", function () {
+        var tab = tabOfHash();
+        if (tab) tab.click();
+      });
+      setSteps(stepsOf(current));
+      render();
+      var linked = tabOfHash();
+      if (linked) {
+        linked.click();
+        // Its pill in view once the row is laid out.
+        requestAnimationFrame(function () { center(linked); });
+      }
     })();
   </script>
 </body>

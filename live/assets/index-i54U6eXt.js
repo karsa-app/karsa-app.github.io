@@ -1,0 +1,1 @@
+import{T as n,a0 as s,j as i}from"./index-CMCnav1F.js";import{I as c}from"./InboxView-CbmYGNCh.js";import"./repeat-C7jCyK9W.js";import"./PageShell-CqutPfcC.js";import"./HomeSections-Uq-k6lwO.js";function u(){const o=n(),{projects:t}=s(),r=t.find(e=>e.id===o)?.name;return i.jsx(c,{project:{id:o,name:r}})}export{u as component};

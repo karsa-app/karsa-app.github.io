@@ -1,0 +1,1 @@
+import{j as o}from"./index-CMCnav1F.js";import{I as t}from"./InboxView-CbmYGNCh.js";import"./repeat-C7jCyK9W.js";import"./PageShell-CqutPfcC.js";import"./HomeSections-Uq-k6lwO.js";const s=()=>o.jsx(t,{});export{s as component};
