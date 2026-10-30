@@ -1,0 +1,1 @@
+import{j as o}from"./index-BPv-zwTf.js";import{I as t}from"./InboxView-DIW0X5pQ.js";import"./repeat-BYMuKcDu.js";import"./PageShell-B4Kh7tG4.js";import"./HomeSections-Cs9GcDs-.js";const s=()=>o.jsx(t,{});export{s as component};

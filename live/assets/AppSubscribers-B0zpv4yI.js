@@ -1,0 +1,1 @@
+import{bh as o,j as i}from"./index-BPv-zwTf.js";import{S as p}from"./SubscriberList-TCr9HJoP.js";import"./repeat-BYMuKcDu.js";import"./subscriber-trigger-C7d99ncP.js";function a({projectId:r,frontmatter:t}){const s=o();return i.jsx(p,{projectId:r,projectSeg:s,app:String(t.id??"")})}export{a as default};

@@ -1,1 +1,0 @@
-import{j as o}from"./index-DLqQ7LrJ.js";import{I as t}from"./InboxView-DPk3oi38.js";import"./repeat-Bgvlv2Xi.js";import"./PageShell-DrX6KnUs.js";import"./HomeSections-DPAaPAEY.js";const s=()=>o.jsx(t,{});export{s as component};

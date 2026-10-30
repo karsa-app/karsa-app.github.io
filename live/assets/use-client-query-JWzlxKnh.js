@@ -1,1 +1,0 @@
-import{r as t}from"./index-CMCnav1F.js";import{ba as u,ay as a,$ as n}from"./repeat-C7jCyK9W.js";function p(r,e){const s=t.useMemo(()=>u(r),[r]);return{rows:t.useMemo(()=>{if(!e.trim())return r;try{return a(r,n(e))}catch{return r}},[r,e]),fields:s}}export{p as u};
