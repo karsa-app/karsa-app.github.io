@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Karsa — build software that does your work</title>
-  <meta name="description" content="Describe your workflow. AI builds the software and handles the day-to-day work for you. Run it on your computer or in the cloud, without complicated setup. Private beta for macOS and Linux." />
+  <title>Karsa — the runtime for AI-native software</title>
+  <meta name="description" content="The runtime for AI-native software. AI runs the day-to-day work, changes the app while it runs, and maintains it. Your app is plain files: run it on your computer or in the cloud, and take it anywhere. Private beta for macOS and Linux." />
   <link rel="icon" type="image/png" href="/favicon-64.png" />
-  <meta property="og:title" content="Karsa — build software that does your work" />
-  <meta property="og:description" content="Describe your workflow. AI builds the software and handles the day-to-day work for you. Run it on your computer or in the cloud, without complicated setup." />
+  <meta property="og:title" content="Karsa — the runtime for AI-native software" />
+  <meta property="og:description" content="The runtime for AI-native software. AI runs the day-to-day work, changes the app while it runs, and maintains it. Your app is plain files: run it on your computer or in the cloud, and take it anywhere." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://karsa.app/" />
   <meta property="og:image" content="https://karsa.app/og-image-dark.png" />
@@ -15,7 +15,7 @@
   <meta property="og:image:width" content="512" />
   <meta property="og:image:height" content="512" />
   <meta property="og:image:alt" content="Karsa flame on a dark background" />
-  <link rel="stylesheet" href="/styles.css?v=956b32a6" />
+  <link rel="stylesheet" href="/styles.css?v=a9da938f" />
 </head>
 <body>
   <!-- "Request access" and "Talk to us" share one inbox (mailto) until the
@@ -32,12 +32,13 @@
   </header>
 
   <main>
-    <!-- Explain what Karsa does before the visitor interprets the demo
-         (spec_01M61TT0VRA9 decision 18). Install follows the demo. -->
+    <!-- The category, before the demo (spec_01M61TT0VRA9 decision 19): Karsa is where
+         AI-native software lives; the demo shows it, the sections under it say why it
+         isn't another app builder. Install follows the demo. -->
     <section class="wrap hero">
       <p class="eyebrow">Private beta</p>
-      <h1 class="display">Build software that <span class="accent">does your work.</span></h1>
-      <p class="lead">Describe your workflow. AI builds the software and handles the day-to-day work for you. Run it on your computer or in the cloud, without complicated setup.</p>
+      <h1 class="display">The runtime for <span class="accent nowrap">AI-native</span> software.</h1>
+      <p class="lead">AI runs the day-to-day work, changes the app while it runs, and maintains it. Your app is plain files: run it on your computer or in the cloud, and take it anywhere, even if Karsa goes away.</p>
     </section>
 
     <!-- Karsa, live (spec_01M61TT0VRA9): the web app itself on sample data, in a
@@ -103,6 +104,82 @@
       <p class="live-case-note" hidden></p>
     </section>
 
+
+    <!-- Stands in for customer logos until there are some. Names as text,
+         never vendor logos, so it can't read as an endorsement. -->
+    <section class="wrap strip" aria-label="Compatibility">
+      <p>Works with <b>Claude Code</b> and <b>Codex</b>. Runs on <b>macOS</b>, <b>Linux</b>, or your own server.</p>
+    </section>
+
+    <!-- The body-and-brain idea: Karsa is the body, the agent is the brain. -->
+    <!-- What AI-native means on Karsa (decision 19): the four things an app gets by
+         living here, then how that differs from building with AI, then the app as a
+         folder, for the engineers. -->
+    <section class="wrap section" id="ai-native">
+      <h2 class="section-rule">AI-native, on Karsa</h2>
+      <ul class="cards cards-4">
+        <li class="card">
+          <h3>AI runs the day-to-day.</h3>
+          <p>Agents do the work on schedule and when things happen: the books every morning, the reorder when stock runs low.</p>
+        </li>
+        <li class="card">
+          <h3>It changes while it runs.</h3>
+          <p>Ask for a new field, a view or a rule, and the live app has it. No rebuild, no redeploy.</p>
+        </li>
+        <li class="card">
+          <h3>AI helps maintain it.</h3>
+          <p>Ask agents to update and troubleshoot the app. Review their changes and decide what to keep.</p>
+        </li>
+        <li class="card">
+          <h3>Your files stay yours.</h3>
+          <p>Keep your records and app files in git, and run them with a compatible Karsa runtime on infrastructure you control.</p>
+        </li>
+      </ul>
+    </section>
+
+    <section class="wrap section" id="why">
+      <h2 class="section-rule">Not another app builder</h2>
+      <ul class="cards cards-3 compare">
+        <li class="card">
+          <p class="compare-kind">AI app builders</p>
+          <h3>Build and ship apps.</h3>
+          <p>AI helps create and deploy the app, with hosting and maintenance options that vary by platform.</p>
+        </li>
+        <li class="card">
+          <p class="compare-kind">AI assistants and agents</p>
+          <h3>Work across your tools.</h3>
+          <p>Agents handle ongoing tasks using their memory, connected apps and schedules.</p>
+        </li>
+        <li class="card card-karsa">
+          <p class="compare-kind">Karsa</p>
+          <h3>Is where the app lives.</h3>
+          <p>Your app's records, rules, schedules and agents run together. Agents work inside that system, and you review their changes.</p>
+        </li>
+      </ul>
+    </section>
+
+    <section class="wrap section" id="folder">
+      <h2 class="section-rule">Your app is a folder</h2>
+      <div class="folder">
+        <pre class="folder-tree" aria-label="A Karsa project's folder"><code>brightside-coffee/
+├── karsa/proj_…/artifact/
+│   ├── transaction/          <span>records: a markdown file each</span>
+│   │   ├── index.md          <span>its views</span>
+│   │   └── transaction_01M….md
+│   ├── type/transaction/     <span>its fields, as JSON Schema</span>
+│   ├── task/                 <span>work, with when and repeat</span>
+│   ├── user/…_claude-code/   <span>an agent: its persona and notes</span>
+│   └── app/                  <span>apps: their code and pages</span>
+├── scripts/import_books.py   <span>code the agents wrote</span>
+└── .git                      <span>every change, and who made it</span></code></pre>
+        <ul class="folder-notes">
+          <li><b>Read it, diff it, back it up.</b> Records are markdown with their fields on top; every change is a commit.</li>
+          <li><b>Any agent.</b> Claude Code, Codex, or OpenCode on the model you choose, each walled off as its own user. Swap them; the app stays.</li>
+          <li><b>One API.</b> Every record, schedule and agent through one set of operations, from the CLI, the web or an agent.</li>
+        </ul>
+      </div>
+    </section>
+
     <!-- Get Karsa (spec_01M61TT0VRA9 decision 14): after the demo. Agent first: the
          visitor's own Claude Code or Codex installs it from llms.txt; the shell one-liner
          is the manual way. The page's one install surface: the hero's Install and the
@@ -122,40 +199,6 @@
       <div class="hero-actions">
         <a class="ghost-btn" href="mailto:hello@karsa.app?subject=Karsa%20beta%20access">Request access</a>
       </div>
-    </section>
-
-    <!-- Stands in for customer logos until there are some. Names as text,
-         never vendor logos, so it can't read as an endorsement. -->
-    <section class="wrap strip" aria-label="Compatibility">
-      <p>Works with <b>Claude Code</b> and <b>Codex</b>. Runs on <b>macOS</b>, <b>Linux</b>, or your own server.</p>
-    </section>
-
-    <!-- The body-and-brain idea: Karsa is the body, the agent is the brain. -->
-    <section class="wrap section" id="how">
-      <h2 class="section-rule">How it works</h2>
-      <ol class="steps">
-        <li><span class="num">01</span><p>Karsa holds the system: data, files, schedules, events.</p></li>
-        <li><span class="num">02</span><p>It wakes an agent when something needs thinking.</p></li>
-        <li><span class="num">03</span><p>Everything the agent does lands back in your system.</p></li>
-      </ol>
-    </section>
-
-    <section class="wrap section" id="why">
-      <h2 class="section-rule">Why Karsa</h2>
-      <ul class="cards cards-3">
-        <li class="card">
-          <h3>You own the system of record.</h3>
-          <p>Plain files in git on your machine. Cancel any AI plan and keep everything.</p>
-        </li>
-        <li class="card">
-          <h3>The right agent for each job.</h3>
-          <p>Claude Code reads contracts, Codex runs numbers, in one system.</p>
-        </li>
-        <li class="card">
-          <h3>Start on a laptop, move to a server.</h3>
-          <p>The same system, when others need in. Nothing rebuilt.</p>
-        </li>
-      </ul>
     </section>
 
     <section class="wrap section" id="use-cases">

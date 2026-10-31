@@ -790,6 +790,47 @@ a { color: var(--color-accent); text-decoration: none; }
   color: var(--color-bright-dim);
 }
 
+/* ── Not another app builder; your app is a folder (decision 19) ──────── */
+
+.compare .compare-kind {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-mute);
+}
+.compare .card-karsa { border-color: var(--color-accent-dim); background: var(--color-accent-bg); }
+.compare .card-karsa .compare-kind { color: var(--color-accent); }
+
+.folder {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+.folder-tree {
+  margin: 0;
+  padding: 1.1rem 1.25rem;
+  background: var(--color-paper);
+  border: 1px solid var(--color-line);
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--color-bright);
+}
+.folder-tree span { color: var(--color-mute); }
+.folder-notes { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
+.folder-notes li { font-size: 0.9375rem; color: var(--color-bright-dim); }
+.folder-notes b { display: block; color: var(--color-bright); font-weight: 500; margin-bottom: 0.2rem; }
+@media (max-width: 760px) {
+  .folder { grid-template-columns: minmax(0, 1fr); }
+  .folder-tree { font-size: 0.75rem; }
+  /* On a phone the tree alone: the notes beside it say the rest. */
+  .folder-tree span { display: none; }
+}
+.nowrap { white-space: nowrap; }
+
 /* ── For teams ────────────────────────────────────────────────────────── */
 
 .teams {
